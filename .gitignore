@@ -12,6 +12,9 @@
 # Local editor/OS files.
 .godot/
 .import/
+*.import
+*.uid
+*.translation
 export.cfg
 Thumbs.db
 Desktop.ini

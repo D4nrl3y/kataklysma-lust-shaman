@@ -5,7 +5,7 @@
 - 13 NPCs nomeados: render neutro e 8 frames jogáveis por personagem.
 - 3 entidades prioritárias: render neutro e 8 frames por entidade.
 - 12 CGs base de cenas, preservadas como `legacy_keyframes`.
-- 1 sequência CG aprovada em produção com 4 imagens distintas: Echo 002 / Zekranu.
+- 12 sequências CG aprovadas em produção com 48 imagens distintas: Echo 002 até End 015.
 - Manifesto de continuidade visual para Kataklysma, NPCs e entidades.
 - Auditoria executável para impedir que uma CG seja considerada completa sem os 4 arquivos.
 - 7 backgrounds de zonas: Echo Isles, Sen'jin Village, Durotar Coast, Razor Hill, Ratchet, Northern Barrens e Eye of the Storm Shrine.
@@ -15,7 +15,7 @@
 
 ## Próximos lotes de arte
 
-- 44 variações restantes das 12 CGs (11 cenas × 4 quadros).
+- O lote de 44 variações restantes foi concluído; as 12 cenas agora têm início, desenvolvimento, clímax e desfecho.
 - Turnarounds, expressões e locks de produção para os NPCs que hoje possuem apenas render neutro.
 - Regeneração controlada de CGs, retratos e sprites que não passarem pelo lock de continuidade.
 - NPCs genéricos reutilizáveis de vila, guarda, comerciante, caçador, goblin, orc e viajante.

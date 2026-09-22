@@ -17,4 +17,4 @@ Start with:
 - `03_GODOT/data/zones.json`
 - `README_START_HERE.md`
 
-The `90_SOURCE_ARCHIVE/` folder is intentionally ignored by Git because it contains legacy/raw material already represented by the active assets and documentation. It remains available locally for recovery and audit.
+The `90_SOURCE_ARCHIVE/` folder is versioned because it contains legacy/raw material useful for recovery, comparison and future asset revisions. Temporary QA intermediates remain ignored.

@@ -1,6 +1,3 @@
-# Legacy archive is kept locally, but is not part of the active development repo.
-/90_SOURCE_ARCHIVE/
-
 # Generated audit intermediates and temporary image-processing work.
 /99_AUDIT/_*/
 /99_AUDIT/*_work/

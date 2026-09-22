@@ -1,0 +1,49 @@
+{
+  "package_name": "Kataklysma Separated Sprites & Models Pack",
+  "version": "2.1",
+  "folders": {
+    "04_References": [],
+    "04_References/Original_Screens": [
+      "reference_back.png",
+      "reference_back_left.png",
+      "reference_back_right.png",
+      "reference_front.png",
+      "reference_side_left.png",
+      "reference_side_right.png"
+    ],
+    "02_Sprites": [],
+    "02_Sprites/Sheets": [
+      "kataklysma_sprite_sheet_cast_combat.png",
+      "kataklysma_sprite_sheet_idle_walk.png"
+    ],
+    "01_Models": [],
+    "01_Models/Equipment": [
+      "kataklysma_shaman_staff.png"
+    ],
+    "01_Models/Details": [
+      "kataklysma_foot_detail.png",
+      "kataklysma_hand_detail.png"
+    ],
+    "01_Models/Turnarounds": [
+      "kataklysma_fullbody_back.png",
+      "kataklysma_fullbody_front.png",
+      "kataklysma_fullbody_side.png",
+      "kataklysma_fullbody_three_quarter.png"
+    ],
+    "01_Models/Portraits": [
+      "kataklysma_cutin_magic.png",
+      "kataklysma_portrait_corrupted.png",
+      "kataklysma_portrait_neutral.png"
+    ],
+    "03_Promotional_CG": [
+      "kataklysma_character_sheet_original.png",
+      "kataklysma_character_sheet_refined.png",
+      "kataklysma_master_concept_board.png",
+      "lust_shamans_journey_poster_vertical.png",
+      "lust_shamans_journey_poster_widescreen_16x9.png"
+    ],
+    "00_README": [
+      "README.md"
+    ]
+  }
+}

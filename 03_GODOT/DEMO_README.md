@@ -10,7 +10,7 @@ Esta é a primeira vertical slice executável do projeto. Ela usa a zona **Echo 
 4. Ir até a `Maré Corrompida` marcada no mapa.
 5. Purificar o objetivo e retornar ao Zekranu.
 6. Entregar a quest com marcador `✓`.
-7. Caminhar para acionar um encontro aleatório ou usar `F` para testar a tela imediatamente.
+7. Caminhar para acionar um encontro aleatório ou usar `F` para testar a batalha imediatamente.
 
 ## Controles
 
@@ -18,12 +18,14 @@ Esta é a primeira vertical slice executável do projeto. Ela usa a zona **Echo 
 - `E`, `Espaço` ou `Enter`: interagir / confirmar
 - `F`: abrir encontro de teste
 - `R`: reiniciar a demo
-- Encontro: `1` ataque físico, `2` canalizar espírito, `3` recuar; depois `E` para continuar
+- Combate: `1` ataque físico, `2` canalizar espírito, `3` guarda, `4` purificar, `5` fugir; depois `E` para continuar
 
 ## Execução
 
 Abra a raiz `Kataklysma_Dev_Kit` no Godot 4.7 e pressione Play. A cena principal já aponta para `03_GODOT/scenes/main.tscn`.
 
-## O que é deliberadamente um placeholder
+## Combate implementado
 
-O encontro já possui entrada, escolha e resolução, mas ainda não é o sistema final de combate por turnos. A próxima etapa deve substituir essa interface por iniciativa, habilidades, dano, estados, sprites de ação e retorno ao mapa.
+O combate possui turnos de jogador e inimigo, HP, espírito, defesa física e espiritual, guarda, ataques críticos, custo de recursos, purificação, corrupção com dano periódico, fuga com chance, IA inimiga, vitória, derrota e retorno à exploração. As regras estão isoladas em `03_GODOT/scripts/combat_system.gd` para futura reutilização em uma cena de batalha dedicada.
+
+O próximo marco é expandir o conteúdo: múltiplos inimigos por formação, habilidades específicas por atributo, animações de ação completas, inventário/equipamento e balanceamento baseado nos dados finais do jogo.

@@ -38,7 +38,12 @@ func _run() -> void:
     demo._start_encounter({"type": "monster_ambush", "actors": ["makrura_corrupted"]})
     if not bool(demo.encounter_active):
         failures.append("encounter start")
-    demo._handle_encounter_input(KEY_1)
+    for _turn in range(12):
+        if str(demo.combat_system.phase) != "player_turn":
+            break
+        demo._handle_encounter_input(KEY_1)
+    if not bool(demo.encounter_choice_made):
+        failures.append("combat did not reach a terminal result")
     demo._handle_encounter_input(KEY_E)
     if bool(demo.encounter_active):
         failures.append("encounter resolution")

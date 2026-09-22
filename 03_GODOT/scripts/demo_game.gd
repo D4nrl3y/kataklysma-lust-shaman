@@ -1,5 +1,7 @@
 extends Node2D
 
+const CombatSystem = preload("res://03_GODOT/scripts/combat_system.gd")
+
 ## First playable vertical slice for Kataklysma: Lust: Shaman's Journey.
 ## This scene intentionally keeps the combat layer lightweight while exercising
 ## the real project data, map art, identity-locked sprites and quest markers.
@@ -12,6 +14,8 @@ const PLAYER_WALK_DIR := "res://01_ASSETS/kataklysma/sprites/walk"
 const NPC_ID := "zekranu"
 const NPC_IDLE_DIR := "res://01_ASSETS/kataklysma/sprites/npcs/zekranu/IDLE"
 const NPC_WALK_DIR := "res://01_ASSETS/kataklysma/sprites/npcs/zekranu/WALK"
+const ENTITY_IDLE_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/IDLE"
+const ENTITY_COMBAT_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/COMBAT"
 const QUEST_MARKERS := {
     "available": "res://01_ASSETS/kataklysma/ui/markers/quest_available.svg",
     "in_progress": "res://01_ASSETS/kataklysma/ui/markers/quest_in_progress.svg",
@@ -34,6 +38,15 @@ var encounter_panel: ColorRect
 var encounter_body: Label
 var encounter_hint: Label
 var encounter_manager: Node
+var combat_system: RefCounted
+var combat_player_sprite: AnimatedSprite2D
+var combat_enemy_sprite: AnimatedSprite2D
+var combat_player_bar: ProgressBar
+var combat_enemy_bar: ProgressBar
+var combat_player_spirit_bar: ProgressBar
+var combat_turn_label: Label
+var combat_log_label: Label
+var combat_action_label: Label
 
 var quest_state := "available"
 var objective_complete := false
@@ -199,31 +212,128 @@ func _build_hud() -> void:
     dialogue_panel.add_child(dialogue_hint)
 
     encounter_panel = ColorRect.new()
-    encounter_panel.position = Vector2(235.0, 150.0)
-    encounter_panel.size = Vector2(810.0, 390.0)
+    encounter_panel.position = Vector2(145.0, 90.0)
+    encounter_panel.size = Vector2(990.0, 560.0)
     encounter_panel.color = Color(0.08, 0.025, 0.07, 0.97)
     encounter_panel.visible = false
     hud.add_child(encounter_panel)
 
     var encounter_title := Label.new()
-    encounter_title.position = Vector2(28.0, 22.0)
-    encounter_title.text = "ENCONTRO ALEATÓRIO  //  DEMO DE COMBATE"
+    encounter_title.position = Vector2(30.0, 18.0)
+    encounter_title.text = "ENCONTRO ALEATÓRIO  //  COMBATE POR TURNOS"
     encounter_title.add_theme_font_size_override("font_size", 22)
     encounter_title.add_theme_color_override("font_color", Color("#ffb4c4"))
     encounter_panel.add_child(encounter_title)
 
+    combat_turn_label = Label.new()
+    combat_turn_label.position = Vector2(690.0, 20.0)
+    combat_turn_label.size = Vector2(260.0, 30.0)
+    combat_turn_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    combat_turn_label.add_theme_font_size_override("font_size", 18)
+    combat_turn_label.add_theme_color_override("font_color", Color("#a9f4b0"))
+    encounter_panel.add_child(combat_turn_label)
+
     encounter_body = Label.new()
-    encounter_body.position = Vector2(28.0, 82.0)
-    encounter_body.size = Vector2(750.0, 210.0)
+    encounter_body.position = Vector2(30.0, 58.0)
+    encounter_body.size = Vector2(930.0, 65.0)
     encounter_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    encounter_body.add_theme_font_size_override("font_size", 20)
+    encounter_body.add_theme_font_size_override("font_size", 17)
     encounter_panel.add_child(encounter_body)
 
+    combat_player_sprite = AnimatedSprite2D.new()
+    combat_player_sprite.name = "CombatPlayerSprite"
+    combat_player_sprite.sprite_frames = player.sprite_frames
+    combat_player_sprite.animation = &"idle"
+    combat_player_sprite.position = Vector2(190.0, 205.0)
+    combat_player_sprite.scale = Vector2(0.42, 0.42)
+    combat_player_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+    encounter_panel.add_child(combat_player_sprite)
+
+    combat_enemy_sprite = _make_entity_actor()
+    combat_enemy_sprite.name = "CombatEnemySprite"
+    combat_enemy_sprite.position = Vector2(780.0, 205.0)
+    combat_enemy_sprite.scale = Vector2(0.42, 0.42)
+    combat_enemy_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+    encounter_panel.add_child(combat_enemy_sprite)
+
+    var player_label := Label.new()
+    player_label.position = Vector2(30.0, 235.0)
+    player_label.text = "KATAKLYSMA"
+    player_label.add_theme_font_size_override("font_size", 16)
+    player_label.add_theme_color_override("font_color", Color("#d9f1ff"))
+    encounter_panel.add_child(player_label)
+
+    var enemy_label := Label.new()
+    enemy_label.position = Vector2(590.0, 235.0)
+    enemy_label.text = "MAKRURA CORROMPIDA"
+    enemy_label.add_theme_font_size_override("font_size", 16)
+    enemy_label.add_theme_color_override("font_color", Color("#ffb4c4"))
+    encounter_panel.add_child(enemy_label)
+
+    combat_player_bar = _make_combat_bar(Vector2(30.0, 265.0), Color("#54c7a2"))
+    encounter_panel.add_child(combat_player_bar)
+    combat_player_spirit_bar = _make_combat_bar(Vector2(30.0, 293.0), Color("#6fa9ff"))
+    encounter_panel.add_child(combat_player_spirit_bar)
+    combat_enemy_bar = _make_combat_bar(Vector2(590.0, 265.0), Color("#e26b77"))
+    encounter_panel.add_child(combat_enemy_bar)
+
+    combat_action_label = Label.new()
+    combat_action_label.position = Vector2(30.0, 325.0)
+    combat_action_label.size = Vector2(930.0, 30.0)
+    combat_action_label.add_theme_font_size_override("font_size", 16)
+    combat_action_label.add_theme_color_override("font_color", Color("#ffe7a6"))
+    encounter_panel.add_child(combat_action_label)
+
+    combat_log_label = Label.new()
+    combat_log_label.position = Vector2(30.0, 360.0)
+    combat_log_label.size = Vector2(930.0, 78.0)
+    combat_log_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    combat_log_label.add_theme_font_size_override("font_size", 15)
+    combat_log_label.add_theme_color_override("font_color", Color(1.0, 0.96, 0.86, 0.9))
+    encounter_panel.add_child(combat_log_label)
+
     encounter_hint = Label.new()
-    encounter_hint.position = Vector2(28.0, 320.0)
+    encounter_hint.position = Vector2(30.0, 485.0)
+    encounter_hint.size = Vector2(930.0, 48.0)
+    encounter_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     encounter_hint.add_theme_font_size_override("font_size", 15)
     encounter_hint.add_theme_color_override("font_color", Color("#91d7ff"))
     encounter_panel.add_child(encounter_hint)
+
+func _make_combat_bar(bar_position: Vector2, fill_color: Color) -> ProgressBar:
+    var bar := ProgressBar.new()
+    bar.position = bar_position
+    bar.size = Vector2(350.0, 18.0)
+    bar.min_value = 0.0
+    bar.max_value = 100.0
+    bar.value = 100.0
+    bar.show_percentage = false
+    var background := StyleBoxFlat.new()
+    background.bg_color = Color(0.02, 0.015, 0.04, 0.9)
+    background.corner_radius_top_left = 4
+    background.corner_radius_top_right = 4
+    background.corner_radius_bottom_left = 4
+    background.corner_radius_bottom_right = 4
+    var fill := StyleBoxFlat.new()
+    fill.bg_color = fill_color
+    fill.corner_radius_top_left = 4
+    fill.corner_radius_top_right = 4
+    fill.corner_radius_bottom_left = 4
+    fill.corner_radius_bottom_right = 4
+    bar.add_theme_stylebox_override("background", background)
+    bar.add_theme_stylebox_override("fill", fill)
+    return bar
+
+func _make_entity_actor() -> AnimatedSprite2D:
+    var actor := AnimatedSprite2D.new()
+    var frames := SpriteFrames.new()
+    if frames.has_animation("default"):
+        frames.remove_animation("default")
+    _add_frames(frames, "idle", ENTITY_IDLE_DIR, "entity_corrupted_makrura_idle", 4, 4.0, true)
+    _add_frames(frames, "combat", ENTITY_COMBAT_DIR, "entity_corrupted_makrura_combat", 4, 8.0, true)
+    actor.sprite_frames = frames
+    actor.animation = &"idle"
+    return actor
 
 func _build_encounter_manager() -> void:
     encounter_manager = KataklysmaRandomEncounterManager.new()
@@ -365,25 +475,83 @@ func _on_encounter_triggered(_zone_id: String, encounter: Dictionary) -> void:
 func _start_encounter(encounter: Dictionary) -> void:
     encounter_active = true
     encounter_choice_made = false
-    var event_type := str(encounter.get("type", "monster_ambush")).replace("_", " ").capitalize()
+    var event_type: String = str(encounter.get("type", "monster_ambush")).replace("_", " ").capitalize()
     var actors: Array = encounter.get("actors", ["makrura_corrupted"])
-    encounter_body.text = "Um evento surgiu durante a exploração.\n\nTipo: %s\nAmeaça / atores: %s\n\nEsta é a interface-base do combate por turnos. A implementação completa de habilidades e turnos entra no próximo marco." % [event_type, ", ".join(actors)]
-    encounter_hint.text = "1  Ataque físico     2  Canalizar espírito     3  Recuar     •     E / Espaço depois da escolha"
+    var enemy_id: String = "water_spirit_weakened" if actors.has("water_spirit_weakened") else "corrupted_makrura"
+    combat_system = CombatSystem.new()
+    var snapshot: Dictionary = combat_system.start_battle(enemy_id)
+    encounter_body.text = "Um evento surgiu durante a exploração.  Tipo: %s\nAmeaça: %s" % [event_type, str(snapshot["enemy"]["display_name"])]
+    encounter_hint.text = "1 Ataque físico   2 Canalizar espírito   3 Guarda   4 Purificar   5 Fugir"
+    combat_player_sprite.visible = true
+    combat_enemy_sprite.visible = true
+    combat_player_sprite.play("idle")
+    combat_enemy_sprite.play("idle")
+    _refresh_combat_ui(snapshot)
     encounter_panel.visible = true
 
 func _handle_encounter_input(keycode: Key) -> void:
-    if keycode in [KEY_1, KEY_2, KEY_3]:
+    if encounter_choice_made and keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER, KEY_ESCAPE]:
+        var result: String = combat_system.battle_result if combat_system else ""
+        encounter_panel.visible = false
+        encounter_active = false
+        combat_player_sprite.visible = false
+        combat_enemy_sprite.visible = false
+        if result == "victory":
+            _show_toast("Vitória! A ameaça foi derrotada.", 3.0)
+        elif result == "defeat":
+            _show_toast("Derrota. Pressione R para reiniciar a demo.", 4.0)
+        else:
+            _show_toast("Encontro encerrado. A exploração continua.", 3.0)
+        return
+
+    var action: String = ""
+    match keycode:
+        KEY_1:
+            action = "strike"
+        KEY_2:
+            action = "channel"
+        KEY_3:
+            action = "guard"
+        KEY_4:
+            action = "purify"
+        KEY_5, KEY_ESCAPE:
+            action = "flee"
+        _:
+            return
+    var snapshot: Dictionary = combat_system.perform_action(action)
+    _refresh_combat_ui(snapshot)
+    var phase: String = str(snapshot.get("phase", "player_turn"))
+    if phase in ["victory", "defeat", "fled"]:
         encounter_choice_made = true
-        var choice: String = str({KEY_1: "Ataque físico", KEY_2: "Canalizar espírito", KEY_3: "Recuar"}.get(keycode, "Ação"))
-        encounter_body.text += "\n\nAção escolhida: %s\nResultado da demo: resolução registrada." % choice
-        encounter_hint.text = "E / Espaço  fechar encontro e continuar explorando"
-    elif encounter_choice_made and keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER, KEY_ESCAPE]:
-        encounter_panel.visible = false
-        encounter_active = false
-        _show_toast("Encontro resolvido. O mundo continua em Echo Isles.", 3.0)
-    elif keycode == KEY_ESCAPE:
-        encounter_panel.visible = false
-        encounter_active = false
+        encounter_hint.text = "Combate encerrado — E / Espaço para voltar ao mapa"
+
+func _refresh_combat_ui(snapshot: Dictionary) -> void:
+    var player_stats: Dictionary = snapshot.get("player", {})
+    var enemy_stats: Dictionary = snapshot.get("enemy", {})
+    combat_player_bar.max_value = float(player_stats.get("max_hp", 1))
+    combat_player_bar.value = float(player_stats.get("hp", 0))
+    combat_player_spirit_bar.max_value = float(player_stats.get("max_spirit", 1))
+    combat_player_spirit_bar.value = float(player_stats.get("spirit", 0))
+    combat_enemy_bar.max_value = float(enemy_stats.get("max_hp", 1))
+    combat_enemy_bar.value = float(enemy_stats.get("hp", 0))
+    var event_lines: Array = snapshot.get("events", [])
+    combat_log_label.text = "\n".join(event_lines)
+    var phase: String = str(snapshot.get("phase", "player_turn"))
+    if phase == "player_turn":
+        combat_turn_label.text = "SUA VEZ  •  Round %d" % int(snapshot.get("round", 1))
+        combat_action_label.text = "[1] Ataque  [2] Canalizar  [3] Guarda  [4] Purificar  [5] Fugir"
+    elif phase == "enemy_turn":
+        combat_turn_label.text = "TURNO INIMIGO"
+        combat_action_label.text = "A criatura está agindo..."
+    else:
+        combat_turn_label.text = str(phase).to_upper()
+        combat_action_label.text = "Resultado: %s" % str(snapshot.get("result", ""))
+    encounter_body.text = "%s\nHP %d/%d   •   Espírito %d/%d   •   Corrupção %d\nInimigo: HP %d/%d   •   Corrupção %d" % [
+        str(enemy_stats.get("display_name", "Ameaça")),
+        int(player_stats.get("hp", 0)), int(player_stats.get("max_hp", 1)),
+        int(player_stats.get("spirit", 0)), int(player_stats.get("max_spirit", 1)), int(player_stats.get("corruption", 0)),
+        int(enemy_stats.get("hp", 0)), int(enemy_stats.get("max_hp", 1)), int(enemy_stats.get("corruption", 0)),
+    ]
 
 func _reset_demo() -> void:
     quest_state = "available"
@@ -395,6 +563,8 @@ func _reset_demo() -> void:
     step_distance = 0.0
     encounter_active = false
     encounter_panel.visible = false
+    combat_player_sprite.visible = false
+    combat_enemy_sprite.visible = false
     dialogue_panel.visible = false
     _set_quest_state("available")
     _show_toast("Demo reiniciada.", 2.0)

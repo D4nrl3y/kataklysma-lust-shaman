@@ -14,7 +14,7 @@
 - Catálogo de zonas, encontros aleatórios, estados de quest e pontos de interação.
 - Marcadores visuais de quest disponível, em progresso e pronta para entrega.
 - Scripts Godot para markers, mapas, biblioteca de sprites e encontros aleatórios.
-- Primeira vertical slice jogável integrada: Echo Isles, movimentação, Kataklysma, Zekranu, quest com três marcadores, objetivo de mapa, encontros aleatórios e tela-base de combate.
+- Primeira vertical slice jogável integrada: Echo Isles, movimentação, Kataklysma, Zekranu, quest com três marcadores, objetivo de mapa, encontros aleatórios e combate funcional por turnos.
 
 ## Próximos lotes de arte
 
@@ -27,7 +27,7 @@
 - Monstros de campo para cada arquétipo de encontro.
 - Biblioteca de static objects separada dos backgrounds.
 - Camadas finais de TileMap/collision, foreground, rotas, spawn points e encounter regions.
-- Substituir o combate demonstrativo por combate por turnos real, com iniciativa, habilidades, dano, estados e retorno ao mapa.
+- Expandir o combate funcional para formações com múltiplos inimigos, habilidades específicas por atributo, animações de ação, inventário/equipamento e balanceamento.
 
 ## Decisão de escopo
 

@@ -1,0 +1,25 @@
+{
+  "version": "v001",
+  "purpose": "Canonical identity registry for renders, CGs, portraits and sprites.",
+  "approval_policy": "reference_seed_is_not_production_locked",
+  "characters": [
+    {"id": "kataklysma", "type": "player", "status": "production_locked_reference", "canonical_references": ["res://02_REFERENCE/01_CANON/kataklysma_character_bible.png", "res://02_REFERENCE/02_TURNAROUND/kataklysma_turnaround_full.png", "res://02_REFERENCE/03_FACE/kataklysma_face_closeup.png", "res://02_REFERENCE/07_PALETTE/kataklysma_palette.png", "res://02_REFERENCE/08_SPRITE_REFERENCE/kataklysma_sprites_sheet.png"], "required_outputs": ["render", "portrait", "sprite_idle", "sprite_walk", "sprite_cast", "sprite_combat", "cg"]},
+    {"id": "zekranu", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_zekranu_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "zalkiri", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_zalkiri_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "mokjala", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_mokjala_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "rakjin", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_rakjin_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "tazrima", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_tazrima_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "rukka", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_rukka_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "makjala", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_makjala_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "azkarra", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_azkarra_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "korgash", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_korgash_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "sister_aruka", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_sister_aruka_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "grikzan", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_grikzan_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "razzik_coilthumb", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_razzik_coilthumb_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "vexa_geargrin", "type": "npc", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/npcs/renders/npc_vexa_geargrin_render_neutral_v001.png"], "required_outputs": ["turnaround", "expressions", "render", "sprite", "cg"]},
+    {"id": "corrupted_makrura", "type": "entity", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/entities/renders/entity_corrupted_makrura_render_neutral_v001.png"], "required_outputs": ["turnaround", "sprite", "combat", "cg"]},
+    {"id": "weakened_water_spirit", "type": "entity", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/entities/renders/entity_weakened_water_spirit_render_neutral_v001.png"], "required_outputs": ["turnaround", "sprite", "combat", "cg"]},
+    {"id": "eye_of_storm_avatar", "type": "entity", "status": "reference_seed_only", "canonical_references": ["res://01_ASSETS/kataklysma/character/entities/renders/entity_eye_of_storm_avatar_render_neutral_v001.png"], "required_outputs": ["turnaround", "sprite", "combat", "cg"]}
+  ]
+}
+

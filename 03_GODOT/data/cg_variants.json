@@ -1,5 +1,5 @@
 {
-  "version": "v001",
+  "version": "v002",
   "variant_count": 4,
   "sequence": [
     {"id": "01_start", "display_name": "Início", "purpose": "Estabelece local, personagens e objetivo"},
@@ -7,20 +7,20 @@
     {"id": "03_climax", "display_name": "Clímax", "purpose": "Pico emocional, conflito ou escolha"},
     {"id": "04_resolution", "display_name": "Desfecho", "purpose": "Consequência imediata e transição"}
   ],
+  "filename_pattern": "<scene>__<sequence_id>_v<revision>.png",
+  "asset_root": "res://01_ASSETS/kataklysma/cg/scenes/VARIANTS/",
   "scenes": [
-    "echo_002_zekranu_totem_choice",
-    "echo_003_zalkiri_mokjala_hunt",
-    "echo_004_rakjin_rivalry",
-    "echo_005_water_spirit_choice",
-    "echo_006_corrupted_makrura_boss",
-    "senjin_007_tazrima_rukka_herbs",
-    "echo_008_makjala_vision",
-    "echo_009_azkarra_storm_ritual",
-    "raz_011_korgash_duel",
-    "barrens_012_sister_aruka_roadside_vision",
-    "ratchet_013_grikzan_razzik_vexa_bargain",
-    "end_015_eye_ritual"
-  ],
-  "filename_pattern": "<scene>__<variant>_v001.png",
-  "asset_root": "res://01_ASSETS/kataklysma/cg/scenes/VARIANTS/"
+    {"id": "echo_002_zekranu_totem_choice", "status": "approved_sequence_v002", "continuity_locks": ["kataklysma", "zekranu"], "files": ["echo_002_zekranu_totem_choice__01_start_v002.png", "echo_002_zekranu_totem_choice__02_development_v002.png", "echo_002_zekranu_totem_choice__03_climax_v002.png", "echo_002_zekranu_totem_choice__04_resolution_v002.png"]},
+    {"id": "echo_003_zalkiri_mokjala_hunt", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "zalkiri", "mokjala"], "files": []},
+    {"id": "echo_004_rakjin_rivalry", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "rakjin"], "files": []},
+    {"id": "echo_005_water_spirit_choice", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "weakened_water_spirit"], "files": []},
+    {"id": "echo_006_corrupted_makrura_boss", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "corrupted_makrura"], "files": []},
+    {"id": "senjin_007_tazrima_rukka_herbs", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "tazrima", "rukka"], "files": []},
+    {"id": "echo_008_makjala_vision", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "makjala"], "files": []},
+    {"id": "echo_009_azkarra_storm_ritual", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "azkarra"], "files": []},
+    {"id": "raz_011_korgash_duel", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "korgash"], "files": []},
+    {"id": "barrens_012_sister_aruka_roadside_vision", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "sister_aruka"], "files": []},
+    {"id": "ratchet_013_grikzan_razzik_vexa_bargain", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "grikzan", "razzik_coilthumb", "vexa_geargrin"], "files": []},
+    {"id": "end_015_eye_ritual", "status": "legacy_keyframe_only", "continuity_locks": ["kataklysma", "eye_of_storm_avatar", "zekranu", "makjala", "azkarra"], "files": []}
+  ]
 }

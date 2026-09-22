@@ -1,6 +1,9 @@
 # CG v001 — Asset Roster
 
-These are first-pass story CGs derived from the Narrative Bible. They are scene assets rather than character portraits. All visuals are v001 concept art and must be approved before becoming canon.
+These are first-pass story CGs derived from the Narrative Bible. They are scene
+assets rather than character portraits. They are retained under
+`01_ASSETS/kataklysma/cg/scenes/legacy_keyframes/` as historical references;
+they are not approved continuity assets.
 
 - `cg_echo_002_zekranu_totem_choice_v001.png` — Zek'Ranu tutorial / Echo Isles
 - `cg_echo_003_zalkiri_mokjala_hunt_v001.png` — Zal'Kiri and Mok'Jala tracking scene

@@ -7,7 +7,14 @@ Each scene must receive four independent images, keeping the same character desi
 3. `03_climax` — conflict, revelation or choice.
 4. `04_resolution` — immediate consequence / transition.
 
-Folders are ready under `01_ASSETS/kataklysma/cg/scenes/VARIANTS/<scene>/`. The existing 12 files in `cg/scenes/` are the base concept images; they are not counted as the four final state variants yet.
+Production files live under `01_ASSETS/kataklysma/cg/scenes/VARIANTS/`. The old
+single-frame concepts were moved to `scenes/legacy_keyframes/` and are not
+counted as final state variants.
+
+Current status is tracked authoritatively in
+`03_GODOT/data/cg_variants.json`. At v002, the first scene has a complete
+four-frame sequence; the remaining scenes are explicitly marked as pending
+production rather than being presented as complete.
 
 Scenes queued:
 

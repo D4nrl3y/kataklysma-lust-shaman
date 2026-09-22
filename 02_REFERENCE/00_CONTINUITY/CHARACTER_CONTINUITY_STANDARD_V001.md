@@ -33,9 +33,10 @@ Referências canônicas:
 ## NPCs e entidades
 
 Cada personagem deve possuir uma referência bloqueada antes de entrar em uma
-CG continuada. O render neutro atual é apenas a semente visual inicial; ainda
-é necessário completar turnaround, expressões, proporções de sprite e ficha
-de acessórios antes de considerar o NPC “production locked”.
+CG continuada. Para NPCs e entidades, o pacote mínimo de lock é composto pelo
+render neutro canônico e por uma ficha `identity_lock` com vistas, rosto/core e
+equipamento-assinatura. Turnarounds técnicos, expressões e proporções de sprite
+podem ser extensões posteriores, mas não podem contradizer esse pacote.
 
 O inventário e o estado de cada personagem estão em
 `character_continuity_manifest.json`.
@@ -48,6 +49,8 @@ O inventário e o estado de cada personagem estão em
    cenário e direção de arte. A iluminação e a ação podem evoluir.
 3. Não é permitido completar uma sequência copiando ou renomeando o mesmo
    PNG. Cada arquivo deve ser uma imagem distinta e revisada.
+4. Um arquivo novo só entra em produção se passar pela comparação com o
+   render neutro e a ficha `identity_lock` registrados no manifesto.
 4. O espaço inferior deve permanecer utilizável para a caixa de diálogo do
    jogo.
 5. O arquivo original de uma CG antiga não é automaticamente uma continuação;
@@ -64,4 +67,3 @@ Antes de integrar no Godot, verificar:
 - escala e posição coerentes entre quadros;
 - ausência de texto, marca-d'água, membros duplicados ou anatomia quebrada;
 - existência dos quatro arquivos no manifesto da cena.
-

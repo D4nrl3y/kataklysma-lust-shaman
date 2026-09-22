@@ -15,6 +15,7 @@ var enemy: Dictionary = {}
 var phase := "idle"
 var round := 0
 var battle_result := ""
+var initiative_order := "player_first"
 var _events: Array[String] = []
 var _action_consumed := false
 
@@ -38,11 +39,23 @@ func start_battle(enemy_id: String = "corrupted_makrura") -> Dictionary:
         "corruption": 0,
     }
     enemy = _build_enemy(enemy_id)
-    phase = "player_turn"
+    var player_initiative: int = int(player["agility"])
+    var enemy_initiative: int = int(enemy["agility"])
+    initiative_order = "player_first" if player_initiative >= enemy_initiative else "enemy_first"
+    phase = "player_turn" if initiative_order == "player_first" else "enemy_turn"
     round = 1
     battle_result = ""
     _events.clear()
-    _append_event("Round 1 — sua vez.")
+    _append_event("Iniciativa: %s." % ("Kataklysma" if initiative_order == "player_first" else enemy["display_name"]))
+    if phase == "enemy_turn":
+        _enemy_turn()
+        if int(player.get("hp", 0)) <= 0:
+            _finish("defeat", "Kataklysma caiu antes de agir.")
+        else:
+            phase = "player_turn"
+            _append_event("Round 1 — sua vez.")
+    else:
+        _append_event("Round 1 — sua vez.")
     return get_snapshot()
 
 func _build_enemy(enemy_id: String) -> Dictionary:
@@ -78,6 +91,7 @@ func get_snapshot() -> Dictionary:
     return {
         "phase": phase,
         "round": round,
+        "initiative": initiative_order,
         "result": battle_result,
         "player": player.duplicate(true),
         "enemy": enemy.duplicate(true),

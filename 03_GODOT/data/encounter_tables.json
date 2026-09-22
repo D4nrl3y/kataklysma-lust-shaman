@@ -1,0 +1,49 @@
+{
+  "version": "v001",
+  "rules": {
+    "cooldown_seconds": 45,
+    "minimum_steps_between_events": 18,
+    "roll_only_in_spawn_regions": true,
+    "never_during_dialogue": true,
+    "never_during_boss_or_cg": true
+  },
+  "tables": {
+    "echo_isles_day": [
+      {"weight": 35, "type": "npc_walkby", "actors": ["hunter", "child", "village_shaman"]},
+      {"weight": 30, "type": "monster_ambush", "actors": ["water_spirit_weakened", "makrura_corrupted"]},
+      {"weight": 20, "type": "resource_find", "actors": ["herb_patch", "tide_pool"]},
+      {"weight": 15, "type": "spirit_omen", "actors": ["spirit_elemental"]}
+    ],
+    "senjin_village_day": [
+      {"weight": 40, "type": "npc_walkby", "actors": ["merchant", "fisher", "villager"]},
+      {"weight": 25, "type": "supply_problem", "actors": ["rukka", "supply_crate"]},
+      {"weight": 20, "type": "monster_ambush", "actors": ["makrura_corrupted"]},
+      {"weight": 15, "type": "alchemy_request", "actors": ["tazrima"]}
+    ],
+    "durotar_coast_day": [
+      {"weight": 30, "type": "npc_walkby", "actors": ["hunter", "scout", "gatherer"]},
+      {"weight": 35, "type": "monster_ambush", "actors": ["melee_chaser", "ranged_harasser", "brute"]},
+      {"weight": 20, "type": "track_discovery", "actors": ["track_marker", "mokjala"]},
+      {"weight": 15, "type": "ritual_omen", "actors": ["azkarra", "spirit_elemental"]}
+    ],
+    "razor_hill_day": [
+      {"weight": 45, "type": "npc_walkby", "actors": ["orc_guard", "warrior", "arena_spectator"]},
+      {"weight": 30, "type": "arena_challenge", "actors": ["korgash", "rakjin"]},
+      {"weight": 25, "type": "monster_ambush", "actors": ["brute", "melee_chaser"]}
+    ],
+    "ratchet_day": [
+      {"weight": 45, "type": "npc_walkby", "actors": ["goblin_merchant", "sailor", "mechanic"]},
+      {"weight": 25, "type": "deal_opportunity", "actors": ["grikzan", "razzik_coilthumb"]},
+      {"weight": 15, "type": "machine_malfunction", "actors": ["vexa_geargrin", "controller"]},
+      {"weight": 15, "type": "alley_ambush", "actors": ["ranged_harasser", "support"]}
+    ],
+    "barrens_night": [
+      {"weight": 35, "type": "npc_walkby", "actors": ["nomad", "pilgrim", "sister_aruka"]},
+      {"weight": 40, "type": "monster_ambush", "actors": ["melee_chaser", "ranged_harasser", "brute"]},
+      {"weight": 25, "type": "spirit_omen", "actors": ["sister_aruka", "spirit_elemental"]}
+    ],
+    "storm_shrine_final": [
+      {"weight": 100, "type": "scripted_sequence", "actors": ["eye_of_storm_avatar", "zekranu", "makjala", "azkarra"]}
+    ]
+  }
+}

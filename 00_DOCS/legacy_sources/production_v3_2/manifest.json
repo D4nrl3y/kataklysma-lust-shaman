@@ -1,0 +1,93 @@
+{
+  "package_name": "Kataklysma Production Asset Pack FINAL",
+  "version": "3.2 SPRITEFIX",
+  "sprite_frame_size": [
+    543,
+    362
+  ],
+  "folders": {
+    "04_sprites": [],
+    "04_sprites/cast": [
+      "chr_kataklysma_spr_cast_f001_v001.png",
+      "chr_kataklysma_spr_cast_f002_v001.png",
+      "chr_kataklysma_spr_cast_f003_v001.png",
+      "chr_kataklysma_spr_cast_f004_v001.png"
+    ],
+    "04_sprites/idle": [
+      "chr_kataklysma_spr_idle_f001_v001.png",
+      "chr_kataklysma_spr_idle_f002_v001.png",
+      "chr_kataklysma_spr_idle_f003_v001.png",
+      "chr_kataklysma_spr_idle_f004_v001.png"
+    ],
+    "04_sprites/combat": [
+      "chr_kataklysma_spr_combat_f001_v001.png",
+      "chr_kataklysma_spr_combat_f002_v001.png",
+      "chr_kataklysma_spr_combat_f003_v001.png",
+      "chr_kataklysma_spr_combat_f004_v001.png"
+    ],
+    "04_sprites/source_sheets": [
+      "chr_kataklysma_sheet_cast_combat_v001.png",
+      "chr_kataklysma_sheet_idle_walk_v001.png"
+    ],
+    "04_sprites/walk": [
+      "chr_kataklysma_spr_walk_f001_v001.png",
+      "chr_kataklysma_spr_walk_f002_v001.png",
+      "chr_kataklysma_spr_walk_f003_v001.png",
+      "chr_kataklysma_spr_walk_f004_v001.png"
+    ],
+    "01_character": [],
+    "01_character/models": [],
+    "01_character/models/back": [
+      "chr_kataklysma_model_back_v001.png"
+    ],
+    "01_character/models/three_quarter": [
+      "chr_kataklysma_model_threequarter_v001.png"
+    ],
+    "01_character/models/side": [
+      "chr_kataklysma_model_side_v001.png"
+    ],
+    "01_character/models/front": [
+      "chr_kataklysma_model_front_v001.png"
+    ],
+    "01_character/details": [
+      "chr_kataklysma_foot_detail_v001.png",
+      "chr_kataklysma_hand_detail_v001.png"
+    ],
+    "02_portraits": [],
+    "02_portraits/corrupted": [
+      "ui_cutin_kataklysma_magic_v001.png",
+      "ui_portrait_kataklysma_corrupted_v001.png"
+    ],
+    "02_portraits/neutral": [
+      "ui_portrait_kataklysma_neutral_v001.png"
+    ],
+    "03_equipment": [],
+    "03_equipment/weapons": [
+      "prop_weapon_staff_kataklysma_v001.png"
+    ],
+    "05_cg": [],
+    "05_cg/promo": [
+      "keyart_lust_shamans_journey_vertical_v001.png",
+      "keyart_lust_shamans_journey_widescreen16x9_v001.png"
+    ],
+    "05_cg/story_scenes": [
+      "concept_kataklysma_character_sheet_original_v001.png",
+      "concept_kataklysma_character_sheet_refined_v001.png",
+      "concept_kataklysma_master_board_v001.png"
+    ],
+    "00_docs": [
+      "README.md",
+      "checksums_sha256.txt",
+      "manifest.json"
+    ],
+    "06_references": [],
+    "06_references/original_screens": [
+      "ref_kataklysma_back_left_v001.png",
+      "ref_kataklysma_back_right_v001.png",
+      "ref_kataklysma_back_v001.png",
+      "ref_kataklysma_front_v001.png",
+      "ref_kataklysma_side_left_v001.png",
+      "ref_kataklysma_side_right_v001.png"
+    ]
+  }
+}

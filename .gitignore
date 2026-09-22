@@ -1,0 +1,22 @@
+# Legacy archive is kept locally, but is not part of the active development repo.
+/90_SOURCE_ARCHIVE/
+
+# Generated audit intermediates and temporary image-processing work.
+/99_AUDIT/_*/
+/99_AUDIT/*_work/
+/99_AUDIT/*montage*.png
+/99_AUDIT/_*.png
+/99_AUDIT/debug_*.png
+/99_AUDIT/mask_*.png
+/99_AUDIT/qa_*.png
+/99_AUDIT/test_*.png
+/99_AUDIT/clean_largest.png
+
+# Local editor/OS files.
+.godot/
+.import/
+export.cfg
+Thumbs.db
+Desktop.ini
+*.tmp
+*.bak

@@ -1,0 +1,27 @@
+{
+  "version": "v001",
+  "quest_marker_states": {
+    "available": {
+      "id": "quest_available",
+      "display_name": "Quest disponível",
+      "marker_asset": "res://01_ASSETS/kataklysma/ui/markers/quest_available.svg",
+      "color": "#F6D365",
+      "rule": "NPC ainda não interagido e quest não aceita"
+    },
+    "in_progress": {
+      "id": "quest_in_progress",
+      "display_name": "Quest em progresso",
+      "marker_asset": "res://01_ASSETS/kataklysma/ui/markers/quest_in_progress.svg",
+      "color": "#72B7FF",
+      "rule": "Quest aceita e objetivos ainda incompletos"
+    },
+    "complete": {
+      "id": "quest_complete",
+      "display_name": "Quest pronta para entrega",
+      "marker_asset": "res://01_ASSETS/kataklysma/ui/markers/quest_complete.svg",
+      "color": "#8BE28B",
+      "rule": "Todos os objetivos completos, aguardando entrega"
+    }
+  },
+  "state_transition": ["quest_available", "quest_in_progress", "quest_complete", "turned_in"]
+}

@@ -1,0 +1,26 @@
+{
+  "version": "v001",
+  "variant_count": 4,
+  "sequence": [
+    {"id": "01_start", "display_name": "Início", "purpose": "Estabelece local, personagens e objetivo"},
+    {"id": "02_development", "display_name": "Desenvolvimento", "purpose": "A tensão ou ação começa"},
+    {"id": "03_climax", "display_name": "Clímax", "purpose": "Pico emocional, conflito ou escolha"},
+    {"id": "04_resolution", "display_name": "Desfecho", "purpose": "Consequência imediata e transição"}
+  ],
+  "scenes": [
+    "echo_002_zekranu_totem_choice",
+    "echo_003_zalkiri_mokjala_hunt",
+    "echo_004_rakjin_rivalry",
+    "echo_005_water_spirit_choice",
+    "echo_006_corrupted_makrura_boss",
+    "senjin_007_tazrima_rukka_herbs",
+    "echo_008_makjala_vision",
+    "echo_009_azkarra_storm_ritual",
+    "raz_011_korgash_duel",
+    "barrens_012_sister_aruka_roadside_vision",
+    "ratchet_013_grikzan_razzik_vexa_bargain",
+    "end_015_eye_ritual"
+  ],
+  "filename_pattern": "<scene>__<variant>_v001.png",
+  "asset_root": "res://01_ASSETS/kataklysma/cg/scenes/VARIANTS/"
+}

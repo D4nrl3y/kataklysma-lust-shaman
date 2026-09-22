@@ -1,0 +1,284 @@
+{
+  "character": "Kataklysma",
+  "asset_pack_version": "3.0-final",
+  "sprite_format": "PNG RGBA",
+  "frame_canvas_px": [
+    543,
+    362
+  ],
+  "pivot_policy": "bottom_center",
+  "recommended_pivot_px": [
+    271.5,
+    362
+  ],
+  "animations": {
+    "idle": {
+      "fps": 4.0,
+      "loop": true,
+      "frame_count": 4,
+      "frames": [
+        {
+          "index": 1,
+          "file": "02_SPRITES/Idle/chr_kataklysma_spr_idle_f001_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            89,
+            0,
+            537,
+            362
+          ],
+          "sha256": "c1a60a9a3aee8fcf5c9acac3328db41598f8b8b14032653eb2a78bddfe7e92f7"
+        },
+        {
+          "index": 2,
+          "file": "02_SPRITES/Idle/chr_kataklysma_spr_idle_f002_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            9,
+            0,
+            543,
+            362
+          ],
+          "sha256": "adf32008e5a8b2c6dc4512c56c49e0aa586c83ed0b1ec4207ac390d11834d37b"
+        },
+        {
+          "index": 3,
+          "file": "02_SPRITES/Idle/chr_kataklysma_spr_idle_f003_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            1,
+            0,
+            531,
+            362
+          ],
+          "sha256": "b8d4ada260158f151911045264f4e8b067436d5451d32ae247b91a567069d11d"
+        },
+        {
+          "index": 4,
+          "file": "02_SPRITES/Idle/chr_kataklysma_spr_idle_f004_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            5,
+            0,
+            396,
+            362
+          ],
+          "sha256": "12bd54d4b7ff45954bb68774edf481b58910d8daa2d429e2a8ed0c94483620ea"
+        }
+      ]
+    },
+    "walk": {
+      "fps": 8.0,
+      "loop": true,
+      "frame_count": 4,
+      "frames": [
+        {
+          "index": 1,
+          "file": "02_SPRITES/Walk/chr_kataklysma_spr_walk_f001_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            41,
+            0,
+            403,
+            362
+          ],
+          "sha256": "9069ec58384993a3b648f903c37c54e293ff94fa80260c3077bbd3628e6d4773"
+        },
+        {
+          "index": 2,
+          "file": "02_SPRITES/Walk/chr_kataklysma_spr_walk_f002_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            27,
+            0,
+            537,
+            362
+          ],
+          "sha256": "542e252d2899ded9583e5b56eacf5039f28238249415943a6bfbc83a75dbfbf7"
+        },
+        {
+          "index": 3,
+          "file": "02_SPRITES/Walk/chr_kataklysma_spr_walk_f003_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            15,
+            0,
+            523,
+            362
+          ],
+          "sha256": "af71ce2d211c3eb6eab8d18563946e80397e4c144e6a061576eccbf770800f8c"
+        },
+        {
+          "index": 4,
+          "file": "02_SPRITES/Walk/chr_kataklysma_spr_walk_f004_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            53,
+            0,
+            521,
+            362
+          ],
+          "sha256": "d00970e6f69917adc5be19053d45bdd489b4dda4bb4c22f64c7af3257711fda2"
+        }
+      ]
+    },
+    "cast": {
+      "fps": 6.0,
+      "loop": false,
+      "frame_count": 4,
+      "frames": [
+        {
+          "index": 1,
+          "file": "02_SPRITES/Cast/chr_kataklysma_spr_cast_f001_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            0,
+            0,
+            509,
+            362
+          ],
+          "sha256": "6cc58d6611a6750612394c95cac03ea6d904d1f8340e9d830229d23ea6a00056"
+        },
+        {
+          "index": 2,
+          "file": "02_SPRITES/Cast/chr_kataklysma_spr_cast_f002_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            71,
+            0,
+            509,
+            362
+          ],
+          "sha256": "d38eda5512654e1bf1845edfe0f61f7ab0ca22fabe8613b87b043b178d11c2f2"
+        },
+        {
+          "index": 3,
+          "file": "02_SPRITES/Cast/chr_kataklysma_spr_cast_f003_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            89,
+            0,
+            436,
+            362
+          ],
+          "sha256": "1baa4f2cc27be548f47bd0927a6a3cffd1778726d6e9f1dbe5edaff814181e6f"
+        },
+        {
+          "index": 4,
+          "file": "02_SPRITES/Cast/chr_kataklysma_spr_cast_f004_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            58,
+            14,
+            511,
+            362
+          ],
+          "sha256": "369d6266afc7e4470e51858eefdb7c62e55654bd03224b075d64a6d7765ca19d"
+        }
+      ]
+    },
+    "combat": {
+      "fps": 10.0,
+      "loop": false,
+      "frame_count": 4,
+      "frames": [
+        {
+          "index": 1,
+          "file": "02_SPRITES/Combat/chr_kataklysma_spr_combat_f001_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            61,
+            0,
+            541,
+            362
+          ],
+          "sha256": "05242b85de5f944043784001e1921e2edf4d54c44d763919d84b5c7637273f9d"
+        },
+        {
+          "index": 2,
+          "file": "02_SPRITES/Combat/chr_kataklysma_spr_combat_f002_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            5,
+            0,
+            491,
+            362
+          ],
+          "sha256": "26afc3f32ed425b207ccd77796451213307452750571833270603844140ee4a0"
+        },
+        {
+          "index": 3,
+          "file": "02_SPRITES/Combat/chr_kataklysma_spr_combat_f003_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            15,
+            0,
+            539,
+            362
+          ],
+          "sha256": "2f2a5be35b23751f226239350ef8ce3a8afb77ef5b045b0674cb7410f4a5725a"
+        },
+        {
+          "index": 4,
+          "file": "02_SPRITES/Combat/chr_kataklysma_spr_combat_f004_v001.png",
+          "canvas_px": [
+            543,
+            362
+          ],
+          "visible_bbox_px": [
+            5,
+            0,
+            523,
+            362
+          ],
+          "sha256": "06cbc2a3aca1b2dc9beefa5a9ae3bd2e0694ef390bcf6e8a472a768d03a47057"
+        }
+      ]
+    }
+  }
+}

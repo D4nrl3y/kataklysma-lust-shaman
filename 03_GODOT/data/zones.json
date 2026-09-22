@@ -1,0 +1,89 @@
+{
+  "version": "v001",
+  "zones": [
+    {
+      "id": "echo_isles",
+      "display_name": "Echo Isles",
+      "biome": "tropical_coast",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["awakening_cabin", "training_clearing", "tide_pool", "ancestral_cavern", "storm_cliff"],
+      "named_npcs": ["zekranu", "zalkiri", "rakjin", "makjala"],
+      "generic_npcs": ["village_shaman", "hunter", "child", "elder"],
+      "monsters": ["water_spirit_weakened", "makrura_corrupted", "spirit_elemental"],
+      "interactions": ["totem", "tide_pool", "herb_patch", "chest", "quest_board", "ritual_stone"],
+      "random_encounter_table": "echo_isles_day"
+    },
+    {
+      "id": "senjin_village",
+      "display_name": "Sen'jin Village",
+      "biome": "coastal_village",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["central_fire", "alchemist_hut", "supply_store", "shore_dock"],
+      "named_npcs": ["tazrima", "rukka"],
+      "generic_npcs": ["merchant", "guard", "fisher", "villager", "child"],
+      "monsters": ["makrura_corrupted", "melee_chaser"],
+      "interactions": ["alchemy_station", "supply_crate", "campfire", "boat", "quest_board"],
+      "random_encounter_table": "senjin_village_day"
+    },
+    {
+      "id": "durotar_coast",
+      "display_name": "Durotar Coast",
+      "biome": "volcanic_coast",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["hunter_camp", "black_rock_beach", "ravine_pass"],
+      "named_npcs": ["mokjala", "azkarra"],
+      "generic_npcs": ["hunter", "scout", "shaman", "gatherer"],
+      "monsters": ["melee_chaser", "ranged_harasser", "spirit_elemental", "brute"],
+      "interactions": ["track_marker", "herb_patch", "ore_node", "campfire", "totem"],
+      "random_encounter_table": "durotar_coast_day"
+    },
+    {
+      "id": "razor_hill",
+      "display_name": "Razor Hill",
+      "biome": "red_badlands",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["arena", "watchtower", "war_camp", "weapon_smith"],
+      "named_npcs": ["korgash", "azkarra", "rakjin"],
+      "generic_npcs": ["orc_guard", "warrior", "blacksmith", "arena_spectator"],
+      "monsters": ["brute", "melee_chaser", "support"],
+      "interactions": ["arena_gate", "weapon_rack", "bounty_board", "watchtower", "challenge_marker"],
+      "random_encounter_table": "razor_hill_day"
+    },
+    {
+      "id": "ratchet",
+      "display_name": "Ratchet",
+      "biome": "goblin_port",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["market", "scrap_workshop", "dock", "back_alley"],
+      "named_npcs": ["grikzan", "vexa_geargrin", "razzik_coilthumb"],
+      "generic_npcs": ["goblin_merchant", "sailor", "mechanic", "guard", "smuggler"],
+      "monsters": ["controller", "ranged_harasser", "support"],
+      "interactions": ["shop_counter", "workbench", "scrap_pile", "boat", "hidden_cache", "quest_board"],
+      "random_encounter_table": "ratchet_day"
+    },
+    {
+      "id": "barrens",
+      "display_name": "Northern Barrens",
+      "biome": "dry_grassland",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["crossroads", "dry_river", "sister_aruka_camp", "ruined_totem"],
+      "named_npcs": ["sister_aruka"],
+      "generic_npcs": ["nomad", "scout", "merchant", "pilgrim"],
+      "monsters": ["melee_chaser", "ranged_harasser", "brute", "spirit_elemental"],
+      "interactions": ["roadside_fire", "ruined_totem", "herb_patch", "track_marker", "buried_cache"],
+      "random_encounter_table": "barrens_night"
+    },
+    {
+      "id": "eye_of_storm_shrine",
+      "display_name": "Eye of the Storm Shrine",
+      "biome": "elemental_storm",
+      "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
+      "landmarks": ["ritual_platform", "broken_totems", "storm_eye", "ancestral_gate"],
+      "named_npcs": ["zekranu", "makjala", "azkarra"],
+      "generic_npcs": [],
+      "monsters": ["eye_of_storm_avatar", "spirit_elemental", "controller", "support"],
+      "interactions": ["ritual_circle", "storm_anchor", "ancestor_gate", "ending_choice"],
+      "random_encounter_table": "storm_shrine_final"
+    }
+  ]
+}

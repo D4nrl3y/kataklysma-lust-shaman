@@ -1,0 +1,126 @@
+{
+  "pack": "Kataklysma Master Character Pack",
+  "version": "1.0",
+  "game": "Lust Shaman's Journey",
+  "character": "Kataklysma",
+  "canonical_anatomy": {
+    "hands": "3 total digits per hand: 1 thumb + 2 fingers",
+    "feet": "2 toes per foot"
+  },
+  "promo_aspect_ratio": "16:9",
+  "palette_samples": [
+    {
+      "slot": 1,
+      "rgb": [
+        20,
+        16,
+        16
+      ],
+      "hex": "#141010"
+    },
+    {
+      "slot": 2,
+      "rgb": [
+        69,
+        82,
+        126
+      ],
+      "hex": "#45527E"
+    },
+    {
+      "slot": 3,
+      "rgb": [
+        163,
+        148,
+        130
+      ],
+      "hex": "#A39482"
+    },
+    {
+      "slot": 4,
+      "rgb": [
+        128,
+        52,
+        13
+      ],
+      "hex": "#80340D"
+    },
+    {
+      "slot": 5,
+      "rgb": [
+        18,
+        14,
+        13
+      ],
+      "hex": "#120E0D"
+    },
+    {
+      "slot": 6,
+      "rgb": [
+        83,
+        58,
+        40
+      ],
+      "hex": "#533A28"
+    },
+    {
+      "slot": 7,
+      "rgb": [
+        69,
+        42,
+        28
+      ],
+      "hex": "#452A1C"
+    },
+    {
+      "slot": 8,
+      "rgb": [
+        161,
+        95,
+        69
+      ],
+      "hex": "#A15F45"
+    },
+    {
+      "slot": 9,
+      "rgb": [
+        20,
+        16,
+        15
+      ],
+      "hex": "#14100F"
+    },
+    {
+      "slot": 10,
+      "rgb": [
+        86,
+        61,
+        43
+      ],
+      "hex": "#563D2B"
+    },
+    {
+      "slot": 11,
+      "rgb": [
+        102,
+        34,
+        34
+      ],
+      "hex": "#662222"
+    },
+    {
+      "slot": 12,
+      "rgb": [
+        137,
+        63,
+        152
+      ],
+      "hex": "#893F98"
+    }
+  ],
+  "source_master_dimensions": [
+    1672,
+    941
+  ],
+  "notes": "Crops are separated exports from the approved master board plus original visual references and promotional art."
+}

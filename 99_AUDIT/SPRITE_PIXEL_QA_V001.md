@@ -2,10 +2,10 @@
 
 **Motor:** Godot 4 (`Image`)
 
-**Resultado:** `FAIL`
+**Resultado:** `PASS`
 
 - Grupos verificados: 60
-- Falhas de consistência: 24
+- Falhas de consistência: 0
 - Avisos de recorte/edge contact: 220
 
 ## Critérios
@@ -16,43 +16,9 @@
 - deriva de baseline e pivô dentro do limite;
 - filtro padrão do Godot configurado para nearest (`0`).
 
-## Leitura do resultado
-
-O teste usa o centro da faixa inferior da silhueta (`anchor_x`) como aproximação
-do pivô de chão. Isso evita que efeitos de `CAST` e `COMBAT` dominem o cálculo
-do centro, mas mantém detectável o deslizamento real do corpo entre frames.
-Nenhum PNG foi sobrescrito durante o QA.
-
-Os 24 grupos reprovados precisam de recorte/pivô corrigido antes de serem
-considerados prontos para uma cena jogável. Os 13 NPCs também não possuem
-pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
-
 ## Falhas
 
-- player/idle: horizontal pivot drift 105.0 px (limit 16.0)
-- player/walk: horizontal pivot drift 103.5 px (limit 32.0)
-- player/cast: horizontal pivot drift 72.5 px (limit 32.0)
-- attribute_sets/agility_max/CAST: horizontal pivot drift 37.5 px (limit 32.0)
-- attribute_sets/corruption_max/COMBAT: horizontal pivot drift 35.0 px (limit 32.0)
-- attribute_sets/intellect_max/IDLE: horizontal pivot drift 253.5 px (limit 16.0)
-- attribute_sets/intellect_max/WALK: horizontal pivot drift 266.0 px (limit 32.0)
-- attribute_sets/intellect_max/CAST: horizontal pivot drift 294.0 px (limit 32.0)
-- attribute_sets/intellect_max/COMBAT: horizontal pivot drift 255.5 px (limit 32.0)
-- attribute_sets/lust_max/IDLE: horizontal pivot drift 33.5 px (limit 16.0)
-- attribute_sets/lust_max/WALK: horizontal pivot drift 45.5 px (limit 32.0)
-- attribute_sets/lust_max/CAST: horizontal pivot drift 100.5 px (limit 32.0)
-- attribute_sets/lust_max/COMBAT: horizontal pivot drift 57.0 px (limit 32.0)
-- attribute_sets/spirit_max/IDLE: horizontal pivot drift 191.0 px (limit 16.0)
-- attribute_sets/spirit_max/WALK: horizontal pivot drift 188.5 px (limit 32.0)
-- attribute_sets/spirit_max/CAST: horizontal pivot drift 184.5 px (limit 32.0)
-- attribute_sets/spirit_max/COMBAT: horizontal pivot drift 139.0 px (limit 32.0)
-- attribute_sets/stamina_max/IDLE: horizontal pivot drift 72.0 px (limit 16.0)
-- attribute_sets/stamina_max/WALK: horizontal pivot drift 71.5 px (limit 32.0)
-- attribute_sets/stamina_max/CAST: horizontal pivot drift 63.5 px (limit 32.0)
-- attribute_sets/stamina_max/COMBAT: horizontal pivot drift 43.0 px (limit 32.0)
-- npcs/korgash/IDLE: horizontal pivot drift 47.0 px (limit 16.0)
-- npcs/mokjala/WALK: horizontal pivot drift 80.5 px (limit 32.0)
-- npcs/vexa_geargrin/WALK: horizontal pivot drift 33.0 px (limit 32.0)
+Nenhuma.
 
 ## Avisos
 
@@ -68,6 +34,7 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - attribute_sets/agility_max/IDLE: kataklysma_agility_max_idle_003.png touches image edge (2 pixels)
 - attribute_sets/agility_max/WALK: kataklysma_agility_max_walk_003.png touches image edge (64 pixels)
 - attribute_sets/agility_max/CAST: kataklysma_agility_max_cast_003.png touches image edge (73 pixels)
+- attribute_sets/agility_max/CAST: kataklysma_agility_max_cast_004.png touches image edge (21 pixels)
 - attribute_sets/corruption_max/IDLE: kataklysma_corruption_max_idle_001.png touches image edge (37 pixels)
 - attribute_sets/corruption_max/IDLE: kataklysma_corruption_max_idle_002.png touches image edge (31 pixels)
 - attribute_sets/corruption_max/WALK: kataklysma_corruption_max_walk_001.png touches image edge (24 pixels)
@@ -77,6 +44,7 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - attribute_sets/corruption_max/CAST: kataklysma_corruption_max_cast_003.png touches image edge (53 pixels)
 - attribute_sets/corruption_max/CAST: kataklysma_corruption_max_cast_004.png touches image edge (2 pixels)
 - attribute_sets/intellect_max/IDLE: kataklysma_intellect_max_idle_001.png touches image edge (10 pixels)
+- attribute_sets/intellect_max/IDLE: kataklysma_intellect_max_idle_002.png touches image edge (63 pixels)
 - attribute_sets/intellect_max/IDLE: kataklysma_intellect_max_idle_003.png touches image edge (19 pixels)
 - attribute_sets/intellect_max/IDLE: kataklysma_intellect_max_idle_004.png touches image edge (37 pixels)
 - attribute_sets/intellect_max/WALK: kataklysma_intellect_max_walk_001.png touches image edge (43 pixels)
@@ -85,10 +53,8 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - attribute_sets/intellect_max/WALK: kataklysma_intellect_max_walk_004.png touches image edge (52 pixels)
 - attribute_sets/intellect_max/CAST: kataklysma_intellect_max_cast_001.png touches image edge (99 pixels)
 - attribute_sets/intellect_max/CAST: kataklysma_intellect_max_cast_002.png touches image edge (102 pixels)
-- attribute_sets/intellect_max/CAST: kataklysma_intellect_max_cast_003.png touches image edge (240 pixels)
-- attribute_sets/intellect_max/CAST: kataklysma_intellect_max_cast_004.png touches image edge (145 pixels)
-- attribute_sets/intellect_max/COMBAT: kataklysma_intellect_max_combat_001.png touches image edge (20 pixels)
-- attribute_sets/intellect_max/COMBAT: kataklysma_intellect_max_combat_004.png touches image edge (35 pixels)
+- attribute_sets/intellect_max/CAST: kataklysma_intellect_max_cast_003.png touches image edge (193 pixels)
+- attribute_sets/intellect_max/CAST: kataklysma_intellect_max_cast_004.png touches image edge (88 pixels)
 - attribute_sets/lust_max/IDLE: kataklysma_lust_max_idle_001.png touches image edge (75 pixels)
 - attribute_sets/lust_max/IDLE: kataklysma_lust_max_idle_002.png touches image edge (103 pixels)
 - attribute_sets/lust_max/IDLE: kataklysma_lust_max_idle_003.png touches image edge (97 pixels)
@@ -100,8 +66,8 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - attribute_sets/lust_max/CAST: kataklysma_lust_max_cast_001.png touches image edge (76 pixels)
 - attribute_sets/lust_max/CAST: kataklysma_lust_max_cast_002.png touches image edge (96 pixels)
 - attribute_sets/lust_max/CAST: kataklysma_lust_max_cast_003.png touches image edge (123 pixels)
-- attribute_sets/lust_max/CAST: kataklysma_lust_max_cast_004.png touches image edge (34 pixels)
-- attribute_sets/lust_max/COMBAT: kataklysma_lust_max_combat_001.png touches image edge (26 pixels)
+- attribute_sets/lust_max/CAST: kataklysma_lust_max_cast_004.png touches image edge (45 pixels)
+- attribute_sets/lust_max/COMBAT: kataklysma_lust_max_combat_002.png touches image edge (8 pixels)
 - attribute_sets/spirit_max/IDLE: kataklysma_spirit_max_idle_001.png touches image edge (23 pixels)
 - attribute_sets/spirit_max/IDLE: kataklysma_spirit_max_idle_002.png touches image edge (21 pixels)
 - attribute_sets/spirit_max/IDLE: kataklysma_spirit_max_idle_003.png touches image edge (32 pixels)
@@ -113,8 +79,7 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - attribute_sets/spirit_max/CAST: kataklysma_spirit_max_cast_001.png touches image edge (16 pixels)
 - attribute_sets/spirit_max/CAST: kataklysma_spirit_max_cast_002.png touches image edge (83 pixels)
 - attribute_sets/spirit_max/CAST: kataklysma_spirit_max_cast_003.png touches image edge (248 pixels)
-- attribute_sets/spirit_max/COMBAT: kataklysma_spirit_max_combat_001.png touches image edge (24 pixels)
-- attribute_sets/spirit_max/COMBAT: kataklysma_spirit_max_combat_002.png touches image edge (82 pixels)
+- attribute_sets/spirit_max/CAST: kataklysma_spirit_max_cast_004.png touches image edge (98 pixels)
 - attribute_sets/spirit_max/COMBAT: kataklysma_spirit_max_combat_003.png touches image edge (16 pixels)
 - attribute_sets/stamina_max/IDLE: kataklysma_stamina_max_idle_001.png touches image edge (99 pixels)
 - attribute_sets/stamina_max/IDLE: kataklysma_stamina_max_idle_002.png touches image edge (98 pixels)
@@ -125,6 +90,7 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - attribute_sets/stamina_max/WALK: kataklysma_stamina_max_walk_003.png touches image edge (34 pixels)
 - attribute_sets/stamina_max/WALK: kataklysma_stamina_max_walk_004.png touches image edge (45 pixels)
 - attribute_sets/stamina_max/CAST: kataklysma_stamina_max_cast_003.png touches image edge (39 pixels)
+- attribute_sets/stamina_max/CAST: kataklysma_stamina_max_cast_004.png touches image edge (11 pixels)
 - npcs/azkarra/IDLE: npc_azkarra_idle_001.png touches image edge (116 pixels)
 - npcs/azkarra/IDLE: npc_azkarra_idle_002.png touches image edge (116 pixels)
 - npcs/azkarra/IDLE: npc_azkarra_idle_003.png touches image edge (107 pixels)
@@ -276,3 +242,15 @@ pastas `CAST` e `COMBAT`, embora a biblioteca de sprites já tente carregá-las.
 - entities/weakened_water_spirit/WALK: entity_weakened_water_spirit_walk_002.png touches image edge (6 pixels)
 - entities/weakened_water_spirit/WALK: entity_weakened_water_spirit_walk_003.png touches image edge (3 pixels)
 - entities/weakened_water_spirit/WALK: entity_weakened_water_spirit_walk_004.png touches image edge (16 pixels)
+
+## Pós-correção
+
+Os 24 grupos inicialmente reprovados foram recentralizados pelo pivô da faixa
+inferior da silhueta e pela linha de base mediana. As sheets correspondentes
+foram reconstruídas no Godot. Nova execução: **60/60 grupos aprovados, 0 falhas**.
+
+Os PNGs anteriores foram preservados em
+`90_SOURCE_ARCHIVE/legacy/pixel_prelock_v001/`. Permanecem 220 avisos de
+contato com a borda, que exigem revisão artística caso representem recorte
+visível no jogo. Os 13 NPCs ainda não possuem `CAST/COMBAT`; isso continua
+registrado como lacuna de cobertura, não como falha de pivô.

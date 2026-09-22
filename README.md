@@ -2,6 +2,10 @@
 
 Development repository for the Godot RPG project.
 
+The repository root is the portable Godot project. Open the folder containing
+`project.godot` in Godot 4, or open `kataklysma.code-workspace` in VS Code.
+No absolute local paths are required by the project files.
+
 ## Project layout
 
 - `00_DOCS/` — lore source and legacy production documentation.
@@ -12,6 +16,8 @@ Development repository for the Godot RPG project.
 
 Start with:
 
+- `project.godot`
+- `kataklysma.code-workspace`
 - `03_GODOT/IMPORT_GUIDE.md`
 - `03_GODOT/PRODUCTION_STATUS_V001.md`
 - `03_GODOT/data/zones.json`

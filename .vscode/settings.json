@@ -1,0 +1,19 @@
+{
+  "files.exclude": {
+    "**/.godot": true,
+    "**/.import": true,
+    "**/99_AUDIT/_*": true,
+    "**/99_AUDIT/*_work": true
+  },
+  "files.associations": {
+    "*.gd": "gdscript",
+    "*.tscn": "godot-scene",
+    "*.tres": "godot-resource"
+  },
+  "search.exclude": {
+    "**/.godot": true,
+    "**/99_AUDIT/_*": true,
+    "**/99_AUDIT/*_work": true
+  }
+}
+

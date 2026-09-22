@@ -8,6 +8,7 @@
 - 12 sequências CG aprovadas em produção com 48 imagens distintas: Echo 002 até End 015.
 - Manifesto de continuidade visual para Kataklysma, NPCs e entidades.
 - QA visual concluído: 13 NPCs e 3 entidades com render neutro + ficha de identity lock; nenhum bloqueador de identidade encontrado.
+- QA pixel dos sprites executado no Godot 4: 60 grupos verificados, 36 aprovados e 24 bloqueados por deriva horizontal de pivô; os assets não foram sobrescritos.
 - Auditoria executável para impedir que uma CG seja considerada completa sem os 4 arquivos.
 - 7 backgrounds de zonas: Echo Isles, Sen'jin Village, Durotar Coast, Razor Hill, Ratchet, Northern Barrens e Eye of the Storm Shrine.
 - Catálogo de zonas, encontros aleatórios, estados de quest e pontos de interação.
@@ -18,6 +19,8 @@
 
 - O lote de 44 variações restantes foi concluído; as 12 cenas agora têm início, desenvolvimento, clímax e desfecho.
 - Turnarounds técnicos, expressões e proporções de sprite derivados dos locks já aprovados.
+- Correção de pivôs/crops dos 24 grupos reprovados no `SPRITE_PIXEL_QA_V001.md`.
+- Completar `CAST` e `COMBAT` dos 13 NPCs antes de usar `KataklysmaSpriteLibrary.build_npc()` em produção.
 - Regeneração controlada de CGs, retratos e sprites que não passarem pelo lock de continuidade.
 - NPCs genéricos reutilizáveis de vila, guarda, comerciante, caçador, goblin, orc e viajante.
 - Monstros de campo para cada arquétipo de encontro.

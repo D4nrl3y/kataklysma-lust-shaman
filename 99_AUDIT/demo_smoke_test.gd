@@ -18,6 +18,23 @@ func _run() -> void:
     demo._start_new_game()
     if not bool(demo.world_started):
         failures.append("new game start")
+    if not bool(demo.camera.enabled) or demo.camera.limit_right != int(demo.MAP_SIZE.x):
+        failures.append("camera limits")
+    if bool(demo._is_walkable_position(Vector2(250.0, 760.0))):
+        failures.append("water walkability boundary")
+    if not bool(demo._is_walkable_position(demo.PLAYER_START)):
+        failures.append("player start walkability")
+    if not bool(demo.collision_probe_for_test(demo.PLAYER_START, Vector2(250.0, 760.0))):
+        failures.append("water collision probe")
+    if not bool(demo.collision_probe_for_test(demo.PLAYER_START, Vector2(575.0, 380.0))):
+        failures.append("rock collision probe")
+    if not bool(demo.collision_probe_for_test(demo.PLAYER_START, Vector2(100.0, 500.0))):
+        failures.append("cliff collision probe")
+    if not bool(demo.collision_probe_for_test(demo.NPC_POSITION - Vector2(100.0, 0.0), demo.NPC_POSITION)):
+        failures.append("NPC collision probe")
+    for animation_name in ["idle_front", "idle_back", "idle_left", "idle_right", "walk_front", "walk_back", "walk_left", "walk_right"]:
+        if not demo.player.sprite_frames.has_animation(animation_name):
+            failures.append("animation " + animation_name)
 
     var checks: Dictionary = demo.demo_smoke_test()
     for check_name in ["player_loaded", "player_idle_frames", "npc_loaded", "npc_idle_frames", "quest_marker_loaded", "objective_marker_loaded", "encounter_manager_loaded"]:
@@ -26,8 +43,12 @@ func _run() -> void:
     _expect_state(demo, "available", "initial quest state")
 
     demo._interact_with_npc()
+    if demo.dialogue_portrait.texture == null:
+        failures.append("Zekranu portrait")
     demo._confirm_dialogue()
     demo._confirm_dialogue()
+    if demo.dialogue_portrait.texture == null:
+        failures.append("Kataklysma portrait")
     _expect_state(demo, "in_progress", "quest acceptance")
 
     demo.player.position = demo.OBJECTIVE_POSITION
@@ -54,6 +75,13 @@ func _run() -> void:
     demo._handle_encounter_input(KEY_E)
     if bool(demo.encounter_active):
         failures.append("encounter resolution")
+
+    demo._save_game()
+    var saved_position: Vector2 = demo.player.position
+    demo.player.position = demo.NPC_POSITION
+    demo._load_game()
+    if demo.player.position != saved_position:
+        failures.append("save/load position")
 
     if failures.is_empty():
         print("DEMO_SMOKE_TEST: PASS")

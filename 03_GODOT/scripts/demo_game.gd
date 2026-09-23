@@ -18,6 +18,8 @@ const NPC_IDLE_DIR := "res://01_ASSETS/kataklysma/sprites/npcs/zekranu/IDLE"
 const NPC_WALK_DIR := "res://01_ASSETS/kataklysma/sprites/npcs/zekranu/WALK"
 const ENTITY_IDLE_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/IDLE"
 const ENTITY_COMBAT_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/COMBAT"
+const PLAYER_PORTRAIT := "res://01_ASSETS/kataklysma/ui/portraits/neutral/kataklysma_portrait_neutral.png"
+const NPC_PORTRAIT := "res://01_ASSETS/kataklysma/character/npcs/renders/npc_zekranu_render_neutral_v001.png"
 const QUEST_MARKERS := {
     "available": "res://01_ASSETS/kataklysma/ui/markers/quest_available.svg",
     "in_progress": "res://01_ASSETS/kataklysma/ui/markers/quest_in_progress.svg",
@@ -38,6 +40,8 @@ var dialogue_panel: ColorRect
 var dialogue_title: Label
 var dialogue_body: Label
 var dialogue_hint: Label
+var dialogue_portrait: TextureRect
+var dialogue_portrait_placeholder: Label
 var encounter_panel: ColorRect
 var encounter_body: Label
 var encounter_hint: Label
@@ -96,12 +100,19 @@ var step_distance := 0.0
 var toast_time := 0.0
 var marker_time := 0.0
 var tutorial_distance := 0.0
+var last_direction := "front"
 
 const PLAYER_START := Vector2(410.0, 450.0)
 const NPC_POSITION := Vector2(830.0, 365.0)
 const OBJECTIVE_POSITION := Vector2(1030.0, 505.0)
 const MOVE_SPEED := 190.0
 const SAVE_PATH := "user://kataklysma_echo_isles_demo.json"
+const WALKABLE_REGIONS := [
+    Rect2(150.0, 150.0, 690.0, 360.0),
+    Rect2(700.0, 240.0, 780.0, 220.0),
+    Rect2(480.0, 390.0, 850.0, 240.0),
+    Rect2(800.0, 580.0, 700.0, 240.0),
+]
 const CG_VARIANTS := [
     "res://01_ASSETS/kataklysma/cg/scenes/VARIANTS/echo_002_zekranu_totem_choice__01_start_v002.png",
     "res://01_ASSETS/kataklysma/cg/scenes/VARIANTS/echo_002_zekranu_totem_choice__02_development_v002.png",
@@ -251,6 +262,14 @@ func _make_actor(actor_name: String, idle_dir: String, walk_dir: String, file_pr
         frames.remove_animation("default")
     _add_frames(frames, "idle", idle_dir, "%s_idle" % file_prefix, 4, 4.0, true)
     _add_frames(frames, "walk", walk_dir, "%s_walk" % file_prefix, 4, 8.0, true)
+    _copy_animation(frames, "idle", "idle_front")
+    _copy_animation(frames, "idle", "idle_back")
+    _copy_animation(frames, "idle", "idle_left")
+    _copy_animation(frames, "idle", "idle_right")
+    _copy_animation(frames, "walk", "walk_front")
+    _copy_animation(frames, "walk", "walk_back")
+    _copy_animation(frames, "walk", "walk_left")
+    _copy_animation(frames, "walk", "walk_right")
     actor.sprite_frames = frames
     actor.animation = &"idle"
     actor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -264,6 +283,13 @@ func _add_frames(frames: SpriteFrames, animation_name: String, directory: String
         var texture: Texture2D = load("%s/%s_%03d.png" % [directory, prefix, index])
         if texture:
             frames.add_frame(animation_name, texture)
+
+func _copy_animation(frames: SpriteFrames, source_name: String, target_name: String) -> void:
+    frames.add_animation(target_name)
+    frames.set_animation_speed(target_name, frames.get_animation_speed(source_name))
+    frames.set_animation_loop(target_name, frames.get_animation_loop(source_name))
+    for frame_index in range(frames.get_frame_count(source_name)):
+        frames.add_frame(target_name, frames.get_frame_texture(source_name, frame_index))
 
 func _build_hud() -> void:
     var hud := CanvasLayer.new()
@@ -350,28 +376,49 @@ func _build_hud() -> void:
     hud.add_child(dialogue_panel)
 
     dialogue_title = Label.new()
-    dialogue_title.position = Vector2(24.0, 16.0)
+    dialogue_title.position = Vector2(180.0, 16.0)
     dialogue_title.add_theme_font_size_override("font_size", 21)
     dialogue_title.add_theme_color_override("font_color", Color("#ffe7a6"))
     dialogue_panel.add_child(dialogue_title)
 
+    var portrait_back := ColorRect.new()
+    portrait_back.position = Vector2(22.0, 34.0)
+    portrait_back.size = Vector2(135.0, 145.0)
+    portrait_back.color = Color(0.02, 0.015, 0.04, 0.95)
+    dialogue_panel.add_child(portrait_back)
+    dialogue_portrait = TextureRect.new()
+    dialogue_portrait.position = Vector2(27.0, 39.0)
+    dialogue_portrait.size = Vector2(125.0, 135.0)
+    dialogue_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+    dialogue_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    dialogue_panel.add_child(dialogue_portrait)
+    dialogue_portrait_placeholder = Label.new()
+    dialogue_portrait_placeholder.position = Vector2(27.0, 94.0)
+    dialogue_portrait_placeholder.size = Vector2(125.0, 25.0)
+    dialogue_portrait_placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    dialogue_portrait_placeholder.text = "PORTRAIT"
+    dialogue_portrait_placeholder.add_theme_font_size_override("font_size", 11)
+    dialogue_portrait_placeholder.add_theme_color_override("font_color", Color("#91d7ff"))
+    dialogue_portrait_placeholder.visible = false
+    dialogue_panel.add_child(dialogue_portrait_placeholder)
+
     dialogue_body = Label.new()
-    dialogue_body.position = Vector2(24.0, 49.0)
-    dialogue_body.size = Vector2(980.0, 65.0)
+    dialogue_body.position = Vector2(180.0, 49.0)
+    dialogue_body.size = Vector2(830.0, 65.0)
     dialogue_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     dialogue_body.add_theme_font_size_override("font_size", 17)
     dialogue_panel.add_child(dialogue_body)
 
     dialogue_choices = Label.new()
-    dialogue_choices.position = Vector2(24.0, 120.0)
-    dialogue_choices.size = Vector2(980.0, 58.0)
+    dialogue_choices.position = Vector2(180.0, 120.0)
+    dialogue_choices.size = Vector2(830.0, 58.0)
     dialogue_choices.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     dialogue_choices.add_theme_font_size_override("font_size", 14)
     dialogue_choices.add_theme_color_override("font_color", Color("#ffe7a6"))
     dialogue_panel.add_child(dialogue_choices)
 
     dialogue_hint = Label.new()
-    dialogue_hint.position = Vector2(24.0, 190.0)
+    dialogue_hint.position = Vector2(180.0, 190.0)
     dialogue_hint.text = "E / Espaço  confirmar"
     dialogue_hint.add_theme_font_size_override("font_size", 14)
     dialogue_hint.add_theme_color_override("font_color", Color("#91d7ff"))
@@ -507,10 +554,12 @@ func _build_main_menu() -> void:
     subtitle.add_theme_color_override("font_color", Color("#d5f4ff"))
     menu_layer.add_child(subtitle)
 
-    _add_menu_button("NOVO JOGO", Vector2(82.0, 310.0), Callable(self, "_start_new_game"))
-    _add_menu_button("CONTINUAR", Vector2(82.0, 362.0), Callable(self, "_continue_game"))
-    _add_menu_button("OPÇÕES", Vector2(82.0, 414.0), Callable(self, "_show_menu_options"))
-    _add_menu_button("CRÉDITOS", Vector2(82.0, 466.0), Callable(self, "_show_menu_credits"))
+    _add_menu_button("NOVO JOGO", Vector2(82.0, 288.0), Callable(self, "_start_new_game"))
+    var continue_button: Button = _add_menu_button("CONTINUAR", Vector2(82.0, 340.0), Callable(self, "_continue_game"))
+    continue_button.disabled = not FileAccess.file_exists(SAVE_PATH)
+    _add_menu_button("OPÇÕES", Vector2(82.0, 392.0), Callable(self, "_show_menu_options"))
+    _add_menu_button("CRÉDITOS", Vector2(82.0, 444.0), Callable(self, "_show_menu_credits"))
+    _add_menu_button("SAIR", Vector2(82.0, 496.0), Callable(self, "_quit_game"))
 
     var footer := Label.new()
     footer.position = Vector2(82.0, 630.0)
@@ -519,14 +568,37 @@ func _build_main_menu() -> void:
     footer.add_theme_color_override("font_color", Color(1.0, 0.95, 0.85, 0.82))
     menu_layer.add_child(footer)
 
-func _add_menu_button(button_text: String, button_position: Vector2, callback: Callable) -> void:
+func _add_menu_button(button_text: String, button_position: Vector2, callback: Callable) -> Button:
     var button := Button.new()
     button.position = button_position
     button.size = Vector2(270.0, 40.0)
     button.text = button_text
     button.add_theme_font_size_override("font_size", 17)
+    button.add_theme_color_override("font_color", Color("#ffe7a6"))
+    button.add_theme_color_override("font_hover_color", Color("#ffffff"))
+    button.add_theme_color_override("font_pressed_color", Color("#91d7ff"))
+    button.add_theme_color_override("font_disabled_color", Color(1.0, 0.9, 0.7, 0.35))
+    button.add_theme_stylebox_override("normal", _make_button_style(Color(0.04, 0.03, 0.10, 0.82), Color(0.55, 0.42, 0.24, 0.65)))
+    button.add_theme_stylebox_override("hover", _make_button_style(Color(0.16, 0.10, 0.16, 0.94), Color("#ffe7a6")))
+    button.add_theme_stylebox_override("focus", _make_button_style(Color(0.12, 0.08, 0.16, 0.96), Color("#91d7ff")))
+    button.add_theme_stylebox_override("pressed", _make_button_style(Color(0.02, 0.08, 0.13, 0.98), Color("#91d7ff")))
+    button.add_theme_stylebox_override("disabled", _make_button_style(Color(0.04, 0.03, 0.10, 0.50), Color(0.55, 0.42, 0.24, 0.25)))
     button.pressed.connect(callback)
     menu_layer.add_child(button)
+    return button
+
+func _make_button_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+    var style := StyleBoxFlat.new()
+    style.bg_color = background_color
+    style.border_color = border_color
+    style.set_border_width_all(1)
+    style.corner_radius_top_left = 5
+    style.corner_radius_top_right = 5
+    style.corner_radius_bottom_left = 5
+    style.corner_radius_bottom_right = 5
+    style.content_margin_left = 16.0
+    style.content_margin_right = 16.0
+    return style
 
 func _build_pause_menu() -> void:
     pause_layer = CanvasLayer.new()
@@ -608,6 +680,9 @@ func _show_menu_options() -> void:
 
 func _show_menu_credits() -> void:
     _show_toast("Kataklysma — Lust: Shaman's Journey • Echo Isles demo", 4.0)
+
+func _quit_game() -> void:
+    get_tree().quit()
 
 func _toggle_pause() -> void:
     if not world_started or encounter_active or dialogue_panel.visible or cg_active:
@@ -693,27 +768,55 @@ func _move_player(delta: float) -> void:
     if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
         direction.y += 1.0
     if direction == Vector2.ZERO:
-        player.play("idle")
+        player.play("idle_%s" % last_direction)
         return
     direction = direction.normalized()
     var motion: Vector2 = direction * MOVE_SPEED * delta
     tutorial_distance += motion.length()
     if tutorial_distance >= 380.0:
         tutorial_label.visible = false
+    var candidate_position: Vector2 = player.position + motion
+    if not _is_walkable_position(candidate_position):
+        player.play("idle_%s" % last_direction)
+        return
     player_collision_body.position = player.position
     player_collision_body.move_and_collide(motion)
     player.position = player_collision_body.position
     player.position.x = clampf(player.position.x, 90.0, MAP_SIZE.x - 90.0)
     player.position.y = clampf(player.position.y, 165.0, MAP_SIZE.y - 115.0)
     player_collision_body.position = player.position
-    player.flip_h = direction.x < 0.0
-    player.play("walk")
+    if absf(direction.x) > absf(direction.y):
+        last_direction = "left" if direction.x < 0.0 else "right"
+        player.flip_h = direction.x < 0.0
+    elif direction.y < 0.0:
+        last_direction = "back"
+        player.flip_h = false
+    else:
+        last_direction = "front"
+        player.flip_h = false
+    player.play("walk_%s" % last_direction)
     step_distance += player.position.distance_to(last_position)
     last_position = player.position
     if step_distance >= 52.0:
         step_distance = 0.0
         encounter_manager.register_step()
         encounter_manager.try_roll(ZONE_ID, false)
+
+func _is_walkable_position(world_position: Vector2) -> bool:
+    var feet_position := world_position + Vector2(0.0, 31.0)
+    for region in WALKABLE_REGIONS:
+        if region.has_point(feet_position):
+            return true
+    return false
+
+func collision_probe_for_test(start_position: Vector2, target_position: Vector2) -> bool:
+    if not _is_walkable_position(target_position):
+        return true
+    var previous_position: Vector2 = player_collision_body.position
+    player_collision_body.position = start_position
+    var blocked: bool = player_collision_body.test_move(player_collision_body.global_transform, target_position - start_position)
+    player_collision_body.position = previous_position
+    return blocked
 
 func _unhandled_input(event: InputEvent) -> void:
     if not event is InputEventKey or not event.pressed or event.echo:
@@ -773,7 +876,17 @@ func _show_dialogue(title_text: String, body_text: String, action: String) -> vo
     dialogue_body.text = body_text
     dialogue_choices.text = ""
     dialogue_hint.text = "E / Espaço  confirmar"
+    _set_dialogue_portrait(NPC_PORTRAIT if title_text.begins_with("Zek") else PLAYER_PORTRAIT)
     dialogue_panel.visible = true
+
+func _set_dialogue_portrait(portrait_path: String) -> void:
+    var texture: Texture2D = load(portrait_path)
+    if texture:
+        dialogue_portrait.texture = texture
+        dialogue_portrait_placeholder.visible = false
+    else:
+        dialogue_portrait.texture = load(PLAYER_PORTRAIT)
+        dialogue_portrait_placeholder.visible = dialogue_portrait.texture == null
 
 func _handle_dialogue_input(keycode: Key) -> void:
     if dialogue_action == "npc_intro" and keycode in [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5]:
@@ -808,6 +921,8 @@ func _apply_dialogue_choice(choice_index: int) -> void:
     dialogue_choice_selected = true
     audio_manager.play_ui("menu_select")
     dialogue_action = "accept_quest"
+    dialogue_title.text = "Kataklysma  •  resposta"
+    _set_dialogue_portrait(PLAYER_PORTRAIT)
     dialogue_body.text = consequence + "\n\nA missão é purificar a Maré Corrompida."
     dialogue_choices.text = ""
     dialogue_hint.text = "E / Espaço  aceitar quest"
@@ -1085,6 +1200,7 @@ func _reset_demo() -> void:
     tutorial_distance = 0.0
     player.position = PLAYER_START
     player.flip_h = false
+    last_direction = "front"
     last_position = PLAYER_START
     step_distance = 0.0
     encounter_active = false

@@ -1,46 +1,61 @@
-# QA REPORT
+# QA Report — Echo Isles
 
-Build: Echo Isles Public Demo Polish Sprint
-Commit: sprint commit reported in the final handoff (parent baseline: 5f2df6b)
+Build: Echo Isles — Public Demo Completion Sprint
 Date: 2026-09-23
 Engine: Godot 4.7.2 stable
+Classification: **B — INTERNAL REVIEW READY**
 
-## Tests
+The build launches and the end-to-end vertical slice is playable. It is not classified as PUBLIC DEMO READY because the walkability polygons still need a final map-authored pass and that remains a P0 release blocker under the sprint rules.
 
-| Test | Result | Notes |
-|------|--------|-------|
-| Main Menu | PASS | Captured `01_main_menu.png`; buttons include disabled Continue without save and all requested states. |
-| Player Scale | PASS | Visual capture `02_gameplay_scale.png`; player reduced to world scale 0.34 with foot collider. |
-| Zek'Ranu Scale | PASS | Same capture; NPC uses proportional 0.34 scale. |
-| Camera Follow | PASS | Camera2D enabled with smoothing and map limits; smoke test validates limits. |
-| Walkable Paths | PARTIAL | Whitelist regions and collision boundaries are functional; final hand-drawn polygons remain pending. |
-| Water Collision | PARTIAL | Out-of-region water probes are blocked; full shoreline polygon pass remains pending. |
-| Rock Collision | PASS | Prototype central rock blocker and static obstacle collision are active; capture `05_blocked_rocks.png`. |
-| Cliff Collision | PASS | Map boundary/cliff blockers are active; capture `04_blocked_water.png` covers boundary behavior. |
-| NPC Collision | PASS | Zek'Ranu has a physical blocker and interaction area. |
-| Y-Sort | PASS | Entities are under a y-sorted root; fixed z-index is not used for player/NPC depth. |
-| Walk Front | PASS | `walk_front` state exists and uses the approved front walk frames. |
-| Walk Back | PARTIAL | State exists, but dedicated back walk frames are not present; fallback frames are documented. |
-| Walk Left | PARTIAL | State and velocity routing exist; dedicated lateral frames are missing. |
-| Walk Right | PARTIAL | State and velocity routing exist; dedicated lateral frames are missing. |
-| Idle Left | PARTIAL | State exists with fallback frames; dedicated lateral idle frames are missing. |
-| Idle Right | PARTIAL | State exists with fallback frames; dedicated lateral idle frames are missing. |
-| Dialogue Portrait Zek'Ranu | PASS | Render portrait appears in `08_dialogue_zekranu.png`, with fallback handling. |
-| Dialogue Portrait Kataklysma | PASS | Portrait appears after a response in `09_dialogue_kataklysma.png`. |
-| Dialogue Text | PASS | Wrapping and expanded panel validated visually. |
-| Dialogue Choices | PASS | Five choices are visible and selectable. |
-| Attribute Change | PASS | Smoke test and choice handlers update attributes. |
-| Quest Update | PASS | Available → in progress → complete → turned in remains functional. |
-| CG Trigger | PASS | Four-frame CG sequence remains connected to objective completion. |
-| Minimap | PASS | HUD capture `10_minimap_hud.png`; player, quest and objective markers update. |
-| Save | PASS | Save writes position, quest, attributes, affinity, flags and POIs. |
+## Functional and visual results
+
+| Test | Result | Evidence |
+|---|---|---|
+| Main Menu | PASS | `01_menu_final.png`; canonical title and button states render. |
+| Player Scale | PASS | `02_scale_hut.png`, `03_scale_training_area.png`; scale `0.26`, foot collision recalibrated. |
+| Zek'Ranu Scale | PASS | `02_scale_hut.png`; NPC uses scale `0.26`. |
+| Camera Follow | PASS | Smoke test; smoothing and map limits are active. |
+| Walkable Paths | PARTIAL | Polygon whitelist and F10 overlay work; shoreline/vegetation precision still needs map-authored refinement. |
+| Water Collision | PARTIAL | Water probes are blocked; full coast perimeter still needs final polygon audit. |
+| Rock Collision | PASS | `07_blocked_rocks.png` and smoke probe pass. |
+| Cliff Collision | PASS | `06_blocked_cliff.png` and out-of-region probe pass. |
+| Vegetation Collision | PARTIAL | Covered by polygon whitelist in tested routes; every dense cluster is not yet individually audited. |
+| NPC Collision | PASS | Zek'Ranu blocker and interaction area pass smoke test. |
+| Y-Sort | PASS | Player and NPC remain under the `Entities` y-sorted root. |
+| Idle Front | PASS | Existing approved front idle frames remain active. |
+| Idle Back | PASS | 2 dedicated frames integrated; `08_idle_back.png`. |
+| Idle Left | PASS | 2 dedicated frames integrated; `09_idle_left.png`. |
+| Idle Right | PASS | 2 dedicated frames integrated; `10_idle_right.png`. |
+| Walk Front | PASS | Existing approved front walk sequence remains active. |
+| Walk Back | PASS | 8 dedicated frames integrated; `11_walk_back.png`. |
+| Walk Left | PASS | 8 dedicated frames integrated; `12_walk_left.png`. |
+| Walk Right | PASS | 8 integrated lateral frames; `13_walk_right.png`. |
+| Dialogue Portrait Zek'Ranu | PASS | Dedicated bust crop in `14_dialogue_zekranu.png`. |
+| Dialogue Portrait Kataklysma | PASS | `15_dialogue_kataklysma.png`. |
+| Dialogue Text | PASS | PT-BR intro and quest lines visible. |
+| Dialogue Choices | PASS | `16_dialogue_vertical_choices.png`; five choices are listed vertically and selectable. |
+| Attribute Change | PASS | Smoke test verifies choice effects. |
+| Quest Update | PASS | `18_quest_before_accept.png` → `19_quest_after_accept.png`; tracker changes immediately. |
+| CG Trigger | PASS | Smoke test traverses objective completion and four CG variants. |
+| Minimap | PASS | `17_minimap_final.png`; player, quest and objective markers are visible. |
+| Tutorial | PASS | Timer/distance fade and save flag implemented; no longer permanent. |
+| Save | PASS | Smoke test writes position, quest, attributes, flags and POIs. |
 | Load | PASS | Smoke test restores saved position and quest data. |
-| Pause | PASS | ESC opens pause menu with attributes, quests, map, options, save and menu actions. |
+| Pause | PASS | ESC pause menu and actions remain functional. |
 
 ## Automated validation
 
-- Godot project launch validation: PASS.
-- Parser/script validation: PASS.
+- Godot editor/project launch validation: PASS.
+- Parser validation: PASS; no script parse errors.
 - `res://99_AUDIT/demo_smoke_test.gd`: PASS.
-- Visual capture script: PASS; ten screenshots generated in `docs/qa/screenshots/`.
-- No parser errors, missing-node errors or missing-resource errors were reported by the final validation run.
+- `res://99_AUDIT/capture_sprint_qa.gd`: PASS under the OpenGL renderer; 20 PNGs generated.
+- Visual QA performed on the required screenshot set; no missing player directional texture was observed.
+- Headless dummy renderer is not suitable for screenshot capture because it exposes no viewport texture; this is an infrastructure limitation, not a game runtime error.
+
+## Screenshot index
+
+The required files are in `docs/qa/screenshots/`: `01_menu_final.png` through `20_gameplay_final.png`, including scale, walkability debug, blockers, directional frames, dialogue, minimap and quest states.
+
+## Release gate
+
+**B — INTERNAL REVIEW READY.** The P0 walkability gate remains open. The build must not be advertised as PUBLIC DEMO READY until the polygon pass is reviewed against the full map and the 13 required walkability zones are manually confirmed.

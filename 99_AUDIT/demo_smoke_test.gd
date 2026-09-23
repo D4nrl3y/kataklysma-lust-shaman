@@ -35,6 +35,23 @@ func _run() -> void:
     for animation_name in ["idle_front", "idle_back", "idle_left", "idle_right", "walk_front", "walk_back", "walk_left", "walk_right"]:
         if not demo.player.sprite_frames.has_animation(animation_name):
             failures.append("animation " + animation_name)
+    if demo.player.sprite_frames.get_frame_count("idle_back") != 2:
+        failures.append("idle back frame count")
+    if demo.player.sprite_frames.get_frame_count("idle_left") != 2:
+        failures.append("idle left frame count")
+    if demo.player.sprite_frames.get_frame_count("idle_right") != 2:
+        failures.append("idle right frame count")
+    for directional_name in ["walk_back", "walk_left", "walk_right"]:
+        if demo.player.sprite_frames.get_frame_count(directional_name) != 8:
+            failures.append(directional_name + " frame count")
+        elif demo.player.sprite_frames.get_frame_texture(directional_name, 0) == demo.player.sprite_frames.get_frame_texture("walk_front", 0):
+            failures.append(directional_name + " uses front fallback")
+    for walkable_position in [demo.NPC_POSITION, demo.OBJECTIVE_POSITION, Vector2(360.0, 320.0), Vector2(1380.0, 240.0), Vector2(1400.0, 520.0)]:
+        if not bool(demo._is_walkable_position(walkable_position)):
+            failures.append("walkable sample " + str(walkable_position))
+    for blocked_position in [Vector2(250.0, 760.0), Vector2(100.0, 500.0), Vector2(1500.0, 850.0), Vector2(150.0, 620.0)]:
+        if bool(demo._is_walkable_position(blocked_position)):
+            failures.append("blocked sample " + str(blocked_position))
 
     var checks: Dictionary = demo.demo_smoke_test()
     for check_name in ["player_loaded", "player_idle_frames", "npc_loaded", "npc_idle_frames", "quest_marker_loaded", "objective_marker_loaded", "encounter_manager_loaded"]:

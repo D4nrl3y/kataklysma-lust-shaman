@@ -2,8 +2,9 @@ extends Node2D
 
 const CombatSystem = preload("res://03_GODOT/scripts/combat_system.gd")
 const AudioManagerScript = preload("res://03_GODOT/scripts/audio_manager.gd")
+const WalkabilityDebugScript = preload("res://03_GODOT/scripts/walkability_debug.gd")
 
-## First playable vertical slice for Kataklysma: Lust: Shaman's Journey.
+## First playable vertical slice for Kataklysma: Lust Shaman's Journey.
 ## Echo Isles is presented as a real navigable world: camera, scale, collisions,
 ## depth sorting, interaction, dialogue choices, CG, save/load and combat.
 
@@ -19,7 +20,8 @@ const NPC_WALK_DIR := "res://01_ASSETS/kataklysma/sprites/npcs/zekranu/WALK"
 const ENTITY_IDLE_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/IDLE"
 const ENTITY_COMBAT_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/COMBAT"
 const PLAYER_PORTRAIT := "res://01_ASSETS/kataklysma/ui/portraits/neutral/kataklysma_portrait_neutral.png"
-const NPC_PORTRAIT := "res://01_ASSETS/kataklysma/character/npcs/renders/npc_zekranu_render_neutral_v001.png"
+const NPC_PORTRAIT := "res://01_ASSETS/kataklysma/ui/portraits/neutral/zekranu_portrait_neutral_v001.png"
+const DIRECTIONAL_DIR := "res://01_ASSETS/kataklysma/sprites/directional"
 const QUEST_MARKERS := {
     "available": "res://01_ASSETS/kataklysma/ui/markers/quest_available.svg",
     "in_progress": "res://01_ASSETS/kataklysma/ui/markers/quest_in_progress.svg",
@@ -67,6 +69,7 @@ var minimap_player_dot: Label
 var minimap_quest_dot: Label
 var minimap_objective_dot: Label
 var minimap_panel: ColorRect
+var walkability_debug: Node2D
 var cg_layer: CanvasLayer
 var cg_image: TextureRect
 var cg_caption: Label
@@ -100,18 +103,34 @@ var step_distance := 0.0
 var toast_time := 0.0
 var marker_time := 0.0
 var tutorial_distance := 0.0
+var tutorial_time := 0.0
 var last_direction := "front"
+var debug_walkability_visible := false
 
 const PLAYER_START := Vector2(410.0, 450.0)
 const NPC_POSITION := Vector2(830.0, 365.0)
 const OBJECTIVE_POSITION := Vector2(1030.0, 505.0)
 const MOVE_SPEED := 190.0
 const SAVE_PATH := "user://kataklysma_echo_isles_demo.json"
-const WALKABLE_REGIONS := [
-    Rect2(150.0, 150.0, 690.0, 360.0),
-    Rect2(700.0, 240.0, 780.0, 220.0),
-    Rect2(480.0, 390.0, 850.0, 240.0),
-    Rect2(800.0, 580.0, 700.0, 240.0),
+var WALKABLE_POLYGONS: Array[PackedVector2Array] = [
+    PackedVector2Array([Vector2(250, 210), Vector2(500, 210), Vector2(620, 270), Vector2(615, 390), Vector2(540, 480), Vector2(520, 520), Vector2(280, 520), Vector2(220, 420)]),
+    PackedVector2Array([Vector2(120, 120), Vector2(500, 105), Vector2(570, 155), Vector2(500, 205), Vector2(280, 230), Vector2(150, 205)]),
+    PackedVector2Array([Vector2(545, 365), Vector2(670, 300), Vector2(835, 315), Vector2(925, 380), Vector2(830, 435), Vector2(720, 425), Vector2(650, 455), Vector2(555, 425)]),
+    PackedVector2Array([Vector2(945, 230), Vector2(1100, 220), Vector2(1240, 190), Vector2(1510, 180), Vector2(1580, 250), Vector2(1540, 320), Vector2(1300, 310), Vector2(1140, 345), Vector2(1000, 320)]),
+    PackedVector2Array([Vector2(1050, 100), Vector2(1440, 100), Vector2(1500, 150), Vector2(1450, 210), Vector2(1150, 210), Vector2(1080, 180)]),
+    PackedVector2Array([Vector2(560, 500), Vector2(800, 465), Vector2(950, 500), Vector2(1080, 465), Vector2(1300, 480), Vector2(1480, 540), Vector2(1460, 600), Vector2(1300, 570), Vector2(1120, 545), Vector2(950, 575), Vector2(800, 560), Vector2(650, 550)]),
+    PackedVector2Array([Vector2(1280, 330), Vector2(1400, 340), Vector2(1530, 420), Vector2(1540, 480), Vector2(1460, 440), Vector2(1340, 390)]),
+]
+var WALKABLE_REGIONS: Array[PackedVector2Array] = WALKABLE_POLYGONS
+const COLLISION_RECT_DATA := [
+    {"position": Vector2(MAP_SIZE.x * 0.5, 48.0), "size": Vector2(MAP_SIZE.x, 96.0)},
+    {"position": Vector2(MAP_SIZE.x * 0.5, MAP_SIZE.y - 38.0), "size": Vector2(MAP_SIZE.x, 76.0)},
+    {"position": Vector2(38.0, MAP_SIZE.y * 0.5), "size": Vector2(76.0, MAP_SIZE.y)},
+    {"position": Vector2(MAP_SIZE.x - 38.0, MAP_SIZE.y * 0.5), "size": Vector2(76.0, MAP_SIZE.y)},
+    {"position": Vector2(575.0, 380.0), "size": Vector2(170.0, 110.0)},
+    {"position": Vector2(1240.0, 285.0), "size": Vector2(260.0, 74.0)},
+    {"position": Vector2(1330.0, 610.0), "size": Vector2(250.0, 96.0)},
+    {"position": NPC_POSITION + Vector2(0.0, 30.0), "size": Vector2(46.0, 24.0)},
 ]
 const CG_VARIANTS := [
     "res://01_ASSETS/kataklysma/cg/scenes/VARIANTS/echo_002_zekranu_totem_choice__01_start_v002.png",
@@ -157,7 +176,7 @@ func _build_world() -> void:
 
     player = _make_actor("Kataklysma", PLAYER_IDLE_DIR, PLAYER_WALK_DIR, "kataklysma")
     player.position = PLAYER_START
-    player.scale = Vector2(0.34, 0.34)
+    player.scale = Vector2(0.26, 0.26)
     player.z_index = 5
     entities_root.add_child(player)
     player.play("idle")
@@ -182,16 +201,23 @@ func _build_world() -> void:
     player_collision_body.collision_mask = 1
     var player_collision_shape := CollisionShape2D.new()
     var player_shape := RectangleShape2D.new()
-    player_shape.size = Vector2(24.0, 14.0)
-    player_collision_shape.position = Vector2(0.0, 31.0)
+    player_shape.size = Vector2(20.0, 12.0)
+    player_collision_shape.position = Vector2(0.0, 48.0)
     player_collision_shape.shape = player_shape
     player_collision_body.add_child(player_collision_shape)
     add_child(player_collision_body)
     _build_collision_world()
 
+    walkability_debug = WalkabilityDebugScript.new()
+    walkability_debug.name = "WalkabilityDebugOverlay"
+    walkability_debug.z_index = 40
+    walkability_debug.configure(WALKABLE_POLYGONS, _collision_rects_for_debug(), [])
+    walkability_debug.visible = false
+    add_child(walkability_debug)
+
     npc = _make_actor("Zekranu", NPC_IDLE_DIR, NPC_WALK_DIR, "npc_%s" % NPC_ID)
     npc.position = NPC_POSITION
-    npc.scale = Vector2(0.34, 0.34)
+    npc.scale = Vector2(0.26, 0.26)
     npc.z_index = 5
     entities_root.add_child(npc)
     npc.play("idle")
@@ -203,19 +229,19 @@ func _build_world() -> void:
     npc_interaction_area.collision_mask = 0
     var npc_area_shape := CollisionShape2D.new()
     var npc_circle := CircleShape2D.new()
-    npc_circle.radius = 150.0
+    npc_circle.radius = 125.0
     npc_area_shape.shape = npc_circle
     npc_interaction_area.add_child(npc_area_shape)
     add_child(npc_interaction_area)
 
     quest_marker = Sprite2D.new()
     quest_marker.name = "QuestMarker_Zekranu"
-    quest_marker.position = NPC_POSITION + Vector2(0.0, -142.0)
+    quest_marker.position = NPC_POSITION + Vector2(0.0, -116.0)
     quest_marker.scale = Vector2(0.62, 0.62)
     quest_marker.z_index = 12
     entities_root.add_child(quest_marker)
 
-    npc_name = _make_world_label("Zek'Ranu\nShaman Mentor", NPC_POSITION + Vector2(-52.0, 76.0), 13, Color("#ffe7a6"))
+    npc_name = _make_world_label("Zek'Ranu\nMentor Xamã", NPC_POSITION + Vector2(-52.0, 64.0), 13, Color("#ffe7a6"))
     npc_name.visible = false
     entities_root.add_child(npc_name)
     player_name = _make_world_label("", PLAYER_START, 1, Color.TRANSPARENT)
@@ -231,17 +257,7 @@ func _build_world() -> void:
     entities_root.add_child(camp_label)
 
 func _build_collision_world() -> void:
-    var obstacles: Array[Dictionary] = [
-        {"position": Vector2(MAP_SIZE.x * 0.5, 48.0), "size": Vector2(MAP_SIZE.x, 96.0)},
-        {"position": Vector2(MAP_SIZE.x * 0.5, MAP_SIZE.y - 38.0), "size": Vector2(MAP_SIZE.x, 76.0)},
-        {"position": Vector2(38.0, MAP_SIZE.y * 0.5), "size": Vector2(76.0, MAP_SIZE.y)},
-        {"position": Vector2(MAP_SIZE.x - 38.0, MAP_SIZE.y * 0.5), "size": Vector2(76.0, MAP_SIZE.y)},
-        {"position": Vector2(575.0, 380.0), "size": Vector2(170.0, 68.0)},
-        {"position": Vector2(1240.0, 285.0), "size": Vector2(260.0, 74.0)},
-        {"position": Vector2(1330.0, 610.0), "size": Vector2(250.0, 96.0)},
-        {"position": NPC_POSITION + Vector2(0.0, 30.0), "size": Vector2(46.0, 24.0)},
-    ]
-    for obstacle in obstacles:
+    for obstacle in COLLISION_RECT_DATA:
         var body := StaticBody2D.new()
         body.name = "WalkableBoundary"
         body.collision_layer = 1
@@ -254,6 +270,14 @@ func _build_collision_world() -> void:
         body.add_child(shape_node)
         add_child(body)
 
+func _collision_rects_for_debug() -> Array[Rect2]:
+    var rects: Array[Rect2] = []
+    for obstacle in COLLISION_RECT_DATA:
+        var size: Vector2 = obstacle["size"]
+        var position: Vector2 = obstacle["position"]
+        rects.append(Rect2(position - size * 0.5, size))
+    return rects
+
 func _make_actor(actor_name: String, idle_dir: String, walk_dir: String, file_prefix: String) -> AnimatedSprite2D:
     var actor := AnimatedSprite2D.new()
     actor.name = actor_name
@@ -263,13 +287,21 @@ func _make_actor(actor_name: String, idle_dir: String, walk_dir: String, file_pr
     _add_frames(frames, "idle", idle_dir, "%s_idle" % file_prefix, 4, 4.0, true)
     _add_frames(frames, "walk", walk_dir, "%s_walk" % file_prefix, 4, 8.0, true)
     _copy_animation(frames, "idle", "idle_front")
-    _copy_animation(frames, "idle", "idle_back")
-    _copy_animation(frames, "idle", "idle_left")
-    _copy_animation(frames, "idle", "idle_right")
     _copy_animation(frames, "walk", "walk_front")
-    _copy_animation(frames, "walk", "walk_back")
-    _copy_animation(frames, "walk", "walk_left")
-    _copy_animation(frames, "walk", "walk_right")
+    if file_prefix == "kataklysma":
+        _add_exact_frames(frames, "idle_back", "%s/idle_back" % DIRECTIONAL_DIR, "chr_kataklysma_idle_back_f", 2, 3.0, true)
+        _add_exact_frames(frames, "idle_left", "%s/idle_left" % DIRECTIONAL_DIR, "chr_kataklysma_idle_left_f", 2, 3.0, true)
+        _add_exact_frames(frames, "idle_right", "%s/idle_right" % DIRECTIONAL_DIR, "chr_kataklysma_idle_right_f", 2, 3.0, true)
+        _add_exact_frames(frames, "walk_back", "%s/walk_back" % DIRECTIONAL_DIR, "chr_kataklysma_walk_back_f", 8, 8.0, true)
+        _add_exact_frames(frames, "walk_left", "%s/walk_left" % DIRECTIONAL_DIR, "chr_kataklysma_walk_left_f", 8, 8.0, true)
+        _add_exact_frames(frames, "walk_right", "%s/walk_right" % DIRECTIONAL_DIR, "chr_kataklysma_walk_right_f", 8, 8.0, true)
+    else:
+        _copy_animation(frames, "idle", "idle_back")
+        _copy_animation(frames, "idle", "idle_left")
+        _copy_animation(frames, "idle", "idle_right")
+        _copy_animation(frames, "walk", "walk_back")
+        _copy_animation(frames, "walk", "walk_left")
+        _copy_animation(frames, "walk", "walk_right")
     actor.sprite_frames = frames
     actor.animation = &"idle"
     actor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -281,6 +313,15 @@ func _add_frames(frames: SpriteFrames, animation_name: String, directory: String
     frames.set_animation_loop(animation_name, looped)
     for index in range(1, count + 1):
         var texture: Texture2D = load("%s/%s_%03d.png" % [directory, prefix, index])
+        if texture:
+            frames.add_frame(animation_name, texture)
+
+func _add_exact_frames(frames: SpriteFrames, animation_name: String, directory: String, stem: String, count: int, fps: float, looped: bool) -> void:
+    frames.add_animation(animation_name)
+    frames.set_animation_speed(animation_name, fps)
+    frames.set_animation_loop(animation_name, looped)
+    for index in range(1, count + 1):
+        var texture: Texture2D = load("%s/%s%03d_v001.png" % [directory, stem, index])
         if texture:
             frames.add_frame(animation_name, texture)
 
@@ -369,8 +410,8 @@ func _build_hud() -> void:
     minimap_panel.add_child(minimap_objective_dot)
 
     dialogue_panel = ColorRect.new()
-    dialogue_panel.position = Vector2(120.0, 450.0)
-    dialogue_panel.size = Vector2(1040.0, 220.0)
+    dialogue_panel.position = Vector2(120.0, 435.0)
+    dialogue_panel.size = Vector2(1040.0, 235.0)
     dialogue_panel.color = Color(0.035, 0.025, 0.08, 0.94)
     dialogue_panel.visible = false
     hud.add_child(dialogue_panel)
@@ -404,21 +445,21 @@ func _build_hud() -> void:
 
     dialogue_body = Label.new()
     dialogue_body.position = Vector2(180.0, 49.0)
-    dialogue_body.size = Vector2(830.0, 65.0)
+    dialogue_body.size = Vector2(830.0, 48.0)
     dialogue_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     dialogue_body.add_theme_font_size_override("font_size", 17)
     dialogue_panel.add_child(dialogue_body)
 
     dialogue_choices = Label.new()
-    dialogue_choices.position = Vector2(180.0, 120.0)
-    dialogue_choices.size = Vector2(830.0, 58.0)
+    dialogue_choices.position = Vector2(180.0, 98.0)
+    dialogue_choices.size = Vector2(830.0, 88.0)
     dialogue_choices.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    dialogue_choices.add_theme_font_size_override("font_size", 14)
+    dialogue_choices.add_theme_font_size_override("font_size", 13)
     dialogue_choices.add_theme_color_override("font_color", Color("#ffe7a6"))
     dialogue_panel.add_child(dialogue_choices)
 
     dialogue_hint = Label.new()
-    dialogue_hint.position = Vector2(180.0, 190.0)
+    dialogue_hint.position = Vector2(180.0, 204.0)
     dialogue_hint.text = "E / Espaço  confirmar"
     dialogue_hint.add_theme_font_size_override("font_size", 14)
     dialogue_hint.add_theme_color_override("font_color", Color("#91d7ff"))
@@ -542,7 +583,7 @@ func _build_main_menu() -> void:
 
     var title := Label.new()
     title.position = Vector2(78.0, 92.0)
-    title.text = "KATAKLYSMA\nLUST: SHAMAN'S JOURNEY"
+    title.text = "KATAKLYSMA\nLUST SHAMAN'S JOURNEY"
     title.add_theme_font_size_override("font_size", 32)
     title.add_theme_color_override("font_color", Color("#ffe7a6"))
     menu_layer.add_child(title)
@@ -667,9 +708,11 @@ func _start_new_game() -> void:
     _reset_demo()
     _set_gameplay_visible(true)
     menu_layer.visible = false
-    tutorial_label.visible = true
+    tutorial_label.modulate.a = 1.0
+    tutorial_label.visible = not story_flags.get("tutorial_movement_seen", false)
+    tutorial_time = 0.0
     audio_manager.play_ui("menu_select")
-    _show_toast("Echo Isles • explore a maré corrompida", 3.0)
+    _show_toast("Echo Isles • explore uma maré corrompida", 3.0)
 
 func _continue_game() -> void:
     _start_new_game()
@@ -679,7 +722,7 @@ func _show_menu_options() -> void:
     _show_toast("Opções: áudio, vídeo, minimapa e velocidade de texto serão persistidos no próximo marco.", 4.0)
 
 func _show_menu_credits() -> void:
-    _show_toast("Kataklysma — Lust: Shaman's Journey • Echo Isles demo", 4.0)
+    _show_toast("Kataklysma — Lust Shaman's Journey • Demo Echo Isles", 4.0)
 
 func _quit_game() -> void:
     get_tree().quit()
@@ -746,11 +789,15 @@ func _process(delta: float) -> void:
         _process_cg(delta)
         return
     if quest_marker and quest_marker.visible:
-        quest_marker.position.y = NPC_POSITION.y - 142.0 + sin(marker_time * 3.0) * 5.0
+        quest_marker.position.y = NPC_POSITION.y - 116.0 + sin(marker_time * 3.0) * 5.0
     if toast_time > 0.0:
         toast_time -= delta
         if toast_time <= 0.0:
             toast_label.text = ""
+    if world_started and not dialogue_panel.visible and not story_flags.get("tutorial_movement_seen", false):
+        tutorial_time += delta
+        if tutorial_time >= 3.0:
+            _hide_tutorial()
     if not world_started or paused or dialogue_panel.visible or encounter_active:
         if player:
             player.play("idle")
@@ -774,7 +821,7 @@ func _move_player(delta: float) -> void:
     var motion: Vector2 = direction * MOVE_SPEED * delta
     tutorial_distance += motion.length()
     if tutorial_distance >= 380.0:
-        tutorial_label.visible = false
+        _hide_tutorial()
     var candidate_position: Vector2 = player.position + motion
     if not _is_walkable_position(candidate_position):
         player.play("idle_%s" % last_direction)
@@ -787,7 +834,7 @@ func _move_player(delta: float) -> void:
     player_collision_body.position = player.position
     if absf(direction.x) > absf(direction.y):
         last_direction = "left" if direction.x < 0.0 else "right"
-        player.flip_h = direction.x < 0.0
+        player.flip_h = false
     elif direction.y < 0.0:
         last_direction = "back"
         player.flip_h = false
@@ -803,9 +850,9 @@ func _move_player(delta: float) -> void:
         encounter_manager.try_roll(ZONE_ID, false)
 
 func _is_walkable_position(world_position: Vector2) -> bool:
-    var feet_position := world_position + Vector2(0.0, 31.0)
-    for region in WALKABLE_REGIONS:
-        if region.has_point(feet_position):
+    var feet_position := world_position + Vector2(0.0, 48.0)
+    for region in WALKABLE_POLYGONS:
+        if Geometry2D.is_point_in_polygon(feet_position, region):
             return true
     return false
 
@@ -839,6 +886,8 @@ func _unhandled_input(event: InputEvent) -> void:
         _toggle_pause()
     elif key_event.keycode == KEY_R:
         _reset_demo()
+    elif key_event.keycode == KEY_F10:
+        _toggle_walkability_debug()
     elif key_event.keycode == KEY_F:
         _start_encounter({"type": "monster_ambush", "actors": ["makrura_corrupted"], "manual": true})
     elif key_event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
@@ -852,13 +901,27 @@ func _try_interact() -> void:
     else:
         _show_toast("Nenhum ponto de interação próximo.", 2.0)
 
+func _hide_tutorial() -> void:
+    if not tutorial_label.visible:
+        return
+    story_flags["tutorial_movement_seen"] = true
+    var tween := create_tween()
+    tween.tween_property(tutorial_label, "modulate:a", 0.0, 0.35)
+    tween.tween_callback(func() -> void: tutorial_label.visible = false)
+
+func _toggle_walkability_debug() -> void:
+    debug_walkability_visible = not debug_walkability_visible
+    if walkability_debug:
+        walkability_debug.visible = debug_walkability_visible
+    _show_toast("Debug de walkability: %s" % ("ON" if debug_walkability_visible else "OFF"), 1.5)
+
 func _interact_with_npc() -> void:
     if quest_state == "available":
-        _show_dialogue("Zek'Ranu  •  Shaman Mentor", "The tide ain't right, child. Even de spirits are avoiding the shore. Como você pretende agir?", "npc_intro")
-        dialogue_choices.text = "[1] ESPÍRITO  Ouvir os espíritos antes de agir.\n[2] INTELECTO  Examinar a água.   [3] AGILIDADE  Ir direto à origem.\n[4] CORRUPÇÃO  Fazer o responsável falar.   [5] LUXÚRIA  Uma resposta confiante e provocativa."
+        _show_dialogue("Zek'Ranu  •  Mentor Xamã", "A maré não está certa, criança. Até os espíritos estão evitando a costa. Como você pretende agir?", "npc_intro")
+        dialogue_choices.text = "[1] ESPÍRITO — Ouvir os espíritos antes de agir.\n[2] INTELECTO — Examinar a água.\n[3] AGILIDADE — Ir direto à origem.\n[4] CORRUPÇÃO — Fazer o responsável falar.\n[5] LUXÚRIA — Responder com confiança e provocação."
         dialogue_hint.text = "1–5 escolher resposta   •   E confirmar"
     elif quest_state == "in_progress":
-        _show_dialogue("Zekranu", "A poça fica ao leste, perto das pedras. Procure o marcador ◈ e não toque na água escura.", "close")
+        _show_dialogue("Zek'Ranu", "A poça fica ao leste, perto das pedras. Procure o marcador ◈ e não toque na água escura.", "close")
     elif quest_state == "complete":
         _show_dialogue("Zekranu", "Você estabilizou a maré. O espírito agora pode respirar novamente. A missão está completa.", "turn_in_quest")
     else:
@@ -877,6 +940,10 @@ func _show_dialogue(title_text: String, body_text: String, action: String) -> vo
     dialogue_choices.text = ""
     dialogue_hint.text = "E / Espaço  confirmar"
     _set_dialogue_portrait(NPC_PORTRAIT if title_text.begins_with("Zek") else PLAYER_PORTRAIT)
+    interaction_prompt.visible = false
+    npc_name.visible = false
+    tutorial_label.visible = false
+    minimap_panel.modulate.a = 0.42
     dialogue_panel.visible = true
 
 func _set_dialogue_portrait(portrait_path: String) -> void:
@@ -951,6 +1018,8 @@ func _confirm_dialogue() -> void:
             _show_toast("Quest entregue. Demo principal concluída!", 5.0)
         _:
             pass
+    minimap_panel.modulate.a = 1.0
+    tutorial_label.visible = not story_flags.get("tutorial_movement_seen", false)
     dialogue_action = ""
 
 func _set_quest_state(new_state: String) -> void:
@@ -977,7 +1046,7 @@ func _set_quest_state(new_state: String) -> void:
     minimap_objective_dot.visible = quest_state == "in_progress"
 
 func _update_interaction_feedback() -> void:
-    if not world_started or paused or cg_active or encounter_active:
+    if not world_started or paused or cg_active or encounter_active or dialogue_panel.visible:
         interaction_prompt.visible = false
         if npc_name:
             npc_name.visible = false
@@ -1040,6 +1109,7 @@ func _save_game() -> void:
         "npc_affinity": npc_affinity.duplicate(true),
         "story_flags": story_flags.duplicate(true),
         "discovered_pois": discovered_pois.duplicate(true),
+        "tutorial_movement_seen": bool(story_flags.get("tutorial_movement_seen", false)),
     }
     var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
     if file:
@@ -1063,8 +1133,12 @@ func _load_game() -> void:
         attributes = data.get("attributes", attributes)
         npc_affinity = data.get("npc_affinity", npc_affinity)
         story_flags = data.get("story_flags", story_flags)
+        if bool(data.get("tutorial_movement_seen", false)):
+            story_flags["tutorial_movement_seen"] = true
         discovered_pois = data.get("discovered_pois", discovered_pois)
         _set_quest_state(quest_state)
+        tutorial_label.modulate.a = 1.0 if not story_flags.get("tutorial_movement_seen", false) else 0.0
+        tutorial_label.visible = not story_flags.get("tutorial_movement_seen", false)
         _show_toast("Save carregado.", 3.0)
 
 func _start_cg_sequence() -> void:
@@ -1198,6 +1272,7 @@ func _reset_demo() -> void:
     story_flags.clear()
     discovered_pois = {"awakening_cabin": true, "training_clearing": true}
     tutorial_distance = 0.0
+    tutorial_time = 0.0
     player.position = PLAYER_START
     player.flip_h = false
     last_direction = "front"
@@ -1209,6 +1284,8 @@ func _reset_demo() -> void:
     combat_enemy_sprite.visible = false
     dialogue_panel.visible = false
     dialogue_choices.text = ""
+    minimap_panel.modulate.a = 1.0
+    tutorial_label.modulate.a = 1.0
     player_collision_body.position = PLAYER_START
     _set_quest_state("available")
     _show_toast("Demo reiniciada.", 2.0)

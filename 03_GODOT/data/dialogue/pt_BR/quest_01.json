@@ -1,0 +1,15 @@
+{
+  "id": "echo_isles_quest_01",
+  "locale": "pt_BR",
+  "title": "Purificar a Maré Corrompida",
+  "npc_intro": "A maré não está certa, criança. Até os espíritos estão evitando a costa. Como você pretende agir?",
+  "choices": [
+    {"attribute": "spirit", "label": "ESPÍRITO", "text": "Ouvir os espíritos antes de agir."},
+    {"attribute": "intellect", "label": "INTELECTO", "text": "Examinar a água."},
+    {"attribute": "agility", "label": "AGILIDADE", "text": "Ir direto à origem."},
+    {"attribute": "corruption", "label": "CORRUPÇÃO", "text": "Fazer o responsável falar."},
+    {"attribute": "lust", "label": "LUXÚRIA", "text": "Responder com confiança e provocação."}
+  ],
+  "objective": "Investigue a maré corrompida",
+  "turn_in": "Volte ao Zek'Ranu"
+}

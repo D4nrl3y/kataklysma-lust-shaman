@@ -15,6 +15,9 @@
 - Marcadores visuais de quest disponível, em progresso e pronta para entrega.
 - Scripts Godot para markers, mapas, biblioteca de sprites e encontros aleatórios.
 - Primeira vertical slice jogável integrada: Echo Isles, movimentação, Kataklysma, Zekranu, quest com três marcadores, objetivo de mapa, encontros aleatórios e combate funcional por turnos.
+- Correção de demo v2: mapa maior que a viewport, Camera2D com limites e suavização, escala de personagens revisada, colisões físicas de limites/obstáculos, corpo de colisão nos pés e Y-sort de entidades.
+- Front-end funcional: menu inicial, Novo Jogo/Continuar, pause menu, tracker contextual, minimapa, diálogo com cinco escolhas, consequências de atributos/afinidade/flags, sequência CG de quatro quadros e save/load local.
+- Feedback sonoro procedural para seleção, quest, conclusão e combate enquanto a biblioteca de áudio autoral não é adicionada.
 
 ## Próximos lotes de arte
 
@@ -28,6 +31,9 @@
 - Biblioteca de static objects separada dos backgrounds.
 - Camadas finais de TileMap/collision, foreground, rotas, spawn points e encounter regions.
 - Expandir o combate funcional para formações com múltiplos inimigos, habilidades específicas por atributo, animações de ação, inventário/equipamento e balanceamento.
+- Substituir os tons procedurais por trilhas e efeitos autorais: exploração, investigação, combate, conclusão, oceano, vento, pássaros, passos, magia e interface.
+- Substituir os retângulos de colisão de protótipo por TileMap/TileSet ou polígonos revisados sobre a camada final de walkability.
+- Completar Options com sliders de áudio, vídeo, VSync, resolução, velocidade de texto, shake e keybinding.
 
 ## Decisão de escopo
 

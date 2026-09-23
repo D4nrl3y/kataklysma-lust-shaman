@@ -8,6 +8,7 @@
 /99_AUDIT/qa_*.png
 /99_AUDIT/test_*.png
 /99_AUDIT/clean_largest.png
+/99_AUDIT/demo_*_frame.png
 
 # Local editor/OS files.
 .godot/

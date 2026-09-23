@@ -14,6 +14,10 @@ func _run() -> void:
     var demo = packed_scene.instantiate()
     root.add_child(demo)
     await process_frame
+    demo.audio_manager.enabled = false
+    demo._start_new_game()
+    if not bool(demo.world_started):
+        failures.append("new game start")
 
     var checks: Dictionary = demo.demo_smoke_test()
     for check_name in ["player_loaded", "player_idle_frames", "npc_loaded", "npc_idle_frames", "quest_marker_loaded", "objective_marker_loaded", "encounter_manager_loaded"]:
@@ -23,12 +27,15 @@ func _run() -> void:
 
     demo._interact_with_npc()
     demo._confirm_dialogue()
+    demo._confirm_dialogue()
     _expect_state(demo, "in_progress", "quest acceptance")
 
     demo.player.position = demo.OBJECTIVE_POSITION
     demo._interact_with_objective()
     demo._confirm_dialogue()
     _expect_state(demo, "complete", "objective completion")
+    demo.cg_active = false
+    demo.cg_layer.visible = false
 
     demo.player.position = demo.NPC_POSITION
     demo._interact_with_npc()
@@ -52,7 +59,9 @@ func _run() -> void:
         print("DEMO_SMOKE_TEST: PASS")
     else:
         print("DEMO_SMOKE_TEST: FAIL -> %s" % ", ".join(failures))
-    demo.queue_free()
+    if demo.audio_manager:
+        demo.audio_manager.free()
+    demo.free()
     _finish()
 
 func _expect_state(demo, expected: String, label: String) -> void:

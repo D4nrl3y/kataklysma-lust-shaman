@@ -10,6 +10,7 @@ const WalkabilityDebugScript = preload("res://03_GODOT/scripts/walkability_debug
 
 const VIEW_SIZE := Vector2(1280.0, 720.0)
 const MAP_SIZE := Vector2(1672.0, 941.0)
+const DEMO_VERSION := "0.1.0-demo"
 const ZONE_ID := "echo_isles"
 const MAP_TEXTURE := "res://01_ASSETS/kataklysma/maps/echo_isles/backgrounds/echo_isles_background_concept_v001.png"
 const PLAYER_IDLE_DIR := "res://01_ASSETS/kataklysma/sprites/idle"
@@ -107,21 +108,27 @@ var tutorial_time := 0.0
 var last_direction := "front"
 var debug_walkability_visible := false
 
-const PLAYER_START := Vector2(410.0, 450.0)
+const PLAYER_START := Vector2(410.0, 390.0)
 const NPC_POSITION := Vector2(830.0, 365.0)
 const OBJECTIVE_POSITION := Vector2(1030.0, 505.0)
 const MOVE_SPEED := 190.0
 const SAVE_PATH := "user://kataklysma_echo_isles_demo.json"
 var WALKABLE_POLYGONS: Array[PackedVector2Array] = [
-    PackedVector2Array([Vector2(250, 210), Vector2(500, 210), Vector2(620, 270), Vector2(615, 390), Vector2(540, 480), Vector2(520, 520), Vector2(280, 520), Vector2(220, 420)]),
+    PackedVector2Array([Vector2(260, 230), Vector2(500, 230), Vector2(580, 290), Vector2(580, 385), Vector2(520, 450), Vector2(300, 450), Vector2(250, 380)]),
     PackedVector2Array([Vector2(120, 120), Vector2(500, 105), Vector2(570, 155), Vector2(500, 205), Vector2(280, 230), Vector2(150, 205)]),
-    PackedVector2Array([Vector2(545, 365), Vector2(670, 300), Vector2(835, 315), Vector2(925, 380), Vector2(830, 435), Vector2(720, 425), Vector2(650, 455), Vector2(555, 425)]),
-    PackedVector2Array([Vector2(945, 230), Vector2(1100, 220), Vector2(1240, 190), Vector2(1510, 180), Vector2(1580, 250), Vector2(1540, 320), Vector2(1300, 310), Vector2(1140, 345), Vector2(1000, 320)]),
-    PackedVector2Array([Vector2(1050, 100), Vector2(1440, 100), Vector2(1500, 150), Vector2(1450, 210), Vector2(1150, 210), Vector2(1080, 180)]),
-    PackedVector2Array([Vector2(560, 500), Vector2(800, 465), Vector2(950, 500), Vector2(1080, 465), Vector2(1300, 480), Vector2(1480, 540), Vector2(1460, 600), Vector2(1300, 570), Vector2(1120, 545), Vector2(950, 575), Vector2(800, 560), Vector2(650, 550)]),
-    PackedVector2Array([Vector2(1280, 330), Vector2(1400, 340), Vector2(1530, 420), Vector2(1540, 480), Vector2(1460, 440), Vector2(1340, 390)]),
+    PackedVector2Array([Vector2(500, 350), Vector2(650, 290), Vector2(840, 310), Vector2(910, 360), Vector2(840, 445), Vector2(700, 455), Vector2(620, 460), Vector2(530, 420)]),
+    PackedVector2Array([Vector2(1000, 230), Vector2(1210, 220), Vector2(1450, 250), Vector2(1550, 320), Vector2(1490, 350), Vector2(1280, 315), Vector2(1100, 330)]),
+    PackedVector2Array([Vector2(930, 100), Vector2(1100, 95), Vector2(1180, 130), Vector2(1400, 120), Vector2(1490, 170), Vector2(1450, 220), Vector2(1200, 210), Vector2(1100, 190), Vector2(980, 210)]),
+    PackedVector2Array([Vector2(1330, 330), Vector2(1410, 335), Vector2(1515, 410), Vector2(1535, 460), Vector2(1470, 430), Vector2(1390, 385), Vector2(1330, 360)]),
+    PackedVector2Array([Vector2(500, 460), Vector2(650, 450), Vector2(800, 475), Vector2(850, 520), Vector2(760, 550), Vector2(630, 520), Vector2(520, 510)]),
+    PackedVector2Array([Vector2(850, 480), Vector2(1080, 455), Vector2(1300, 470), Vector2(1470, 530), Vector2(1450, 580), Vector2(1300, 540), Vector2(1100, 525), Vector2(930, 555), Vector2(875, 530)]),
+    PackedVector2Array([Vector2(960, 500), Vector2(1080, 500), Vector2(1110, 560), Vector2(1000, 580), Vector2(940, 550)]),
+    PackedVector2Array([Vector2(1300, 500), Vector2(1450, 520), Vector2(1470, 580), Vector2(1360, 590)]),
 ]
 var WALKABLE_REGIONS: Array[PackedVector2Array] = WALKABLE_POLYGONS
+var WALKABILITY_BLOCK_POLYGONS: Array[PackedVector2Array] = [
+    PackedVector2Array([Vector2(490, 330), Vector2(650, 330), Vector2(675, 420), Vector2(625, 455), Vector2(500, 445), Vector2(470, 390)]),
+]
 const COLLISION_RECT_DATA := [
     {"position": Vector2(MAP_SIZE.x * 0.5, 48.0), "size": Vector2(MAP_SIZE.x, 96.0)},
     {"position": Vector2(MAP_SIZE.x * 0.5, MAP_SIZE.y - 38.0), "size": Vector2(MAP_SIZE.x, 76.0)},
@@ -211,7 +218,7 @@ func _build_world() -> void:
     walkability_debug = WalkabilityDebugScript.new()
     walkability_debug.name = "WalkabilityDebugOverlay"
     walkability_debug.z_index = 40
-    walkability_debug.configure(WALKABLE_POLYGONS, _collision_rects_for_debug(), [])
+    walkability_debug.configure(WALKABLE_POLYGONS, _collision_rects_for_debug(), WALKABILITY_BLOCK_POLYGONS)
     walkability_debug.visible = false
     add_child(walkability_debug)
 
@@ -604,7 +611,7 @@ func _build_main_menu() -> void:
 
     var footer := Label.new()
     footer.position = Vector2(82.0, 630.0)
-    footer.text = "Godot 4.x  •  Echo Isles vertical slice"
+    footer.text = "Echo Isles vertical slice  •  %s" % DEMO_VERSION
     footer.add_theme_font_size_override("font_size", 13)
     footer.add_theme_color_override("font_color", Color(1.0, 0.95, 0.85, 0.82))
     menu_layer.add_child(footer)
@@ -722,7 +729,7 @@ func _show_menu_options() -> void:
     _show_toast("Opções: áudio, vídeo, minimapa e velocidade de texto serão persistidos no próximo marco.", 4.0)
 
 func _show_menu_credits() -> void:
-    _show_toast("Kataklysma — Lust Shaman's Journey • Demo Echo Isles", 4.0)
+    _show_toast("Kataklysma — Lust Shaman's Journey • Echo Isles %s" % DEMO_VERSION, 4.0)
 
 func _quit_game() -> void:
     get_tree().quit()
@@ -851,6 +858,9 @@ func _move_player(delta: float) -> void:
 
 func _is_walkable_position(world_position: Vector2) -> bool:
     var feet_position := world_position + Vector2(0.0, 48.0)
+    for blocked_region in WALKABILITY_BLOCK_POLYGONS:
+        if Geometry2D.is_point_in_polygon(feet_position, blocked_region):
+            return false
     for region in WALKABLE_POLYGONS:
         if Geometry2D.is_point_in_polygon(feet_position, region):
             return true

@@ -1,4 +1,4 @@
-# Kataklysma — Lust: Shaman's Journey
+# Kataklysma — Lust Shaman's Journey
 
 Development repository for the Godot RPG project.
 

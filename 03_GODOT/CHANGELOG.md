@@ -33,3 +33,21 @@
 
 - Walkability is now polygonal and substantially narrower, but still requires a final in-editor shoreline/vegetation pass before a public release classification.
 - Authored music, ambience, display font and a full options screen remain outside this sprint.
+
+## Final Walkability & Release Gate Sprint
+
+### Added
+
+- Final-release QA runner covering 15 escape points and 7 physical blocker probes.
+- Final-release screenshot capture covering menu, scale, walkability overlays, blockers, directional movement, dialogue, minimap, quest progress, CG, combat and gameplay.
+- Explicit demo version `0.1.0-demo` in `project.godot` and the main menu footer.
+
+### Changed
+
+- Walkability polygons were narrowed around the arena, cabin approach, Zek'Ranu route, totem platform, bridge and southern paths.
+- Central rock exclusion was added to the walkability whitelist.
+- Release QA now records each requested map escape test individually.
+
+### Known limitations
+
+- The release overlay still shows areas where the polygon edges need another art-directed shoreline/vegetation pass. The release gate therefore remains B — INTERNAL REVIEW READY.

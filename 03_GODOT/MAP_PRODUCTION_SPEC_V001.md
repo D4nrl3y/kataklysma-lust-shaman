@@ -22,6 +22,12 @@ Os mapas são cenas jogáveis compostas por camadas, não apenas imagens únicas
 
 O Eye of the Storm Shrine permanece como local especial para cenas/arena roteirizadas do arco final, não como uma oitava região de viagem. Seu background é conceitual. O catálogo das sete regiões e locais especiais está em `03_GODOT/data/zones.json`.
 
+### Estado real do escopo M30
+
+- Echo Isles: o background conceitual é carregado pela cena principal e a lógica de walkability está no runtime. Ainda não é um mapa modular com camadas separadas e a geometria não está aprovada por QA visual.
+- Sen'jin Village: existe somente o background conceitual; não há cena jogável, colisões, POIs, rotas, spawns ou regiões de encontro implementados.
+- Inventário de NPCs, props, inimigos e CGs usados como candidatos ou ainda ausentes: `docs/production/M30_ASSET_COVERAGE.md`.
+
 ## Convenção de marcadores
 
 Cada ponto interativo deve possuir `interaction_id`, `interaction_type`, `quest_id` opcional e `world_position`. O ícone só aparece quando fizer sentido para o estado do jogo; não é decoração livre.

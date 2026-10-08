@@ -1,6 +1,6 @@
 # Linha de base canônica do M30
 
-**Estado:** baseline v1 registrada — corte escolhido pelo usuário e critérios narrativos por quest documentados; estimativa preliminar, vínculo dos recursos e calibração de esforço ainda pendentes.
+**Estado:** baseline v1 congelada — corte e despedida escolhidos pelo usuário; critérios narrativos, estimativa preliminar e inventário de assets documentados. Calibração empírica fica para a Fase 1.
 
 **Referência narrativa:** `00_DOCS/source_lore/Lust_Shamans_Journey_Complete_Game_Narrative_Bible_V2.0.docx`.
 
@@ -20,7 +20,7 @@ A Bíblia define 15 quests principais distribuídas por sete regiões de campanh
 | Ratchet | `QST_RAT_013` | Thunder for Sale |
 | Northern Barrens | `QST_BAR_014` | Localização e ativação inicial do Eye |
 
-O local especial `eye_of_storm_shrine` se relaciona a `QST_BAR_014` e `QST_END_015`, mas não conta como uma região de viagem adicional. A sequência dos dados está em `03_GODOT/data/zones.json` v002.
+O local especial `eye_of_storm_shrine` se relaciona a `QST_BAR_014` e `QST_END_015`, mas não conta como uma região de viagem adicional. A sequência dos dados está em `03_GODOT/data/zones.json` v003.
 
 ## Decisões de produção
 
@@ -43,9 +43,9 @@ Na Fase 2, decompor o protótipo em elementos reaproveitáveis e reimplementar o
 
 O usuário escolheu uma campanha do início até `QST_SEN_009`: `QST_ECHO_001`–`QST_ECHO_008`, transição persistente e `QST_SEN_009`. O corte cobre nove dos quinze IDs de quest; essa razão não é usada como medida de esforço.
 
-`docs/production/M30_WORK_BREAKDOWN.md` registra uma estimativa preliminar de 35 pontos M30 em 100 pontos para o jogo completo (faixa aproximada de 30%–40%; confiança baixa a média). É um plano de esforço, não progresso já realizado, nem uma baseline de custo validada. Revisar depois de estabilizar a fundação Godot e estimar uma quest e um mapa com dados reais. Só contar itens integrados, aceitos e com QA; não ajustar pesos retroativamente para preservar um rótulo percentual.
+`docs/production/M30_WORK_BREAKDOWN.md` registra uma estimativa preliminar de 35 pontos M30 em 100 pontos para o jogo completo (faixa aproximada de 30%–45%; baixa confiança). É um plano de esforço, não progresso já realizado, nem uma baseline de custo validada. Revisar depois de estabilizar a fundação Godot e estimar uma quest e um mapa com dados reais. Só contar itens integrados, aceitos e com QA; não ajustar pesos retroativamente para preservar um rótulo percentual.
 
-A matriz `docs/production/M30_QUEST_ACCEPTANCE.md` registra objetivos, dependências de spine, cenas, escolhas, flags, consequências e critérios de aceite das nove quests. A associação dos arquivos de arte/CGs ainda requer inventário, e a Fase 0 continua aberta até essa associação e a revisão dos pesos com evidência da Fase 1.
+A matriz `docs/production/M30_QUEST_ACCEPTANCE.md` registra objetivos, dependências de spine, cenas, escolhas, flags, consequências e critérios de aceite das nove quests. `docs/production/M30_ASSET_COVERAGE.md` separa assets integrados, candidatos e ausentes; a despedida de `QST_ECHO_008` foi fixada em Mak’Jala + Rak’jin por escolha do usuário. A baseline de planejamento está congelada, com esforço ainda não calibrado empiricamente; isso não representa percentual concluído.
 
 ## Estados de produção
 

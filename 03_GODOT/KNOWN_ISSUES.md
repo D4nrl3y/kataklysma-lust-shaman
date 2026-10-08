@@ -11,6 +11,9 @@
 | KI-007 | P1 | Canonical quest/CG wiring | The active tide-purification flow is a non-canonical prototype and triggers the Echo 002 totem-choice CG. The dialogue JSON is not loaded by the runtime. Map the prototype to no quest ID until its objectives, choices and CG trigger are reconciled with the Narrative Bible. | High | OPEN — CANONICAL FLOW NOT IMPLEMENTED |
 | KI-008 | P1 | Random event routing | The encounter callback starts combat for any event emitted by the weighted table, including non-combat event types. Actor resolution currently covers only a weakened water spirit and corrupted Makrura. | High | OPEN — EVENT DISPATCH REQUIRED |
 | KI-009 | P2 | Full-world coverage | Orgrimmar is one of the seven canonical campaign regions but has no background asset. It is outside the proposed M30 playable cut; retain as a later full-game production requirement. | Medium | OPEN — ART NOT PRODUCED |
+| KI-010 | P0 | M30 canonical quest content | The active runtime is still the non-canonical tide prototype. None of `QST_ECHO_001`–`QST_ECHO_008` or `QST_SEN_009` exists as a complete playable quest flow with canonical dialogue, branch state and consequences. | High | OPEN — CAMPAIGN NOT IMPLEMENTED |
+| KI-011 | P0 | Sen'jin playable map | Sen'jin has only a concept background. There is no runtime zone scene, collision, interaction-point layer, NPC placement/routes, spawn points or encounter regions for the selected M30 ending. | High | OPEN — ZONE NOT BUILT |
+| KI-012 | P1 | M30 quest support assets | Static-object asset folder is empty; generic children/apprentice/depot/council actors, boar/common-enemy sprites and most dedicated dialogue portraits are absent. See `docs/production/M30_ASSET_COVERAGE.md` for the per-quest inventory and approved CG candidates. | High | OPEN — ASSET PRODUCTION REQUIRED |
 
 ## Closed this sprint
 

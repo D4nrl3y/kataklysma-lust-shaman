@@ -6,15 +6,15 @@
 
 **Estado do repositório na revisão:** `main` sincronizada com `origin/main`, sem alterações locais antes deste documento.
 
-**Execução:** Fase 0 — baseline v1 registrada; corte aprovado pelo usuário até `QST_SEN_009`. Critérios das nove quests estão em `docs/production/M30_QUEST_ACCEPTANCE.md`. Estimativa preliminar em `docs/production/M30_WORK_BREAKDOWN.md`: 35 pontos de 100 (faixa de confiança aproximada: 30%–40%). Isso não representa progresso realizado. O gate completo da Fase 0 permanece aberto para calibrar a estimativa com métricas da fundação e congelar o backlog.
+**Execução:** Fase 0 concluída — baseline v1 congelada até `QST_SEN_009`, com critérios narrativos e cobertura de assets documentados. A estimativa é preliminar: 35 pontos de 100, faixa de incerteza aproximada de 30%–45%; não representa progresso realizado e será recalibrada com dados da Fase 1.
 
 ## Decisão executiva
 
 O projeto já tem um protótipo funcional de Echo Isles e um acervo de arte amplo, mas ainda não tem uma build que possa ser chamada honestamente de 30% do jogo. Hoje, conteúdo produzido, conteúdo integrado e conteúdo validado são coisas diferentes: somente Echo Isles está ligada ao fluxo principal; várias regiões, quests, personagens e CGs existem como arte ou dados de referência, sem cenas jogáveis correspondentes. A atualização técnica mais recente também ainda não recebeu QA em runtime.
 
-O corte até `QST_SEN_009` em Sen’jin foi escolhido pelo usuário para a primeira campanha demonstrável. Esse recorte contém 9 das 15 quests principais. A primeira decomposição de esforço estima 35/100 pontos para esse conteúdo, com baixa a média confiança e faixa aproximada de 30%–40%; portanto, é uma hipótese de planejamento que precisa ser revisada após a Fase 1. Quests ou assets não equivalem a esforço concluído.
+O corte até `QST_SEN_009` em Sen’jin foi escolhido pelo usuário para a primeira campanha demonstrável. Esse recorte contém 9 das 15 quests principais. A primeira decomposição de esforço estima 35/100 pontos para esse conteúdo, com baixa confiança e faixa aproximada de 30%–45%; portanto, é uma hipótese de planejamento que precisa ser revisada após a Fase 1. Quests ou assets não equivalem a esforço concluído.
 
-O projeto não tem hoje uma estimativa total de esforço aprovada que permita calcular seu percentual real. Portanto, “30%” deve ser uma meta de escopo e esforço, não um número atribuído por quantidade de arquivos. A Fase 0 abaixo estabelece a linha de base para medir o progresso sem inflá-lo com assets ainda não usados.
+O projeto não tem uma estimativa de esforço validada por histórico de execução que permita calcular seu percentual real concluído. A baseline v1 estabelece um denominador preliminar para planejar o escopo; “30%” continua sendo uma meta de entrega, não progresso atribuído por quantidade de arquivos.
 
 ## Estado encontrado
 
@@ -63,18 +63,19 @@ Durotar, Razor Hill, Orgrimmar, Ratchet, Northern Barrens e o clímax do Eye; qu
 
 **Entrega:** backlog M30 aprovado, fonte de verdade alinhada e estimativa total rastreável.
 
-**Status:** baseline v1 registrada; gate de aceite ainda aberto.
+**Status:** concluída — baseline de planejamento v1 congelada; estimativa de baixa confiança será calibrada na Fase 1.
 
 - [x] Revisar os dados de regiões, CG e quest protótipo contra a Bíblia e o runtime.
 - [x] Registrar combate por turnos como direção vigente, sete regiões canônicas e Eye shrine como local especial.
 - [x] Atualizar a lista de regiões e corrigir os documentos de início, status, release e roster de CG.
 - [x] Receber decisão final sobre o corte do M30: Echo Isles `QST_ECHO_001`–`QST_ECHO_008` + Sen’jin `QST_SEN_009`.
-- [x] Criar decomposição preliminar do escopo completo em pontos relativos; estimativa inicial do corte: 35/100, faixa aproximada de 30%–40% (`docs/production/M30_WORK_BREAKDOWN.md`).
+- [x] Criar decomposição preliminar do escopo completo em pontos relativos; estimativa inicial do corte: 35/100, faixa aproximada de 30%–45% (`docs/production/M30_WORK_BREAKDOWN.md`).
 - [x] Registrar objetivos, pré-requisitos de spine, estados, cenas, branches, flags, consequências e critérios de aceite das nove quests em `docs/production/M30_QUEST_ACCEPTANCE.md`.
-- [ ] Calibrar a estimativa após métricas da Fase 1 e fechar o inventário/vínculo de recursos concretos para cada quest.
-- [ ] Aprovar os critérios de aceite do backlog e congelar a linha de base.
+- [x] Inventariar por quest recursos integrados, existentes candidatos e ausentes em `docs/production/M30_ASSET_COVERAGE.md`.
+- [x] Fixar os dois NPCs prioritários da despedida de `QST_ECHO_008`: Mak’Jala e Rak’jin.
+- [x] Congelar o escopo e os critérios da baseline v1. A incerteza de esforço e as lacunas de assets ficam visíveis, não são tratadas como conteúdo pronto.
 
-**Gate:** todo conteúdo M30 tem ID, pré-requisito, estado final, consequências, recursos associados e critério de aceite; o denominador e os pesos foram revisados com evidência. A especificação narrativa está registrada, mas o inventário de recursos e a calibração de esforço seguem pendentes. Não declarar a Fase 0 concluída nem progresso de 30% antes de fechar esses itens.
+**Gate:** baseline v1 aprovada para planejamento: conteúdo tem IDs, dependências conhecidas, estados, consequências e aceite; recursos estão classificados como integrados, candidatos ou ausentes; o total do jogo e o corte usam a mesma unidade relativa. A precisão será recalibrada quando houver dados reais de produção. Isso não declara 30% de progresso concluído.
 
 ### Fase 1 — Estabilizar a fundação jogável
 
@@ -123,13 +124,13 @@ Durotar, Razor Hill, Orgrimmar, Ratchet, Northern Barrens e o clímax do Eye; qu
 
 ## Como medir os 30 por cento
 
-Na Fase 0, criar uma estrutura de trabalho que cubra **todo o jogo previsto**, e estimar cada item com a mesma unidade (por exemplo, pontos de esforço). A métrica será:
+Na Fase 0 foi criada uma estrutura de trabalho que cobre **todo o jogo previsto** e estima cada pacote com a mesma unidade relativa. A métrica futura de progresso aceito será:
 
 `progresso aceito = esforço dos itens concluídos e aceitos ÷ esforço estimado do escopo total`
 
 Um item só conta como concluído quando está integrado, tem critério de aceite satisfeito e possui QA correspondente. Arte criada, JSON de catálogo, screenshot antigo, script de captura ou teste não executado não pontuam como funcionalidade pronta. O M30 precisa simultaneamente atingir pelo menos 30% nessa métrica e cumprir todos os gates de conteúdo e qualidade descritos acima.
 
-Até a Fase 0 ser aprovada, o percentual atual é **não calculado**. A classificação mais precisa é: **protótipo jogável em evolução; build atual para revisão interna; M30 ainda não atingido**.
+O percentual atual continua **não calculado**: pontos estimados para o M30 não são pontos implementados. A classificação mais precisa é: **protótipo jogável em evolução; build atual para revisão interna; M30 ainda não atingido**.
 
 ## QA e regra de evidência
 
@@ -147,4 +148,5 @@ Para cada gate futuro, guardar screenshots/capturas da build correspondente e re
 - `docs/decisions/M30_CANONICAL_BASELINE.md`
 - `docs/production/M30_WORK_BREAKDOWN.md`
 - `docs/production/M30_QUEST_ACCEPTANCE.md`
+- `docs/production/M30_ASSET_COVERAGE.md`
 - `01_ASSETS/kataklysma/maps/README.md`, catálogo de assets, `99_AUDIT/CG_VARIANT_ROSTER.md` e `VISUAL_IDENTITY_QA_V002.md`

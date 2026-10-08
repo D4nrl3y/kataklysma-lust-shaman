@@ -68,10 +68,10 @@ Este documento transforma os cartões e as branch matrices da Bíblia em critér
 
 ### `QST_ECHO_008` — Beyond the Isles
 
-- **Pré-condição / resolução:** concluir os incidentes prioritários de Echo Isles; escolher a despedida, falar com dois NPCs prioritários e embarcar para Sen’jin.
+- **Pré-condição / resolução:** concluir os incidentes prioritários de Echo Isles; escolher a despedida, falar com Mak’Jala e Rak’jin e embarcar para Sen’jin. A dupla foi fixada pelo usuário em 2026-10-07.
 - **Cenas:** `SCN_ECHO_008_PACK`, `SCN_ECHO_008_FAREWELL`, `SCN_ECHO_008_BOAT`.
 - **Ramos exigidos:** prometer voltar com honra → Espírito +2, reputação Darkspear +4 e sonho futuro de Mak’jala, `FLG_DEPARTURE_HONOR`; dizer que voltará mais poderosa → Estamina +1 / Agilidade +1, afinidade de Rak’jin +3, `FLG_DEPARTURE_AMBITION`; esconder medo com humor → Luxúria +1, afinidade geral +2, `FLG_DEPARTURE_CHARM`; partir sem revelar fragmento oculto → Corrupção +2, World Tension +3, `FLG_DEPARTURE_SECRET`.
-- **Aceite específico:** inventário/cartas e despedidas não apagam flags anteriores; a embarcação persiste estado e posição segura; exibe transição de capítulo e carrega Sen’jin com as relações e o ramo de fragmento.
+- **Aceite específico:** inventário/cartas e despedidas não apagam flags anteriores; Mak’Jala e Rak’jin reagem à história/relacionamento acumulados; a embarcação persiste estado e posição segura; exibe transição de capítulo e carrega Sen’jin com as relações e o ramo de fragmento.
 
 ### `QST_SEN_009` — Missing Supplies
 

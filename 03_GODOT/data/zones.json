@@ -1,5 +1,5 @@
 {
-  "version": "v002",
+  "version": "v003",
   "zones": [
     {
       "id": "echo_isles",
@@ -13,7 +13,7 @@
       "monsters": ["water_spirit_weakened", "makrura_corrupted", "spirit_elemental"],
       "interactions": ["totem", "tide_pool", "herb_patch", "chest", "quest_board", "ritual_stone"],
       "random_encounter_table": "echo_isles_day",
-      "map_asset_status": "concept_background_present_scene_not_implemented"
+      "map_asset_status": "concept_background_loaded_by_runtime_main_scene_walkability_qa_open"
     },
     {
       "id": "senjin_village",
@@ -27,7 +27,7 @@
       "monsters": ["makrura_corrupted", "melee_chaser"],
       "interactions": ["alchemy_station", "supply_crate", "campfire", "boat", "quest_board"],
       "random_encounter_table": "senjin_village_day",
-      "map_asset_status": "concept_background_present_scene_not_implemented"
+      "map_asset_status": "concept_background_present_no_runtime_scene"
     },
     {
       "id": "durotar_coast",

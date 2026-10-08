@@ -92,10 +92,14 @@
 - Recorded the production baseline and scope decisions in `docs/decisions/M30_CANONICAL_BASELINE.md`.
 - Added `docs/production/M30_WORK_BREAKDOWN.md` with a preliminary effort-weighted estimate for the full game and M30 scope.
 - Added `docs/production/M30_QUEST_ACCEPTANCE.md` with source-traced objectives, scene IDs, branch outcomes, flags and acceptance criteria for the nine-quest M30 cutoff.
+- Added `docs/production/M30_ASSET_COVERAGE.md` separating integrated assets, candidates and missing requirements by quest; selected Mak’Jala + Rak’jin as the two `QST_ECHO_008` farewell NPCs per user decision.
+- Updated zone metadata to distinguish Echo Isles' runtime-loaded concept map from Sen'jin's concept-only background; clarified the CG variants README about asset approval versus runtime integration.
+- Versioned the zone catalogue as v003 after correcting the actual Echo Isles and Sen'jin map availability statuses.
+- Added `KI-010`–`KI-012` for missing canonical M30 quest flows, the unbuilt Sen'jin map and missing quest support assets.
 
 ### Open
 
 - User-selected content cutoff: Echo Isles `QST_ECHO_001`–`QST_ECHO_008`, transition to Sen'jin, and `QST_SEN_009`.
-- Preliminary plan estimates this cutoff at 35/100 relative effort points (rough range 30%–40%); this is neither validated nor completed progress.
-- Quest-level narrative acceptance is documented; concrete asset mapping and effort calibration remain open. No numeric completion percentage is claimed.
+- Preliminary plan estimates this cutoff at 35/100 relative effort points (rough range 30%–45%); this is neither empirically validated nor completed progress.
+- Phase 0 planning baseline is frozen. Asset creation/integration and current-build QA remain open; no numeric completion percentage is claimed.
 - No runtime or parser QA was performed as part of this documentation/data alignment.

@@ -57,3 +57,7 @@ The eight walk frames are ordered as contact, down, passing, up, contact-inverse
 - Release-approved unwatermarked Echo Isles score/ambience and authored SFX: OPEN, P1.
 - Full visual review and final polygon adjustments for shorelines, cliffs, vegetation and small islands: OPEN, P0.
 - In-game portrait presentation, options controls, typography and NPC routine need Godot QA before their issues can be closed.
+
+## Roadmap M30 — coverage beyond the Echo Isles prototype
+
+The static inventory for `QST_ECHO_001`–`QST_ECHO_008` and `QST_SEN_009` is documented in `docs/production/M30_ASSET_COVERAGE.md`. Key gaps include a playable Sen'jin scene, generic child/apprentice/depot/council actors, dedicated dialogue portraits beyond Zek'Ranu, boar and common-enemy sprites, interactive quest props, and canonical quest dialogue. Existing NPC renders, CG sequences and concept backgrounds remain produced assets until their correct quest beat is integrated and QA-approved.

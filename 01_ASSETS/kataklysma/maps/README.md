@@ -1,6 +1,6 @@
 # Map backgrounds v001
 
-There is one concept background for each first-pass zone. These images establish composition, landmarks and usable staging areas; they are not yet the final collision/TileMap layer.
+Concept background art exists for most first-pass zones; Orgrimmar is still missing. These images establish composition, landmarks and usable staging areas; they are not final playable maps or collision/TileMap layers.
 
 Before importing into a playable Godot scene, each zone needs:
 

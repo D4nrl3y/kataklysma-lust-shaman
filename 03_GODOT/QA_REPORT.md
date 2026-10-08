@@ -75,3 +75,9 @@ The final release set is in `docs/qa/screenshots/`:
 ## Release gate
 
 **B — INTERNAL REVIEW READY.** The remaining blocker is visual precision of the walkable polygon edges against the background art. Do not publish the demo externally until that final map-authored pass is reviewed and the F10 overlay no longer visibly crosses shoreline/cliff/vegetation areas.
+
+## Implementation update — 2026-10-07
+
+Six issue tracks were changed after the QA run above: walkable polygons and foot probes, audio routing and a generated music candidate, a full settings panel, licensed fonts, a dedicated Zek'Ranu portrait, and a Zek'Ranu ambient route.
+
+No Godot launch, parser check, gameplay test or screenshot QA was performed for this update. Therefore none of the changes above are assigned PASS here. The test table and screenshots above are historical evidence for the previous build and previous polygon set only; the current classification remains **B — INTERNAL REVIEW READY**, with KI-001 still blocking a public release.

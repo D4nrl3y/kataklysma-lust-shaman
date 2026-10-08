@@ -3,6 +3,8 @@ extends Node2D
 const CombatSystem = preload("res://03_GODOT/scripts/combat_system.gd")
 const AudioManagerScript = preload("res://03_GODOT/scripts/audio_manager.gd")
 const WalkabilityDebugScript = preload("res://03_GODOT/scripts/walkability_debug.gd")
+const OptionsMenuScript = preload("res://03_GODOT/scripts/options_menu.gd")
+const DISPLAY_FONT_PATH := "res://01_ASSETS/kataklysma/ui/fonts/cinzel/cinzel_variable.ttf"
 
 ## First playable vertical slice for Kataklysma: Lust Shaman's Journey.
 ## Echo Isles is presented as a real navigable world: camera, scale, collisions,
@@ -21,7 +23,7 @@ const NPC_WALK_DIR := "res://01_ASSETS/kataklysma/sprites/npcs/zekranu/WALK"
 const ENTITY_IDLE_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/IDLE"
 const ENTITY_COMBAT_DIR := "res://01_ASSETS/kataklysma/character/entities/sprites/corrupted_makrura/COMBAT"
 const PLAYER_PORTRAIT := "res://01_ASSETS/kataklysma/ui/portraits/neutral/kataklysma_portrait_neutral.png"
-const NPC_PORTRAIT := "res://01_ASSETS/kataklysma/ui/portraits/neutral/zekranu_portrait_neutral_v001.png"
+const NPC_PORTRAIT := "res://01_ASSETS/kataklysma/ui/portraits/neutral/zekranu_portrait_dedicated_v002.png"
 const DIRECTIONAL_DIR := "res://01_ASSETS/kataklysma/sprites/directional"
 const QUEST_MARKERS := {
     "available": "res://01_ASSETS/kataklysma/ui/markers/quest_available.svg",
@@ -32,6 +34,8 @@ const QUEST_MARKERS := {
 var player: AnimatedSprite2D
 var npc: AnimatedSprite2D
 var player_collision_body: CharacterBody2D
+var npc_collision_body: StaticBody2D
+var npc_interaction_area: Area2D
 var camera: Camera2D
 var quest_marker: Sprite2D
 var objective_marker: Label
@@ -66,6 +70,7 @@ var dialogue_choices: Label
 var menu_layer: CanvasLayer
 var pause_layer: CanvasLayer
 var pause_info: Label
+var options_menu: Variant
 var minimap_player_dot: Label
 var minimap_quest_dot: Label
 var minimap_objective_dot: Label
@@ -92,6 +97,8 @@ var attributes := {
 var npc_affinity := {"zekranu": 0}
 var story_flags := {}
 var discovered_pois := {"awakening_cabin": true, "training_clearing": true}
+var npc_routine_index := 0
+var npc_routine_wait := 2.0
 
 var quest_state := "available"
 var objective_complete := false
@@ -112,31 +119,48 @@ const PLAYER_START := Vector2(410.0, 390.0)
 const NPC_POSITION := Vector2(830.0, 365.0)
 const OBJECTIVE_POSITION := Vector2(1030.0, 505.0)
 const MOVE_SPEED := 190.0
+const NPC_MOVE_SPEED := 34.0
+const NPC_ROUTE := [
+	Vector2(806.0, 362.0),
+	Vector2(820.0, 344.0),
+	Vector2(844.0, 345.0),
+	Vector2(858.0, 366.0),
+	Vector2(842.0, 382.0),
+	Vector2(816.0, 382.0),
+]
+const WALKABILITY_FOOT_PROBES := [Vector2.ZERO, Vector2(-10.0, -5.0), Vector2(10.0, -5.0), Vector2(-10.0, 5.0), Vector2(10.0, 5.0)]
 const SAVE_PATH := "user://kataklysma_echo_isles_demo.json"
 var WALKABLE_POLYGONS: Array[PackedVector2Array] = [
-    PackedVector2Array([Vector2(260, 230), Vector2(500, 230), Vector2(580, 290), Vector2(580, 385), Vector2(520, 450), Vector2(300, 450), Vector2(250, 380)]),
-    PackedVector2Array([Vector2(120, 120), Vector2(500, 105), Vector2(570, 155), Vector2(500, 205), Vector2(280, 230), Vector2(150, 205)]),
-    PackedVector2Array([Vector2(500, 350), Vector2(650, 290), Vector2(840, 310), Vector2(910, 360), Vector2(840, 445), Vector2(700, 455), Vector2(620, 460), Vector2(530, 420)]),
-    PackedVector2Array([Vector2(1000, 230), Vector2(1210, 220), Vector2(1450, 250), Vector2(1550, 320), Vector2(1490, 350), Vector2(1280, 315), Vector2(1100, 330)]),
-    PackedVector2Array([Vector2(930, 100), Vector2(1100, 95), Vector2(1180, 130), Vector2(1400, 120), Vector2(1490, 170), Vector2(1450, 220), Vector2(1200, 210), Vector2(1100, 190), Vector2(980, 210)]),
-    PackedVector2Array([Vector2(1330, 330), Vector2(1410, 335), Vector2(1515, 410), Vector2(1535, 460), Vector2(1470, 430), Vector2(1390, 385), Vector2(1330, 360)]),
-    PackedVector2Array([Vector2(500, 460), Vector2(650, 450), Vector2(800, 475), Vector2(850, 520), Vector2(760, 550), Vector2(630, 520), Vector2(520, 510)]),
-    PackedVector2Array([Vector2(850, 480), Vector2(1080, 455), Vector2(1300, 470), Vector2(1470, 530), Vector2(1450, 580), Vector2(1300, 540), Vector2(1100, 525), Vector2(930, 555), Vector2(875, 530)]),
-    PackedVector2Array([Vector2(960, 500), Vector2(1080, 500), Vector2(1110, 560), Vector2(1000, 580), Vector2(940, 550)]),
-    PackedVector2Array([Vector2(1300, 500), Vector2(1450, 520), Vector2(1470, 580), Vector2(1360, 590)]),
+	# 1. Areia aberta da clareira de treino; bordas ficam fora da vegetação.
+	PackedVector2Array([Vector2(292, 322), Vector2(316, 284), Vector2(365, 258), Vector2(510, 255), Vector2(572, 273), Vector2(620, 314), Vector2(624, 356), Vector2(597, 397), Vector2(548, 440), Vector2(368, 455), Vector2(321, 420), Vector2(295, 372)]),
+	# 2. Acesso externo da cabana e trilha curta ao norte da arena.
+	PackedVector2Array([Vector2(236, 207), Vector2(278, 205), Vector2(322, 222), Vector2(362, 244), Vector2(405, 251), Vector2(434, 269), Vector2(418, 291), Vector2(371, 281), Vector2(328, 260), Vector2(282, 246), Vector2(242, 232)]),
+	# 3. Passagem de terra entre a arena e o posto de Zek'Ranu.
+	PackedVector2Array([Vector2(574, 268), Vector2(620, 267), Vector2(668, 285), Vector2(711, 311), Vector2(754, 329), Vector2(808, 336), Vector2(861, 350), Vector2(884, 376), Vector2(863, 425), Vector2(819, 443), Vector2(769, 432), Vector2(723, 404), Vector2(682, 376), Vector2(635, 344), Vector2(591, 328)]),
+	# 4. Trilha alta que contorna as falésias em direção aos totens.
+	PackedVector2Array([Vector2(455, 223), Vector2(490, 199), Vector2(538, 170), Vector2(587, 148), Vector2(625, 156), Vector2(635, 178), Vector2(605, 201), Vector2(568, 224), Vector2(529, 246), Vector2(486, 264)]),
+	# 5. Clareira do altar e conexão estreita com a trilha leste.
+	PackedVector2Array([Vector2(931, 151), Vector2(970, 127), Vector2(1037, 123), Vector2(1109, 133), Vector2(1154, 153), Vector2(1176, 178), Vector2(1157, 201), Vector2(1106, 193), Vector2(1054, 179), Vector2(1001, 183), Vector2(960, 202), Vector2(933, 184)]),
+	# 6. Estrada norte para a entrada da gruta; não cobre a água ao redor.
+	PackedVector2Array([Vector2(1162, 184), Vector2(1203, 172), Vector2(1252, 181), Vector2(1303, 198), Vector2(1360, 211), Vector2(1421, 228), Vector2(1461, 249), Vector2(1447, 272), Vector2(1395, 261), Vector2(1338, 246), Vector2(1277, 230), Vector2(1220, 213), Vector2(1177, 207)]),
+	# 7. Ponte e desembarque leste.
+	PackedVector2Array([Vector2(1258, 322), Vector2(1295, 326), Vector2(1334, 350), Vector2(1370, 376), Vector2(1406, 397), Vector2(1436, 422), Vector2(1420, 443), Vector2(1382, 426), Vector2(1346, 403), Vector2(1310, 379), Vector2(1276, 357)]),
+	# 8. Escadaria sul e acesso à praia; mantém a faixa de areia fora da água.
+	PackedVector2Array([Vector2(679, 429), Vector2(722, 422), Vector2(767, 433), Vector2(800, 456), Vector2(827, 482), Vector2(858, 498), Vector2(851, 523), Vector2(817, 520), Vector2(782, 501), Vector2(752, 478), Vector2(716, 461), Vector2(685, 456)]),
+	# 9. Faixa de areia explorável entre as rochas costeiras do sul.
+	PackedVector2Array([Vector2(854, 490), Vector2(898, 469), Vector2(947, 465), Vector2(1000, 477), Vector2(1050, 488), Vector2(1107, 490), Vector2(1165, 500), Vector2(1215, 516), Vector2(1260, 526), Vector2(1295, 550), Vector2(1278, 572), Vector2(1231, 568), Vector2(1182, 567), Vector2(1123, 562), Vector2(1067, 560), Vector2(1017, 564), Vector2(970, 568), Vector2(925, 570), Vector2(886, 557), Vector2(857, 534)]),
+	# 10. Baía de areia leste e área do marcador da primeira quest.
+	PackedVector2Array([Vector2(1284, 491), Vector2(1330, 480), Vector2(1384, 490), Vector2(1439, 510), Vector2(1480, 540), Vector2(1486, 570), Vector2(1451, 584), Vector2(1407, 567), Vector2(1360, 548), Vector2(1318, 529), Vector2(1290, 511)]),
 ]
 var WALKABLE_REGIONS: Array[PackedVector2Array] = WALKABLE_POLYGONS
 var WALKABILITY_BLOCK_POLYGONS: Array[PackedVector2Array] = [
-    PackedVector2Array([Vector2(490, 330), Vector2(650, 330), Vector2(675, 420), Vector2(625, 455), Vector2(500, 445), Vector2(470, 390)]),
+	PackedVector2Array([Vector2(490, 330), Vector2(650, 330), Vector2(675, 420), Vector2(625, 455), Vector2(500, 445), Vector2(470, 390)]),
 ]
 const COLLISION_RECT_DATA := [
     {"position": Vector2(MAP_SIZE.x * 0.5, 48.0), "size": Vector2(MAP_SIZE.x, 96.0)},
     {"position": Vector2(MAP_SIZE.x * 0.5, MAP_SIZE.y - 38.0), "size": Vector2(MAP_SIZE.x, 76.0)},
     {"position": Vector2(38.0, MAP_SIZE.y * 0.5), "size": Vector2(76.0, MAP_SIZE.y)},
     {"position": Vector2(MAP_SIZE.x - 38.0, MAP_SIZE.y * 0.5), "size": Vector2(76.0, MAP_SIZE.y)},
-    {"position": Vector2(575.0, 380.0), "size": Vector2(170.0, 110.0)},
-    {"position": Vector2(1240.0, 285.0), "size": Vector2(260.0, 74.0)},
-    {"position": Vector2(1330.0, 610.0), "size": Vector2(250.0, 96.0)},
     {"position": NPC_POSITION + Vector2(0.0, 30.0), "size": Vector2(46.0, 24.0)},
 ]
 const CG_VARIANTS := [
@@ -156,6 +180,7 @@ func _ready() -> void:
     _build_cg_layer()
     _build_pause_menu()
     _build_main_menu()
+    _build_options_menu()
     _set_quest_state("available")
     _set_gameplay_visible(false)
 
@@ -229,7 +254,7 @@ func _build_world() -> void:
     entities_root.add_child(npc)
     npc.play("idle")
 
-    var npc_interaction_area := Area2D.new()
+    npc_interaction_area = Area2D.new()
     npc_interaction_area.name = "InteractionArea_Zekranu"
     npc_interaction_area.position = NPC_POSITION
     npc_interaction_area.collision_layer = 0
@@ -266,16 +291,19 @@ func _build_world() -> void:
 func _build_collision_world() -> void:
     for obstacle in COLLISION_RECT_DATA:
         var body := StaticBody2D.new()
-        body.name = "WalkableBoundary"
+        var obstacle_position: Vector2 = obstacle["position"]
+        body.name = "NPCBlocker_Zekranu" if obstacle_position.is_equal_approx(NPC_POSITION + Vector2(0.0, 30.0)) else "WalkableBoundary"
         body.collision_layer = 1
         body.collision_mask = 1
-        body.position = obstacle["position"]
+        body.position = obstacle_position
         var shape_node := CollisionShape2D.new()
         var shape := RectangleShape2D.new()
         shape.size = obstacle["size"]
         shape_node.shape = shape
         body.add_child(shape_node)
         add_child(body)
+        if body.name == "NPCBlocker_Zekranu":
+            npc_collision_body = body
 
 func _collision_rects_for_debug() -> Array[Rect2]:
     var rects: Array[Rect2] = []
@@ -426,6 +454,7 @@ func _build_hud() -> void:
     dialogue_title = Label.new()
     dialogue_title.position = Vector2(180.0, 16.0)
     dialogue_title.add_theme_font_size_override("font_size", 21)
+    dialogue_title.add_theme_font_override("font", load(DISPLAY_FONT_PATH))
     dialogue_title.add_theme_color_override("font_color", Color("#ffe7a6"))
     dialogue_panel.add_child(dialogue_title)
 
@@ -467,7 +496,7 @@ func _build_hud() -> void:
 
     dialogue_hint = Label.new()
     dialogue_hint.position = Vector2(180.0, 204.0)
-    dialogue_hint.text = "E / Espaço  confirmar"
+    dialogue_hint.text = "%s  confirmar" % _interaction_key_label()
     dialogue_hint.add_theme_font_size_override("font_size", 14)
     dialogue_hint.add_theme_color_override("font_color", Color("#91d7ff"))
     dialogue_panel.add_child(dialogue_hint)
@@ -592,6 +621,7 @@ func _build_main_menu() -> void:
     title.position = Vector2(78.0, 92.0)
     title.text = "KATAKLYSMA\nLUST SHAMAN'S JOURNEY"
     title.add_theme_font_size_override("font_size", 32)
+    title.add_theme_font_override("font", load(DISPLAY_FONT_PATH))
     title.add_theme_color_override("font_color", Color("#ffe7a6"))
     menu_layer.add_child(title)
 
@@ -667,6 +697,7 @@ func _build_pause_menu() -> void:
     title.position = Vector2(34.0, 26.0)
     title.text = "PAUSA"
     title.add_theme_font_size_override("font_size", 28)
+    title.add_theme_font_override("font", load(DISPLAY_FONT_PATH))
     title.add_theme_color_override("font_color", Color("#ffe7a6"))
     panel.add_child(title)
     pause_info = Label.new()
@@ -704,6 +735,48 @@ func _build_cg_layer() -> void:
     cg_layer.add_child(cg_caption)
     cg_layer.visible = false
 
+func _build_options_menu() -> void:
+    options_menu = OptionsMenuScript.new()
+    options_menu.name = "OptionsMenu"
+    options_menu.settings_changed.connect(_on_options_settings_changed)
+    options_menu.closed.connect(_on_options_closed)
+    add_child(options_menu)
+    _on_options_settings_changed(options_menu.settings)
+
+func _on_options_settings_changed(settings: Dictionary) -> void:
+    if minimap_panel:
+        minimap_panel.visible = bool(settings.get("show_minimap", true))
+    if camera:
+        camera.position_smoothing_enabled = bool(settings.get("camera_smoothing", true))
+    if tutorial_label and options_menu:
+        var bindings: Dictionary = options_menu.key_values
+        var left := _physical_key_label(int(bindings.get(&"move_left", KEY_A)))
+        var right := _physical_key_label(int(bindings.get(&"move_right", KEY_D)))
+        var up := _physical_key_label(int(bindings.get(&"move_up", KEY_W)))
+        var down := _physical_key_label(int(bindings.get(&"move_down", KEY_S)))
+        tutorial_label.text = "%s / %s / %s / %s ou SETAS\nMover Kataklysma" % [left, right, up, down]
+
+func _interaction_key_label() -> String:
+    if options_menu and options_menu.key_values is Dictionary:
+        return _physical_key_label(int(options_menu.key_values.get(&"interact", KEY_E)))
+    return "E"
+
+func _pause_key_label() -> String:
+    if options_menu and options_menu.key_values is Dictionary:
+        return _physical_key_label(int(options_menu.key_values.get(&"pause", KEY_ESCAPE)))
+    return "ESC"
+
+func _physical_key_label(key_code: int) -> String:
+    return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical(key_code))
+
+func _on_options_closed() -> void:
+    if paused:
+        _refresh_pause_info()
+
+func _open_options_menu() -> void:
+    if options_menu:
+        options_menu.open_menu()
+
 func _set_gameplay_visible(visible: bool) -> void:
     if gameplay_hud:
         gameplay_hud.visible = visible
@@ -715,9 +788,12 @@ func _start_new_game() -> void:
     _reset_demo()
     _set_gameplay_visible(true)
     menu_layer.visible = false
+    if options_menu:
+        options_menu.visible = false
     tutorial_label.modulate.a = 1.0
     tutorial_label.visible = not story_flags.get("tutorial_movement_seen", false)
     tutorial_time = 0.0
+    audio_manager.start_ambience()
     audio_manager.play_ui("menu_select")
     _show_toast("Echo Isles • explore uma maré corrompida", 3.0)
 
@@ -726,7 +802,7 @@ func _continue_game() -> void:
     _load_game()
 
 func _show_menu_options() -> void:
-    _show_toast("Opções: áudio, vídeo, minimapa e velocidade de texto serão persistidos no próximo marco.", 4.0)
+    _open_options_menu()
 
 func _show_menu_credits() -> void:
     _show_toast("Kataklysma — Lust Shaman's Journey • Echo Isles %s" % DEMO_VERSION, 4.0)
@@ -738,12 +814,14 @@ func _toggle_pause() -> void:
     if not world_started or encounter_active or dialogue_panel.visible or cg_active:
         return
     paused = not paused
+    if not paused and options_menu:
+        options_menu.visible = false
     pause_layer.visible = paused
     if paused:
         _refresh_pause_info()
 
 func _refresh_pause_info() -> void:
-    pause_info.text = "1  ATRIBUTOS\n2  QUESTS\n3  MAPA\n4  OPÇÕES\nS  SALVAR\nM  MENU PRINCIPAL\n\n" + _attributes_text() + "\nESC  CONTINUAR"
+    pause_info.text = "1  ATRIBUTOS\n2  QUESTS\n3  MAPA\n4  OPÇÕES\nS  SALVAR\nM  MENU PRINCIPAL\n\n" + _attributes_text() + "\n\n%s  CONTINUAR" % _pause_key_label()
 
 func _make_combat_bar(bar_position: Vector2, fill_color: Color) -> ProgressBar:
     var bar := ProgressBar.new()
@@ -796,7 +874,8 @@ func _process(delta: float) -> void:
         _process_cg(delta)
         return
     if quest_marker and quest_marker.visible:
-        quest_marker.position.y = NPC_POSITION.y - 116.0 + sin(marker_time * 3.0) * 5.0
+        quest_marker.position = npc.position + Vector2(0.0, -116.0 + sin(marker_time * 3.0) * 5.0)
+    _sync_npc_anchors()
     if toast_time > 0.0:
         toast_time -= delta
         if toast_time <= 0.0:
@@ -809,17 +888,19 @@ func _process(delta: float) -> void:
         if player:
             player.play("idle")
         return
+    _update_npc_routine(delta)
+    _sync_npc_anchors()
     _move_player(delta)
 
 func _move_player(delta: float) -> void:
     var direction := Vector2.ZERO
-    if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+    if Input.is_action_pressed("move_left"):
         direction.x -= 1.0
-    if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+    if Input.is_action_pressed("move_right"):
         direction.x += 1.0
-    if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+    if Input.is_action_pressed("move_up"):
         direction.y -= 1.0
-    if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+    if Input.is_action_pressed("move_down"):
         direction.y += 1.0
     if direction == Vector2.ZERO:
         player.play("idle_%s" % last_direction)
@@ -829,12 +910,11 @@ func _move_player(delta: float) -> void:
     tutorial_distance += motion.length()
     if tutorial_distance >= 380.0:
         _hide_tutorial()
-    var candidate_position: Vector2 = player.position + motion
-    if not _is_walkable_position(candidate_position):
-        player.play("idle_%s" % last_direction)
-        return
     player_collision_body.position = player.position
-    player_collision_body.move_and_collide(motion)
+    if not is_zero_approx(motion.x) and _is_walkable_position(player.position + Vector2(motion.x, 0.0)):
+        player_collision_body.move_and_collide(Vector2(motion.x, 0.0))
+    if not is_zero_approx(motion.y) and _is_walkable_position(player_collision_body.position + Vector2(0.0, motion.y)):
+        player_collision_body.move_and_collide(Vector2(0.0, motion.y))
     player.position = player_collision_body.position
     player.position.x = clampf(player.position.x, 90.0, MAP_SIZE.x - 90.0)
     player.position.y = clampf(player.position.y, 165.0, MAP_SIZE.y - 115.0)
@@ -856,15 +936,60 @@ func _move_player(delta: float) -> void:
         encounter_manager.register_step()
         encounter_manager.try_roll(ZONE_ID, false)
 
+func _update_npc_routine(delta: float) -> void:
+    if not npc or player.position.distance_to(npc.position) < 175.0:
+        if npc:
+            npc.play("idle")
+        return
+    if npc_routine_wait > 0.0:
+        npc_routine_wait -= delta
+        npc.play("idle")
+        return
+    var target: Vector2 = NPC_ROUTE[npc_routine_index]
+    if not _is_walkable_position(target):
+        npc_routine_index = (npc_routine_index + 1) % NPC_ROUTE.size()
+        npc_routine_wait = 1.5
+        return
+    if npc.position.distance_to(target) <= 2.0:
+        npc_routine_index = (npc_routine_index + 1) % NPC_ROUTE.size()
+        npc_routine_wait = 3.0 + float((npc_routine_index * 7) % 5)
+        npc.play("idle")
+        return
+    var next_position := npc.position.move_toward(target, NPC_MOVE_SPEED * delta)
+    if _is_walkable_position(next_position):
+        npc.position = next_position
+        npc.play("walk")
+    else:
+        npc.play("idle")
+        npc_routine_wait = 1.0
+
+func _sync_npc_anchors() -> void:
+    if not npc:
+        return
+    if npc_interaction_area:
+        npc_interaction_area.position = npc.position
+    if npc_collision_body:
+        npc_collision_body.position = npc.position + Vector2(0.0, 30.0)
+    if npc_name:
+        npc_name.position = npc.position + Vector2(-52.0, 64.0)
+    if quest_marker:
+        quest_marker.position.x = npc.position.x
+
 func _is_walkable_position(world_position: Vector2) -> bool:
     var feet_position := world_position + Vector2(0.0, 48.0)
-    for blocked_region in WALKABILITY_BLOCK_POLYGONS:
-        if Geometry2D.is_point_in_polygon(feet_position, blocked_region):
+    for probe_offset in WALKABILITY_FOOT_PROBES:
+        var probe: Vector2 = feet_position + probe_offset
+        for blocked_region in WALKABILITY_BLOCK_POLYGONS:
+            if Geometry2D.is_point_in_polygon(probe, blocked_region):
+                return false
+        var inside_walkable := false
+        for region in WALKABLE_POLYGONS:
+            if Geometry2D.is_point_in_polygon(probe, region):
+                inside_walkable = true
+                break
+        if not inside_walkable:
             return false
-    for region in WALKABLE_POLYGONS:
-        if Geometry2D.is_point_in_polygon(feet_position, region):
-            return true
-    return false
+    return true
 
 func collision_probe_for_test(start_position: Vector2, target_position: Vector2) -> bool:
     if not _is_walkable_position(target_position):
@@ -879,20 +1004,27 @@ func _unhandled_input(event: InputEvent) -> void:
     if not event is InputEventKey or not event.pressed or event.echo:
         return
     var key_event := event as InputEventKey
+    if options_menu and options_menu.handle_key_event(key_event):
+        return
+    var pause_pressed: bool = InputMap.event_is_action(key_event, &"pause")
+    var interact_pressed: bool = InputMap.event_is_action(key_event, &"interact")
     if cg_active:
-        if key_event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER, KEY_ESCAPE]:
+        if interact_pressed or key_event.keycode == KEY_ESCAPE:
             _advance_cg()
         return
     if paused:
+        if pause_pressed:
+            _toggle_pause()
+            return
         _handle_pause_input(key_event.keycode)
         return
     if encounter_active:
-        _handle_encounter_input(key_event.keycode)
+        _handle_encounter_input(key_event)
         return
     if dialogue_panel.visible:
-        _handle_dialogue_input(key_event.keycode)
+        _handle_dialogue_input(key_event)
         return
-    if key_event.keycode == KEY_ESCAPE:
+    if pause_pressed:
         _toggle_pause()
     elif key_event.keycode == KEY_R:
         _reset_demo()
@@ -900,11 +1032,11 @@ func _unhandled_input(event: InputEvent) -> void:
         _toggle_walkability_debug()
     elif key_event.keycode == KEY_F:
         _start_encounter({"type": "monster_ambush", "actors": ["makrura_corrupted"], "manual": true})
-    elif key_event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
+    elif interact_pressed:
         _try_interact()
 
 func _try_interact() -> void:
-    if player.position.distance_to(NPC_POSITION) < 145.0:
+    if player.position.distance_to(npc.position) < 145.0:
         _interact_with_npc()
     elif quest_state == "in_progress" and player.position.distance_to(OBJECTIVE_POSITION) < 145.0:
         _interact_with_objective()
@@ -929,7 +1061,7 @@ func _interact_with_npc() -> void:
     if quest_state == "available":
         _show_dialogue("Zek'Ranu  •  Mentor Xamã", "A maré não está certa, criança. Até os espíritos estão evitando a costa. Como você pretende agir?", "npc_intro")
         dialogue_choices.text = "[1] ESPÍRITO — Ouvir os espíritos antes de agir.\n[2] INTELECTO — Examinar a água.\n[3] AGILIDADE — Ir direto à origem.\n[4] CORRUPÇÃO — Fazer o responsável falar.\n[5] LUXÚRIA — Responder com confiança e provocação."
-        dialogue_hint.text = "1–5 escolher resposta   •   E confirmar"
+        dialogue_hint.text = "1–5 escolher resposta   •   %s confirmar" % _interaction_key_label()
     elif quest_state == "in_progress":
         _show_dialogue("Zek'Ranu", "A poça fica ao leste, perto das pedras. Procure o marcador ◈ e não toque na água escura.", "close")
     elif quest_state == "complete":
@@ -965,10 +1097,11 @@ func _set_dialogue_portrait(portrait_path: String) -> void:
         dialogue_portrait.texture = load(PLAYER_PORTRAIT)
         dialogue_portrait_placeholder.visible = dialogue_portrait.texture == null
 
-func _handle_dialogue_input(keycode: Key) -> void:
+func _handle_dialogue_input(event: InputEventKey) -> void:
+    var keycode: Key = event.keycode
     if dialogue_action == "npc_intro" and keycode in [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5]:
         _apply_dialogue_choice(int(keycode) - int(KEY_1) + 1)
-    elif keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
+    elif InputMap.event_is_action(event, &"interact"):
         _confirm_dialogue()
 
 func _apply_dialogue_choice(choice_index: int) -> void:
@@ -1002,7 +1135,7 @@ func _apply_dialogue_choice(choice_index: int) -> void:
     _set_dialogue_portrait(PLAYER_PORTRAIT)
     dialogue_body.text = consequence + "\n\nA missão é purificar a Maré Corrompida."
     dialogue_choices.text = ""
-    dialogue_hint.text = "E / Espaço  aceitar quest"
+    dialogue_hint.text = "%s  aceitar quest" % _interaction_key_label()
 
 func _confirm_dialogue() -> void:
     if dialogue_action == "npc_intro":
@@ -1061,14 +1194,14 @@ func _update_interaction_feedback() -> void:
         if npc_name:
             npc_name.visible = false
         return
-    var npc_distance: float = player.position.distance_to(NPC_POSITION)
+    var npc_distance: float = player.position.distance_to(npc.position)
     var objective_distance: float = player.position.distance_to(OBJECTIVE_POSITION)
     npc_name.visible = npc_distance < 190.0
     if npc_distance < 150.0:
-        interaction_prompt.text = "[E]  Falar com Zek'Ranu"
+        interaction_prompt.text = "[%s]  Falar com Zek'Ranu" % _interaction_key_label()
         interaction_prompt.visible = true
     elif quest_state == "in_progress" and objective_distance < 150.0:
-        interaction_prompt.text = "[E]  Investigar a Maré Corrompida"
+        interaction_prompt.text = "[%s]  Investigar a Maré Corrompida" % _interaction_key_label()
         interaction_prompt.visible = true
     else:
         interaction_prompt.visible = false
@@ -1079,7 +1212,7 @@ func _update_minimap() -> void:
     var map_origin := Vector2(10.0, 30.0)
     var map_extent := Vector2(190.0, 135.0)
     var player_map: Vector2 = map_origin + Vector2(player.position.x / MAP_SIZE.x * map_extent.x, player.position.y / MAP_SIZE.y * map_extent.y)
-    var npc_map: Vector2 = map_origin + Vector2(NPC_POSITION.x / MAP_SIZE.x * map_extent.x, NPC_POSITION.y / MAP_SIZE.y * map_extent.y)
+    var npc_map: Vector2 = map_origin + Vector2(npc.position.x / MAP_SIZE.x * map_extent.x, npc.position.y / MAP_SIZE.y * map_extent.y)
     var objective_map: Vector2 = map_origin + Vector2(OBJECTIVE_POSITION.x / MAP_SIZE.x * map_extent.x, OBJECTIVE_POSITION.y / MAP_SIZE.y * map_extent.y)
     minimap_player_dot.position = player_map
     minimap_quest_dot.position = npc_map
@@ -1092,19 +1225,18 @@ func _attributes_text() -> String:
     ]
 
 func _handle_pause_input(keycode: Key) -> void:
-    if keycode == KEY_ESCAPE:
-        _toggle_pause()
-    elif keycode == KEY_1:
-        pause_info.text = "ATRIBUTOS\n\n" + _attributes_text() + "\n\nESC voltar"
+    var resume_hint := "%s voltar" % _pause_key_label()
+    if keycode == KEY_1:
+        pause_info.text = "ATRIBUTOS\n\n" + _attributes_text() + "\n\n" + resume_hint
     elif keycode == KEY_2:
-        pause_info.text = "QUESTS\n\nPURIFICAR A MARÉ\nEstado: %s\nAfinidade Zek'Ranu: %d\n\nESC voltar" % [quest_state, int(npc_affinity["zekranu"])]
+        pause_info.text = "QUESTS\n\nPURIFICAR A MARÉ\nEstado: %s\nAfinidade Zek'Ranu: %d\n\n%s" % [quest_state, int(npc_affinity["zekranu"]), resume_hint]
     elif keycode == KEY_3:
-        pause_info.text = "MAPA\n\nEcho Isles\nPOIs descobertos: %d\nMinimapa ativo no canto superior direito.\n\nESC voltar" % discovered_pois.size()
+        pause_info.text = "MAPA\n\nEcho Isles\nPOIs descobertos: %d\nMinimapa ativo no canto superior direito.\n\n%s" % [discovered_pois.size(), resume_hint]
     elif keycode == KEY_4:
-        pause_info.text = "OPÇÕES\n\nÁudio: ativo\nMinimapa: ativo\nCâmera: suavizada\nResolução lógica: 1280 × 720\n\nESC voltar"
+        _open_options_menu()
     elif keycode == KEY_S:
         _save_game()
-        pause_info.text = "JOGO SALVO\n\nPosição, atributos, quest, afinidade, flags e POIs foram salvos.\n\nESC voltar"
+        pause_info.text = "JOGO SALVO\n\nPosição, atributos, quest, afinidade, flags e POIs foram salvos.\n\n%s" % resume_hint
     elif keycode == KEY_M:
         _return_to_menu()
 
@@ -1185,6 +1317,9 @@ func _advance_cg() -> void:
 func _return_to_menu() -> void:
     paused = false
     pause_layer.visible = false
+    if options_menu:
+        options_menu.visible = false
+    audio_manager.stop_ambience()
     _set_gameplay_visible(false)
     menu_layer.visible = true
 
@@ -1209,8 +1344,9 @@ func _start_encounter(encounter: Dictionary) -> void:
     _refresh_combat_ui(snapshot)
     encounter_panel.visible = true
 
-func _handle_encounter_input(keycode: Key) -> void:
-    if encounter_choice_made and keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER, KEY_ESCAPE]:
+func _handle_encounter_input(event: InputEventKey) -> void:
+    var keycode: Key = event.keycode
+    if encounter_choice_made and (InputMap.event_is_action(event, &"interact") or keycode == KEY_ESCAPE):
         var result: String = combat_system.battle_result if combat_system else ""
         encounter_panel.visible = false
         encounter_active = false
@@ -1243,7 +1379,7 @@ func _handle_encounter_input(keycode: Key) -> void:
     var phase: String = str(snapshot.get("phase", "player_turn"))
     if phase in ["victory", "defeat", "fled"]:
         encounter_choice_made = true
-        encounter_hint.text = "Combate encerrado — E / Espaço para voltar ao mapa"
+        encounter_hint.text = "Combate encerrado — %s para voltar ao mapa" % _interaction_key_label()
 
 func _refresh_combat_ui(snapshot: Dictionary) -> void:
     var player_stats: Dictionary = snapshot.get("player", {})
@@ -1284,6 +1420,9 @@ func _reset_demo() -> void:
     tutorial_distance = 0.0
     tutorial_time = 0.0
     player.position = PLAYER_START
+    npc.position = NPC_POSITION
+    npc_routine_index = 0
+    npc_routine_wait = 2.0
     player.flip_h = false
     last_direction = "front"
     last_position = PLAYER_START
@@ -1297,6 +1436,7 @@ func _reset_demo() -> void:
     minimap_panel.modulate.a = 1.0
     tutorial_label.modulate.a = 1.0
     player_collision_body.position = PLAYER_START
+    _sync_npc_anchors()
     _set_quest_state("available")
     _show_toast("Demo reiniciada.", 2.0)
 

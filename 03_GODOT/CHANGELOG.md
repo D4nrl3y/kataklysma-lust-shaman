@@ -51,3 +51,31 @@
 ### Known limitations
 
 - The release overlay still shows areas where the polygon edges need another art-directed shoreline/vegetation pass. The release gate therefore remains B — INTERNAL REVIEW READY.
+
+## KI-001–KI-006 implementation start — 2026-10-07
+
+### Added
+
+- Runtime options panel, reachable from the main menu and pause menu, with master/music/SFX volume, fullscreen, 1280×720/1600×900/1920×1080 window sizes, minimap and camera toggles, and saved remapping for movement, interaction and pause.
+- Inter UI font and Cinzel display font, each with its upstream SIL OFL license file.
+- Dedicated generated Zek'Ranu portrait v002, based on the existing identity-locked render.
+- A generated Echo Isles field-music candidate, plus separate Music and SFX audio buses.
+- Zek'Ranu ambient waypoint movement, timed waits, proximity pause and dynamic interaction/quest/minimap anchors.
+
+### Changed
+
+- Replaced the broad walkable regions with ten smaller land/path polygons and added five-point foot-area validation with axis-separated movement.
+- The NPC dialogue now loads the new dedicated portrait. The old crop remains preserved as an earlier asset.
+- Audio manager starts/stops the field track with gameplay and checks for event-specific OGG files before using its procedural fallback.
+- Project-wide UI typography now defaults to Inter; selected headings use Cinzel.
+
+### Fixed
+
+- No issue is marked Fixed in this implementation pass because the changed systems have not yet received Godot runtime or visual QA.
+
+### Known limitations
+
+- KI-001 remains OPEN until the new F10 overlay is reviewed against the actual map and deliberate escape attempts are repeated.
+- The generated music is watermarked and its redistribution/commercial-use terms are not cleared; final authored SFX remain absent.
+- Options, fonts, portrait integration and Zek'Ranu's route require Godot QA. NPC routines still cover only Zek'Ranu, not the entire population.
+- The prior screenshot package shows the older walkability geometry and must not be cited as evidence for this revision.

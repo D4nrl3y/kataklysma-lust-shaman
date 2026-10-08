@@ -1,6 +1,6 @@
 # Linha de base canônica do M30
 
-**Estado:** linha de base em revisão — escopo M30 e estimativa total ainda não aprovados.
+**Estado:** baseline v1 registrada — corte escolhido pelo usuário e critérios narrativos por quest documentados; estimativa preliminar, vínculo dos recursos e calibração de esforço ainda pendentes.
 
 **Referência narrativa:** `00_DOCS/source_lore/Lust_Shamans_Journey_Complete_Game_Narrative_Bible_V2.0.docx`.
 
@@ -41,9 +41,11 @@ Na Fase 2, decompor o protótipo em elementos reaproveitáveis e reimplementar o
 
 ## Escopo M30 e medição
 
-A recomendação anterior propôs uma campanha até `QST_SEN_009`, conforme o corte de primeira demo demonstrável descrito na Bíblia. Esse corte cobre nove dos quinze IDs de quest; a razão de quests, por si só, não mede esforço de desenvolvimento. A alternativa de encerrar o M30 em Echo Isles após `QST_ECHO_006` (boss e escolha do fragmento) está em consulta ao usuário para separar o milestone de 30% da demo mais ampla de Sen'jin.
+O usuário escolheu uma campanha do início até `QST_SEN_009`: `QST_ECHO_001`–`QST_ECHO_008`, transição persistente e `QST_SEN_009`. O corte cobre nove dos quinze IDs de quest; essa razão não é usada como medida de esforço.
 
-Não existe percentual atual aprovado. Antes de declarar “30%”, estimar o backlog completo do jogo com uma unidade comum de esforço e contar somente itens integrados e aceitos com QA. Se o ponto de corte escolhido superar 30% do esforço estimado, o roadmap deve indicar o percentual real ou reduzir o corte; não alterar pesos para forçar o rótulo M30.
+`docs/production/M30_WORK_BREAKDOWN.md` registra uma estimativa preliminar de 35 pontos M30 em 100 pontos para o jogo completo (faixa aproximada de 30%–40%; confiança baixa a média). É um plano de esforço, não progresso já realizado, nem uma baseline de custo validada. Revisar depois de estabilizar a fundação Godot e estimar uma quest e um mapa com dados reais. Só contar itens integrados, aceitos e com QA; não ajustar pesos retroativamente para preservar um rótulo percentual.
+
+A matriz `docs/production/M30_QUEST_ACCEPTANCE.md` registra objetivos, dependências de spine, cenas, escolhas, flags, consequências e critérios de aceite das nove quests. A associação dos arquivos de arte/CGs ainda requer inventário, e a Fase 0 continua aberta até essa associação e a revisão dos pesos com evidência da Fase 1.
 
 ## Estados de produção
 

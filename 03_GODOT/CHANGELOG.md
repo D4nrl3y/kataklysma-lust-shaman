@@ -90,8 +90,12 @@
 - Added `KI-007` for quest/CG canon mismatch, `KI-008` for event-type routing and `KI-009` for missing Orgrimmar background.
 - Reconciled the CG roster, project start guide, release notes and production status so asset approval is distinguished from runtime integration and current-build QA.
 - Recorded the production baseline and scope decisions in `docs/decisions/M30_CANONICAL_BASELINE.md`.
+- Added `docs/production/M30_WORK_BREAKDOWN.md` with a preliminary effort-weighted estimate for the full game and M30 scope.
+- Added `docs/production/M30_QUEST_ACCEPTANCE.md` with source-traced objectives, scene IDs, branch outcomes, flags and acceptance criteria for the nine-quest M30 cutoff.
 
 ### Open
 
-- The final M30 chapter cutoff and full-project effort estimate are not yet approved; no numeric completion percentage is claimed.
+- User-selected content cutoff: Echo Isles `QST_ECHO_001`–`QST_ECHO_008`, transition to Sen'jin, and `QST_SEN_009`.
+- Preliminary plan estimates this cutoff at 35/100 relative effort points (rough range 30%–40%); this is neither validated nor completed progress.
+- Quest-level narrative acceptance is documented; concrete asset mapping and effort calibration remain open. No numeric completion percentage is claimed.
 - No runtime or parser QA was performed as part of this documentation/data alignment.

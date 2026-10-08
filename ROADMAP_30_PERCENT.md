@@ -6,7 +6,7 @@
 
 **Estado do repositório na revisão:** `main` sincronizada com `origin/main`, sem alterações locais antes deste documento.
 
-**Execução:** Fase 0 concluída — baseline v1 congelada até `QST_SEN_009`, com critérios narrativos e cobertura de assets documentados. A estimativa é preliminar: 35 pontos de 100, faixa de incerteza aproximada de 30%–45%; não representa progresso realizado e será recalibrada com dados da Fase 1.
+**Execução:** Fase 0 concluída — baseline v1 congelada até `QST_SEN_009`, com critérios narrativos e cobertura de assets documentados. Fase 1 está em andamento: parser/import, smoke test, 22 probes de geometria e seis amostras de obstáculos de treino passaram; QA visual de walkability segue parcial e o gate não foi atingido. A estimativa de 35 pontos de 100 (faixa aproximada de 30%–45%) continua sendo planejamento, não progresso realizado.
 
 ## Decisão executiva
 
@@ -20,26 +20,26 @@ O projeto não tem uma estimativa de esforço validada por histórico de execuç
 
 | Área | O que existe | O que isso ainda não comprova |
 |---|---|---|
-| Projeto Godot | Projeto na raiz, cena principal, menu, exploração de Echo Isles, UI construída em runtime e sistemas de save, pause, diálogo, opções e combate | Uma build limpa, reproduzível e validada após as mudanças de 7 de outubro |
+| Projeto Godot | Projeto na raiz, cena principal, menu, exploração de Echo Isles, UI construída em runtime e sistemas de save, pause, diálogo, opções e combate; parser/import e smoke atual executados em Godot 4.7.2 | Fase 1 ainda sem gate: walkability visual e cobertura mais ampla de opções/escala seguem parciais |
 | Código | 11 scripts Godot sob `03_GODOT`; `demo_game.gd` concentra aproximadamente 1.349 linhas e monta a maior parte da demo | Arquitetura de campanha com cenas de zona, quests e componentes de UI independentes |
 | Mundo | 7 imagens de background conceitual e catálogo de zonas | Sete mapas jogáveis: só Echo Isles é carregada pelo jogo; os backgrounds não têm as camadas modulares de colisão, foreground, pontos e rotas descritas na especificação |
 | Personagens | 13 NPCs nomeados com conjuntos de `IDLE`/`WALK`; 3 entidades com conjuntos parciais; retratos, locks e sprites da protagonista | Elenco integrado: a cena atual posiciona Zek’Ranu; os NPCs restantes não formam ainda a população jogável. Os 13 NPCs não têm conjuntos `CAST`/`COMBAT` |
 | CGs | 48 PNGs em 12 sequências de quatro quadros, além de keyframes históricos | Doze cenas implementadas: a demo tem uma sequência ativa, definida por caminhos no script |
 | Quest e diálogo | Uma quest curta, cinco escolhas iniciais, atributos, flags, marcadores de estado, save/load; há JSON de diálogo PT-BR | As 15 quests da Bíblia: o JSON de diálogo e vários catálogos não são a fonte consumida pelo fluxo ativo, que ainda contém texto e estado codificados em `demo_game.gd` |
-| Combate | Sistema de turnos separado, cinco ações e dois perfis inimigos; encounter manager e tabelas de eventos | Sistema de campanha validado ou encontros variados: eventos de NPC/recurso/presságio podem cair no mesmo início de combate; apenas água e Makrura são mapeadas para inimigos. A tabela também declara regiões de spawn, mas o movimento atual tenta rolar encontros por distância percorrida, sem uma região por mapa |
+| Combate | Sistema de turnos separado, cinco ações e dois perfis inimigos; encounter manager e tabelas de eventos; apenas `monster_ambush` abre batalha após a correção | Sistema de campanha validado ou encontros variados: NPC/resource events ainda são avisos pendentes; frequência/regiões ainda não estão implementadas por mapa |
 | Objetos e áudio | Marcadores, ícones e música candidata; tons procedurais como fallback | A pasta `static_objects` está vazia. A faixa de campo está marcada com watermark e sem liberação de direitos; SFX finais não estão presentes |
-| QA | Relatório e screenshots da build anterior, scripts de captura e QA | Evidência da build atual: o próprio relatório registra que os resultados anteriores pertencem à geometria antiga e que a atualização recente não foi testada |
+| QA | Parser/import, smoke test, 22 probes amostrados e 22 screenshots atuais foram executados em Godot 4.7.2 | Gate visual completo: o F10 ainda mostra arestas aproximadas; opções e métricas de escala não foram exaustivamente testadas |
 
-O inventário do repositório encontra 48 imagens de CG na pasta de variantes, 7 backgrounds de zona e nenhum arquivo em `static_objects`. A inspeção visual do background de Echo Isles e do antigo overlay confirma que há uma base artística detalhada, mas o screenshot de walkability é histórico: ele não pode aprovar os polígonos estreitados no commit revisado.
+O inventário do repositório encontra 48 imagens de CG na pasta de variantes, 7 backgrounds de zona e nenhum arquivo em `static_objects`. Há agora uma captura F10 atual em `docs/qa/screenshots/04_walkable_debug.png`; ela é evidência do bloqueio, não aprovação: alguns contornos seguem aproximados.
 
 ### Bloqueadores e inconsistências que afetam o roadmap
 
-1. **Walkability P0:** `KI-001` continua aberto. Polígonos e probes foram alterados, mas não há captura atual nem repetição de tentativas deliberadas de sair dos caminhos.
+1. **Walkability P0:** `KI-001` continua aberto. Os 22 probes amostrados passam e capturas atuais mostram tentativas de borda bloqueadas, mas o overlay aponta imprecisão nas arestas/obstáculos e ainda falta uma passagem manual completa pelo mapa.
 2. **Conteúdo ainda não canônico:** o fluxo ativo “Purificar a Maré Corrompida” é agora classificado como protótipo sem ID canônico. O runtime ainda liga esse objetivo à CG `echo_002_zekranu_totem_choice`, cujo evento narrativo é diferente. A Fase 2 precisa reconciliar a quest e o gatilho da CG com os cartões canônicos.
 3. **Combate em conflito documental:** o usuário definiu combate por turnos, enquanto a seção de controle da Bíblia descreve combate em tempo real. Este roadmap mantém turnos como direção de produção vigente; a Bíblia e os documentos derivados precisam ser reconciliados.
 4. **Mapa do escopo:** a lista de sete regiões foi alinhada à Bíblia e Orgrimmar foi incluída; seu background ainda falta. O Eye shrine ficou catalogado como local especial do clímax, não como oitava região.
 5. **Documentação:** `README_START_HERE.md`, `RELEASE_NOTES.md`, `PRODUCTION_STATUS_V001.md` e `CG_VARIANT_ROSTER.md` foram alinhados para separar asset produzido, runtime integrado, QA pendente e aprovação. Ver `docs/decisions/M30_CANONICAL_BASELINE.md`.
-6. **Percentual não calculável:** há uma estimativa preliminar por pacote, mas não um backlog completo de tarefas calibrado. Os QA `PASS` anteriores não devem ser copiados para a nova build; `QA_REPORT.md` já delimita que são resultados históricos.
+6. **Percentual não calculável:** há uma estimativa preliminar por pacote, mas não um backlog completo de tarefas calibrado. `QA_REPORT.md` separa os testes da build atual dos gates visuais e de conteúdo que seguem abertos.
 
 ## Definição proposta do M30
 
@@ -88,6 +88,8 @@ Durotar, Razor Hill, Orgrimmar, Ratchet, Northern Barrens e o clímax do Eye; qu
 - Corrigir o roteamento de encontros e limitar cada tipo à sua região/regra; garantir que só `monster_ambush` abra combate.
 
 **Gate:** iniciar do menu e completar o fluxo atual sem erro; screenshots atuais, não reaproveitados; testes de fronteira da walkability passam na geometria corrente. Nenhum P0 visual permanece aberto.
+
+**Execução atual:** parser/import, `demo_smoke_test.gd`, seis amostras de blockers de props e 22 probes de `final_release_qa.gd` passaram. As capturas GUI atuais estão em `docs/qa/screenshots/`. O overlay F10 ainda revela limites aproximados; opções/escala têm cobertura parcial. Portanto, o gate da Fase 1 segue **ABERTO**, KI-001 permanece P0 e a Fase 2 ainda não começou.
 
 ### Fase 2 — Entregar o arco de Echo Isles
 

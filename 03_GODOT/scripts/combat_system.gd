@@ -192,16 +192,17 @@ func _player_flee() -> void:
 
 func _enemy_turn() -> void:
     enemy["guard"] = false
+    var enemy_name := str(enemy.get("display_name", "A criatura"))
     var corruption_roll: float = rng.randf()
     if corruption_roll < 0.28 and int(player["corruption"]) < 3:
         var raw_damage: int = int(enemy["spell_power"]) + rng.randi_range(-2, 4)
         var damage: int = _deal_damage(player, raw_damage, "spirit_defense")
         player["corruption"] = mini(3, int(player["corruption"]) + 1)
-        _append_event("A Makrura lançou Névoa Corruptora: %d de dano e +1 corrupção." % damage)
+        _append_event("%s lançou Névoa Corruptora: %d de dano e +1 corrupção." % [enemy_name, damage])
     else:
         var raw_damage: int = int(enemy["power"]) + rng.randi_range(-3, 5)
         var damage: int = _deal_damage(player, raw_damage, "defense")
-        _append_event("A Makrura atacou com as garras e causou %d de dano." % damage)
+        _append_event("%s atacou e causou %d de dano." % [enemy_name, damage])
     player["guard"] = false
 
 func _apply_player_start_turn() -> void:

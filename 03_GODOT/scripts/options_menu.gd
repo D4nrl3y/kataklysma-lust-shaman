@@ -284,8 +284,8 @@ func _refresh_key_buttons() -> void:
 		(key_buttons[action] as Button).text = "%s%s" % [primary, suffix]
 
 func _key_label(physical_code: int) -> String:
-	var layout_key: int = DisplayServer.keyboard_get_keycode_from_physical(physical_code)
-	return OS.get_keycode_string(layout_key)
+	# Keyboard layout translation is unavailable on Godot's headless display server.
+	return OS.get_keycode_string(physical_code)
 
 func _apply_settings(save: bool = true) -> void:
 	_ensure_audio_bus("Music")

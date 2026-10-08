@@ -14,6 +14,7 @@ const VIEW_SIZE := Vector2(1280.0, 720.0)
 const MAP_SIZE := Vector2(1672.0, 941.0)
 const DEMO_VERSION := "0.1.0-demo"
 const ZONE_ID := "echo_isles"
+const ENCOUNTER_TABLE_ID := "echo_isles_day"
 const MAP_TEXTURE := "res://01_ASSETS/kataklysma/maps/echo_isles/backgrounds/echo_isles_background_concept_v001.png"
 const PLAYER_IDLE_DIR := "res://01_ASSETS/kataklysma/sprites/idle"
 const PLAYER_WALK_DIR := "res://01_ASSETS/kataklysma/sprites/walk"
@@ -53,6 +54,7 @@ var encounter_panel: ColorRect
 var encounter_body: Label
 var encounter_hint: Label
 var encounter_manager: Node
+var encounter_rng := RandomNumberGenerator.new()
 var combat_system: RefCounted
 var audio_manager: Node
 var combat_player_sprite: AnimatedSprite2D
@@ -75,6 +77,7 @@ var minimap_player_dot: Label
 var minimap_quest_dot: Label
 var minimap_objective_dot: Label
 var minimap_panel: ColorRect
+var minimap_texture: TextureRect
 var walkability_debug: Node2D
 var cg_layer: CanvasLayer
 var cg_image: TextureRect
@@ -154,7 +157,16 @@ var WALKABLE_POLYGONS: Array[PackedVector2Array] = [
 ]
 var WALKABLE_REGIONS: Array[PackedVector2Array] = WALKABLE_POLYGONS
 var WALKABILITY_BLOCK_POLYGONS: Array[PackedVector2Array] = [
-	PackedVector2Array([Vector2(490, 330), Vector2(650, 330), Vector2(675, 420), Vector2(625, 455), Vector2(500, 445), Vector2(470, 390)]),
+	# Compact exclusion around the rock/prop cluster on the arena's south rim.
+	PackedVector2Array([Vector2(540, 405), Vector2(570, 393), Vector2(607, 397), Vector2(635, 414), Vector2(625, 445), Vector2(575, 452), Vector2(535, 433)]),
+	# Footprints for solid training props inside the otherwise walkable clearing.
+	PackedVector2Array([Vector2(368, 350), Vector2(394, 350), Vector2(394, 370), Vector2(368, 370)]),
+	PackedVector2Array([Vector2(409, 337), Vector2(431, 337), Vector2(431, 355), Vector2(409, 355)]),
+	PackedVector2Array([Vector2(459, 323), Vector2(481, 323), Vector2(481, 341), Vector2(459, 341)]),
+	PackedVector2Array([Vector2(494, 314), Vector2(516, 314), Vector2(516, 332), Vector2(494, 332)]),
+	PackedVector2Array([Vector2(562, 337), Vector2(584, 337), Vector2(584, 355), Vector2(562, 355)]),
+	PackedVector2Array([Vector2(584, 349), Vector2(608, 349), Vector2(608, 369), Vector2(584, 369)]),
+	PackedVector2Array([Vector2(636, 356), Vector2(658, 356), Vector2(658, 374), Vector2(636, 374)]),
 ]
 const COLLISION_RECT_DATA := [
     {"position": Vector2(MAP_SIZE.x * 0.5, 48.0), "size": Vector2(MAP_SIZE.x, 96.0)},
@@ -171,6 +183,7 @@ const CG_VARIANTS := [
 ]
 
 func _ready() -> void:
+    encounter_rng.randomize()
     _build_world()
     _build_hud()
     _build_encounter_manager()
@@ -431,6 +444,21 @@ func _build_hud() -> void:
     minimap_panel.size = Vector2(210.0, 180.0)
     minimap_panel.color = Color(0.025, 0.035, 0.08, 0.86)
     hud.add_child(minimap_panel)
+    minimap_texture = TextureRect.new()
+    minimap_texture.position = Vector2(10.0, 30.0)
+    minimap_texture.size = Vector2(190.0, 107.0)
+    minimap_texture.texture = load(MAP_TEXTURE)
+    minimap_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+    minimap_texture.stretch_mode = TextureRect.STRETCH_SCALE
+    minimap_texture.modulate = Color(0.78, 0.86, 0.9, 0.9)
+    minimap_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    minimap_panel.add_child(minimap_texture)
+    var minimap_tint := ColorRect.new()
+    minimap_tint.position = minimap_texture.position
+    minimap_tint.size = minimap_texture.size
+    minimap_tint.color = Color(0.015, 0.035, 0.055, 0.26)
+    minimap_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    minimap_panel.add_child(minimap_tint)
     var minimap_title := Label.new()
     minimap_title.position = Vector2(12.0, 8.0)
     minimap_title.text = "ECHO ISLES  •  MAPA"
@@ -767,7 +795,7 @@ func _pause_key_label() -> String:
     return "ESC"
 
 func _physical_key_label(key_code: int) -> String:
-    return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical(key_code))
+    return OS.get_keycode_string(key_code)
 
 func _on_options_closed() -> void:
     if paused:
@@ -934,7 +962,7 @@ func _move_player(delta: float) -> void:
     if step_distance >= 52.0:
         step_distance = 0.0
         encounter_manager.register_step()
-        encounter_manager.try_roll(ZONE_ID, false)
+        encounter_manager.try_roll(ENCOUNTER_TABLE_ID, false)
 
 func _update_npc_routine(delta: float) -> void:
     if not npc or player.position.distance_to(npc.position) < 175.0:
@@ -1191,9 +1219,11 @@ func _set_quest_state(new_state: String) -> void:
 func _update_interaction_feedback() -> void:
     if not world_started or paused or cg_active or encounter_active or dialogue_panel.visible:
         interaction_prompt.visible = false
+        objective_marker.visible = false
         if npc_name:
             npc_name.visible = false
         return
+    objective_marker.visible = quest_state == "in_progress" and player.position.distance_to(OBJECTIVE_POSITION) < 400.0
     var npc_distance: float = player.position.distance_to(npc.position)
     var objective_distance: float = player.position.distance_to(OBJECTIVE_POSITION)
     npc_name.visible = npc_distance < 190.0
@@ -1210,7 +1240,7 @@ func _update_minimap() -> void:
     if not minimap_panel or not player:
         return
     var map_origin := Vector2(10.0, 30.0)
-    var map_extent := Vector2(190.0, 135.0)
+    var map_extent := Vector2(190.0, 107.0)
     var player_map: Vector2 = map_origin + Vector2(player.position.x / MAP_SIZE.x * map_extent.x, player.position.y / MAP_SIZE.y * map_extent.y)
     var npc_map: Vector2 = map_origin + Vector2(npc.position.x / MAP_SIZE.x * map_extent.x, npc.position.y / MAP_SIZE.y * map_extent.y)
     var objective_map: Vector2 = map_origin + Vector2(OBJECTIVE_POSITION.x / MAP_SIZE.x * map_extent.x, OBJECTIVE_POSITION.y / MAP_SIZE.y * map_extent.y)
@@ -1323,19 +1353,27 @@ func _return_to_menu() -> void:
     _set_gameplay_visible(false)
     menu_layer.visible = true
 
-func _on_encounter_triggered(_zone_id: String, encounter: Dictionary) -> void:
+func _on_encounter_triggered(_table_id: String, encounter: Dictionary) -> void:
     _start_encounter(encounter)
 
 func _start_encounter(encounter: Dictionary) -> void:
+    var encounter_type := str(encounter.get("type", ""))
+    if encounter_type != "monster_ambush":
+        _handle_noncombat_encounter(encounter_type)
+        return
+
+    var enemy_id := _resolve_combat_enemy(encounter.get("actors", []))
+    if enemy_id.is_empty():
+        push_warning("Emboscada ignorada: a tabela não definiu um inimigo de combate compatível.")
+        _show_toast("Emboscada sem inimigo configurado; nenhum combate foi iniciado.", 3.0)
+        return
+
     encounter_active = true
     encounter_choice_made = false
-    var event_type: String = str(encounter.get("type", "monster_ambush")).replace("_", " ").capitalize()
-    var actors: Array = encounter.get("actors", ["makrura_corrupted"])
-    var enemy_id: String = "water_spirit_weakened" if actors.has("water_spirit_weakened") else "corrupted_makrura"
     combat_system = CombatSystem.new()
     audio_manager.play_ui("combat")
     var snapshot: Dictionary = combat_system.start_battle(enemy_id)
-    encounter_body.text = "Um evento surgiu durante a exploração.  Tipo: %s\nAmeaça: %s" % [event_type, str(snapshot["enemy"]["display_name"])]
+    encounter_body.text = "Uma criatura emboscou Kataklysma durante a exploração.\nAmeaça: %s" % str(snapshot["enemy"]["display_name"])
     encounter_hint.text = "1 Ataque físico   2 Canalizar espírito   3 Guarda   4 Purificar   5 Fugir"
     combat_player_sprite.visible = true
     combat_enemy_sprite.visible = true
@@ -1343,6 +1381,32 @@ func _start_encounter(encounter: Dictionary) -> void:
     combat_enemy_sprite.play("idle")
     _refresh_combat_ui(snapshot)
     encounter_panel.visible = true
+
+func _resolve_combat_enemy(actor_ids: Variant) -> String:
+    if not actor_ids is Array:
+        return ""
+    var candidates: Array[String] = []
+    for actor_id in actor_ids:
+        match str(actor_id):
+            "water_spirit_weakened":
+                candidates.append("water_spirit_weakened")
+            "makrura_corrupted", "corrupted_makrura":
+                candidates.append("corrupted_makrura")
+    if candidates.is_empty():
+        return ""
+    return candidates[encounter_rng.randi_range(0, candidates.size() - 1)]
+
+func _handle_noncombat_encounter(encounter_type: String) -> void:
+    var messages := {
+        "npc_walkby": "Evento de passagem de NPC registrado; apresentação e interação ainda pendentes.",
+        "resource_find": "Evento de recurso registrado; coleta ainda não está disponível nesta build.",
+        "spirit_omen": "Um presságio espiritual atravessa a maré.",
+    }
+    if messages.has(encounter_type):
+        _show_toast(str(messages[encounter_type]), 3.5)
+    else:
+        push_warning("Evento aleatório sem handler: %s" % encounter_type)
+        _show_toast("Evento não reconhecido (%s); nenhum combate foi iniciado." % encounter_type, 3.5)
 
 func _handle_encounter_input(event: InputEventKey) -> void:
     var keycode: Key = event.keycode
@@ -1464,6 +1528,7 @@ func demo_smoke_test() -> Dictionary:
         "npc_idle_frames": npc != null and npc.sprite_frames.get_frame_count("idle") == 4,
         "quest_marker_loaded": quest_marker != null and quest_marker.texture != null,
         "objective_marker_loaded": objective_marker != null,
+        "minimap_texture_loaded": minimap_texture != null and minimap_texture.texture != null,
         "encounter_manager_loaded": encounter_manager != null,
         "quest_state": quest_state,
     }

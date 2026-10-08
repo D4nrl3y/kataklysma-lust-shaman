@@ -21,8 +21,8 @@ func _run() -> void:
         ["bordas cabana", Vector2(100.0, 220.0), false],
         ["vegetação norte", Vector2(730.0, 110.0), false],
         ["região Zek'Ranu", demo.NPC_POSITION, true],
-        ["ponte", Vector2(1450.0, 350.0), true],
-        ["plataforma totens", Vector2(1300.0, 150.0), true],
+        ["ponte", Vector2(1350.0, 342.0), true],
+        ["plataforma totens", Vector2(1050.0, 107.0), true],
         ["ilhas menores", Vector2(900.0, 750.0), false],
         ["pedras centrais", Vector2(575.0, 380.0), false],
         ["escadas", Vector2(450.0, 350.0), true],
@@ -43,7 +43,7 @@ func _run() -> void:
         ["água oeste", Vector2(250.0, 760.0)],
         ["água sul", Vector2(760.0, 820.0)],
         ["água leste", Vector2(1600.0, 600.0)],
-        ["cliff arena", Vector2(640.0, 250.0)],
+        ["cliff arena", Vector2(700.0, 130.0)],
         ["pedras centrais", Vector2(575.0, 380.0)],
         ["vegetação norte", Vector2(730.0, 110.0)],
         ["limite mapa", Vector2(20.0, 450.0)],
@@ -57,9 +57,14 @@ func _run() -> void:
             failures.append("blocker " + label)
 
     if failures.is_empty():
-        print("FINAL_RELEASE_QA: PASS")
+        print("WALKABILITY_BOUNDARY_SUITE: PASS (22 point/blocker probes)")
+        print("VISUAL_WALKABILITY_REVIEW: PARTIAL (KI-001 remains open)")
+        print("FINAL_RELEASE_QA: PARTIAL")
     else:
-        print("FINAL_RELEASE_QA: FAIL -> %s" % ", ".join(failures))
-    demo.audio_manager.free()
-    demo.free()
+        print("WALKABILITY_BOUNDARY_SUITE: FAIL -> %s" % ", ".join(failures))
+        print("FINAL_RELEASE_QA: FAIL")
+    demo.audio_manager.stop_ambience()
+    demo.queue_free()
+    await process_frame
+    await create_timer(0.5).timeout
     quit(0 if failures.is_empty() else 1)

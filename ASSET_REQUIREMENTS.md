@@ -24,7 +24,7 @@ The eight walk frames are ordered as contact, down, passing, up, contact-inverse
 - `velocity.y < 0` routes to `walk_back`; `velocity.y > 0` to `walk_front`.
 - Stopping preserves the last direction and selects the matching idle animation.
 - Texture filtering remains nearest-neighbor.
-- World scale is `0.26`; foot collision is `20×12` at `48 px` below the actor origin.
+- World scale is provisionally `0.26`; foot collision is `20×12` at `48 px` below the actor origin. Current cabin/training screenshots were reviewed, but the road-to-character width target was not measured, so scale is not declared finally approved.
 
 ## Dialogue assets
 
@@ -46,17 +46,18 @@ The eight walk frames are ordered as contact, down, passing, up, contact-inverse
 
 ## Walkability and NPC behavior
 
-- `demo_game.gd` now defines ten smaller walkable polygons for the training clearing, cabin access, north trail, mentor route, totem approach, cave road, bridge, stairs and beaches.
-- The player's five foot probes (center and four corners) must all remain inside the whitelist and outside blockers. The polygons and blockers remain visible only while F10 debug is enabled.
-- Zek'Ranu has a six-point ambient route around his current station, waits between steps, pauses when Kataklysma approaches, and keeps his interaction area, marker, name and minimap icon attached to his live position.
+- `demo_game.gd` defines ten walkable polygons for the training clearing, cabin access, north trail, mentor route, totem approach, cave road, bridge, stairs and beaches, plus a central-rock exclusion, seven local training-prop footprints and map/NPC boundaries.
+- The player's five foot probes (center and four corners) must all remain inside the whitelist and outside exclusions. F10 shows the geometry only in debug; current `04_walkable_debug.png` reveals edge/prop mismatches, so the geometry is not final.
+- The current boundary suite passes 15 named walkability points and 7 blocked targets; the smoke test also checks six representative training-prop footprints. It does not prove every visible prop has a physical collider or replace manual edge traversal.
+- Zek'Ranu has a six-point ambient route around his current station, waits between steps, pauses when Kataklysma approaches, and keeps his interaction area, marker, name and minimap icon attached to his live position; route QA is still pending.
 - Options persist separate bindings for four movement directions, interaction/confirm, and pause; arrow keys and the default interaction alternatives remain available.
-- This remains an implementation candidate pending in-editor route and shoreline review; the old QA screenshots depict the previous larger polygons.
+- The current QA captures are under `docs/qa/screenshots/01_*.png` through `22_*.png`. Older `*_release_*.png` files are historical and must not be used to approve this polygon set.
 
 ## Remaining asset requirements
 
 - Release-approved unwatermarked Echo Isles score/ambience and authored SFX: OPEN, P1.
-- Full visual review and final polygon adjustments for shorelines, cliffs, vegetation and small islands: OPEN, P0.
-- In-game portrait presentation, options controls, typography and NPC routine need Godot QA before their issues can be closed.
+- Full visual review and final polygon/obstacle adjustments for shorelines, cliffs, vegetation, props and small islands: OPEN, P0.
+- Options persistence/remapping, alternate-resolution typography and Zek'Ranu route need broader Godot QA. His dedicated dialogue portrait has been rendered and visually checked in-game.
 
 ## Roadmap M30 — coverage beyond the Echo Isles prototype
 

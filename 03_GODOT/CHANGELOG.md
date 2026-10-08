@@ -75,7 +75,7 @@
 
 ### Known limitations
 
-- KI-001 remains OPEN until the new F10 overlay is reviewed against the actual map and deliberate escape attempts are repeated.
+- KI-001 remains OPEN after current F10 visual review and sampled boundary probes; the remaining polygon/obstacle edge corrections are still required.
 - The generated music is watermarked and its redistribution/commercial-use terms are not cleared; final authored SFX remain absent.
 - Options, fonts, portrait integration and Zek'Ranu's route require Godot QA. NPC routines still cover only Zek'Ranu, not the entire population.
 - The prior screenshot package shows the older walkability geometry and must not be cited as evidence for this revision.
@@ -96,6 +96,35 @@
 - Updated zone metadata to distinguish Echo Isles' runtime-loaded concept map from Sen'jin's concept-only background; clarified the CG variants README about asset approval versus runtime integration.
 - Versioned the zone catalogue as v003 after correcting the actual Echo Isles and Sen'jin map availability statuses.
 - Added `KI-010`–`KI-012` for missing canonical M30 quest flows, the unbuilt Sen'jin map and missing quest support assets.
+
+## Phase 1 QA and event-routing pass — 2026-10-07
+
+### Changed
+
+- Separated the Echo Isles zone ID from the encounter-table ID so step-based rolls query `echo_isles_day` rather than the non-table zone identifier.
+- Restricted combat startup to `monster_ambush`; supported weakened water spirit and corrupted Makrura actor IDs are resolved explicitly. NPC walk-by and resource-find still display pending notices, not completed interactions.
+- Added the Echo Isles background to the minimap with player/quest/objective markers.
+- Added seven local training-prop exclusion polygons and smoke checks for their representative footprints; shoreline/cliff geometry remains approximate and KI-001 stays open.
+- Updated key labels to use Godot's keycode string API so options and controls do not emit unsupported DisplayServer calls in headless runs.
+
+### Added
+
+- Expanded `demo_smoke_test.gd` to assert camera attachment, tutorial timer/fade, dialogue attribute and affinity consequences, all four CG frame transitions, and save/load of quest/attributes/affinity/flags/POIs.
+- Updated `capture_release_qa.gd` to validate safe edge positions and rejected water/cliff/rock targets before capturing; it writes the current 22 named PNGs with the F10 overlay only in the dedicated debug capture.
+- Current Godot 4.7.2 evidence and per-system results in `QA_REPORT.md`.
+
+### Fixed
+
+- The encounter table lookup no longer uses the Echo Isles zone ID, which previously prevented the intended table from rolling.
+- Random non-combat events no longer start turn combat.
+- QA capture no longer reports success when a viewport image is empty or an edge screenshot position is outside walkability.
+
+### Known limitations
+
+- Phase 1 is still in progress. The 22 geometry probes pass, but F10 visual review shows approximate polygon/obstacle edges; KI-001 remains OPEN and the build remains B — INTERNAL REVIEW READY.
+- The current quest and CG are still a non-canonical prototype (KI-007); NPC/resource encounters are pending handlers; options, scale and NPC-route review remain partial.
+- No new character sprites were generated in this QA pass; the already-present directional sets are the ones integrated and captured.
+- M30 canonical Echo Isles quests and playable Sen'jin remain unimplemented (KI-010/KI-011).
 
 ### Open
 

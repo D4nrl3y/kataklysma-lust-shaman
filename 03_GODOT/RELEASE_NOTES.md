@@ -1,45 +1,34 @@
 # Kataklysma — Lust Shaman's Journey
 
-## Echo Isles Demo `0.1.0-demo`
+## Echo Isles prototype 0.1.0-demo
 
-Classification: **B — INTERNAL REVIEW READY**
+**Classification:** B — internal review only. This is not a public-release build.
 
-### Included
+### In the current prototype
 
-- Navigable Echo Isles vertical slice.
-- Kataklysma directional idle and walk animations.
-- Zek'Ranu dialogue with dedicated portrait and five PT-BR choices.
-- Attribute changes, quest progression, CG sequence and turn-based combat.
-- Minimap, quest tracker, pause menu and save/load.
-- F10 walkability debug overlay.
-- Final-release QA scripts and 18 screenshots.
+- Echo Isles exploration with the cardinal movement sprite sets for Kataklysma.
+- Zek'Ranu interaction, a short prototype quest/dialogue, attribute choices and quest markers.
+- One four-frame CG sequence, a turn-based combat prototype, minimap, quest tracker, pause, options and local save/load.
+- F10 walkability overlay for development review.
 
-### Controls
+These features are implemented in the prototype code, but changes from 2026-10-07 have not been verified in Godot. See `QA_REPORT.md` and `KNOWN_ISSUES.md`; historical PASS entries apply only to the older build and walkability geometry.
+
+### Controls documented for the prototype
 
 - `WASD` / arrows: move
 - `E` / `Space`: interact and confirm
-- `1–5`: choose dialogue or combat action
-- `F`: start a combat encounter for internal QA
-- `F10`: show/hide walkability debug overlay
+- `1–5`: choose a dialogue response or combat action
+- `F`: start a combat test encounter
+- `F10`: toggle the development walkability overlay
 - `Esc`: pause
-- `R`: restart demo
+- `R`: restart the prototype
 
-### Requirements
+### Current release blockers
 
-- Godot 4.7.2 or compatible Godot 4.x runtime.
-- OpenGL Compatibility renderer is supported.
-- The project must be opened from the repository root containing `project.godot`.
+- `KI-001`: current walkability geometry has not received visual/runtime QA.
+- The music candidate is watermarked and its redistribution/commercial-use rights are uncleared; final authored SFX are absent.
+- Options, fonts, portrait presentation and NPC route need runtime QA.
+- The active quest is a prototype, not the canonical quest chain in the Narrative Bible. Only Echo Isles is connected to the runtime flow.
+- Random event routing and the full M30 content scope remain to be implemented.
 
-### Known limitations
-
-- Final authored music, ambience and SFX are not included; procedural audio remains the fallback.
-- Options and keybinding screens remain simplified.
-- A licensed display/UI font pairing is still pending.
-- Advanced ambient NPC routines remain outside this demo.
-- Walkability tests pass, but final visual polygon edge refinement is still required before public release.
-
-### Release recommendation
-
-**NÃO PUBLICAR externamente ainda.** Use this build for internal review, QA and controlled playtesting until KI-001 is closed after the final F10 map pass.
-
-Commit: final sprint commit reported in the handoff.
+Do not publish or describe this as the M30 build until its roadmap gates have passed and current build evidence has been recorded.

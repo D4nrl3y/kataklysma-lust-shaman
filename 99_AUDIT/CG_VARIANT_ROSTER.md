@@ -1,22 +1,16 @@
-# CG variants — production checklist
+# CG variant roster
 
-Each scene must receive four independent images, keeping the same character designs and environment:
+## Production asset status
 
-1. `01_start` — establishing shot / setup.
-2. `02_development` — action or conversation begins.
-3. `03_climax` — conflict, revelation or choice.
-4. `04_resolution` — immediate consequence / transition.
+The production catalog is `03_GODOT/data/cg_variants.json`. It declares **12 sequences**, each with four separate images (`01_start`, `02_development`, `03_climax`, `04_resolution`). The repository inventory contains **48 PNGs** in `01_ASSETS/kataklysma/cg/scenes/VARIANTS/`.
 
-Production files live under `01_ASSETS/kataklysma/cg/scenes/VARIANTS/`. The old
-single-frame concepts were moved to `scenes/legacy_keyframes/` and are not
-counted as final state variants.
+The `approved_sequence_v002` status means the sequence and visual continuity were approved in the asset review recorded by `99_AUDIT/VISUAL_IDENTITY_QA_V002.md`. It does not mean the scene has been implemented or QA-tested in Godot.
 
-Current status is tracked authoritatively in
-`03_GODOT/data/cg_variants.json`. At v002, the first scene has a complete
-four-frame sequence; the remaining scenes are explicitly marked as pending
-production rather than being presented as complete.
+## Runtime integration status
 
-Scenes queued:
+The current demo hardcodes only the four frames of `echo_002_zekranu_totem_choice` in `03_GODOT/scripts/demo_game.gd`. The remaining eleven sequences are production assets, not active game content. The active demo triggers this ritual-choice CG after its prototype tide-purification objective; that event wiring must be reconciled with the canonical quest before the sequence is counted as correctly integrated.
+
+## Catalogued sequences
 
 - `echo_002_zekranu_totem_choice`
 - `echo_003_zalkiri_mokjala_hunt`
@@ -30,3 +24,5 @@ Scenes queued:
 - `barrens_012_sister_aruka_roadside_vision`
 - `ratchet_013_grikzan_razzik_vexa_bargain`
 - `end_015_eye_ritual`
+
+Legacy one-image keyframes remain under `01_ASSETS/kataklysma/cg/scenes/legacy_keyframes/`. They are historical references and are not counted among the 48 v002 sequence frames.

@@ -10,17 +10,17 @@ Os mapas são cenas jogáveis compostas por camadas, não apenas imagens únicas
 6. `npc_placements/` — posições fixas e rotas de NPCs.
 7. `encounter_regions/` — regiões onde encontros aleatórios podem rolar.
 
-## Zonas da primeira versão
+## Regiões da campanha
 
 - `echo_isles` — tutorial, cabana, totem, praia, caverna ancestral e penhasco da tempestade.
 - `senjin_village` — vila, alquimia, suprimentos, cais e quests de Taz'Rima/Ruk'ka.
-- `durotar_coast` — praia vulcânica, rastros, coleta e monstros de campo.
+- `durotar_coast` — Durotar: praia vulcânica, rastros, coleta e monstros de campo.
 - `razor_hill` — arena, acampamento, ferreiro e rivalidade com Kor'gash.
+- `orgrimmar` — distritos selecionados, mercado, guildas, guardas e mercado paralelo; background ainda precisa ser produzido.
+- `barrens` — Northern Barrens: estrada, acampamento de Sister Aruka, ruínas e encontros noturnos.
 - `ratchet` — porto goblin, mercado, oficina, becos e contrabando.
-- `barrens` — estrada, acampamento de Sister Aruka, ruínas e encontros noturnos.
-- `eye_of_storm_shrine` — mapa final com ritual, âncoras elementais e escolhas de final.
 
-O catálogo completo das zonas está em `03_GODOT/data/zones.json`.
+O Eye of the Storm Shrine permanece como local especial para cenas/arena roteirizadas do arco final, não como uma oitava região de viagem. Seu background é conceitual. O catálogo das sete regiões e locais especiais está em `03_GODOT/data/zones.json`.
 
 ## Convenção de marcadores
 

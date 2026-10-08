@@ -1,5 +1,8 @@
 {
-  "id": "echo_isles_quest_01",
+  "id": "prototype_echo_isles_tide_v001",
+  "status": "prototype_not_runtime_source",
+  "canonical_mapping": null,
+  "production_note": "Protótipo de diálogo. Não representa uma quest canônica completa e não é consumido pelo fluxo ativo, que permanece codificado em demo_game.gd. Reavaliar escolhas, objetivos e CG antes de mapear para um QST da Bíblia.",
   "locale": "pt_BR",
   "title": "Purificar a Maré Corrompida",
   "npc_intro": "A maré não está certa, criança. Até os espíritos estão evitando a costa. Como você pretende agir?",

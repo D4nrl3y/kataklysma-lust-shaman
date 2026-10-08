@@ -6,11 +6,13 @@
 
 **Estado do repositório na revisão:** `main` sincronizada com `origin/main`, sem alterações locais antes deste documento.
 
+**Execução:** Fase 0 em andamento. A linha de base canônica foi registrada em `docs/decisions/M30_CANONICAL_BASELINE.md`; a escolha final do corte M30 e a estimativa total ainda estão pendentes.
+
 ## Decisão executiva
 
 O projeto já tem um protótipo funcional de Echo Isles e um acervo de arte amplo, mas ainda não tem uma build que possa ser chamada honestamente de 30% do jogo. Hoje, conteúdo produzido, conteúdo integrado e conteúdo validado são coisas diferentes: somente Echo Isles está ligada ao fluxo principal; várias regiões, quests, personagens e CGs existem como arte ou dados de referência, sem cenas jogáveis correspondentes. A atualização técnica mais recente também ainda não recebeu QA em runtime.
 
-Recomendo que o marco **M30** seja uma primeira campanha curta, coesa e canônica: do despertar em Echo Isles até a conclusão de `QST_SEN_009` em Sen’jin Village, com as quests `QST_ECHO_001`–`QST_ECHO_008` e `QST_SEN_009`. A Bíblia chama o encerramento em Sen’jin de primeira versão comercialmente demonstrável. Esse recorte cobre 9 das 15 quests principais listadas, mas isso **não significa 60% do jogo**: contagem de quests não mede o trabalho de mapas, sistemas, ramificações, arte integrada, áudio e QA.
+O corte até `QST_SEN_009` em Sen’jin continua sendo a recomendação da Bíblia para a primeira demo demonstrável, mas ainda não está provado que corresponda a 30% do esforço total. Esse recorte contém 9 das 15 quests principais. Está em consulta uma alternativa menor: encerrar o M30 em Echo Isles após `QST_ECHO_006`, com a luta contra a Makrura e a decisão do fragmento, deixando Sen’jin como uma entrega posterior. A escolha não altera o princípio de medição: quests ou assets não equivalem a esforço concluído.
 
 O projeto não tem hoje uma estimativa total de esforço aprovada que permita calcular seu percentual real. Portanto, “30%” deve ser uma meta de escopo e esforço, não um número atribuído por quantidade de arquivos. A Fase 0 abaixo estabelece a linha de base para medir o progresso sem inflá-lo com assets ainda não usados.
 
@@ -33,20 +35,20 @@ O inventário do repositório encontra 48 imagens de CG na pasta de variantes, 7
 ### Bloqueadores e inconsistências que afetam o roadmap
 
 1. **Walkability P0:** `KI-001` continua aberto. Polígonos e probes foram alterados, mas não há captura atual nem repetição de tentativas deliberadas de sair dos caminhos.
-2. **Conteúdo ainda não canônico:** o fluxo ativo usa `echo_isles_quest_01` e a quest “Purificar a Maré Corrompida”; ela não está rastreada como uma das `QST_ECHO_001`–`QST_SEN_009` da Bíblia. Antes de criar mais quests, é preciso mapear o que se preserva e o que será substituído.
+2. **Conteúdo ainda não canônico:** o fluxo ativo “Purificar a Maré Corrompida” é agora classificado como protótipo sem ID canônico. O runtime ainda liga esse objetivo à CG `echo_002_zekranu_totem_choice`, cujo evento narrativo é diferente. A Fase 2 precisa reconciliar a quest e o gatilho da CG com os cartões canônicos.
 3. **Combate em conflito documental:** o usuário definiu combate por turnos, enquanto a seção de controle da Bíblia descreve combate em tempo real. Este roadmap mantém turnos como direção de produção vigente; a Bíblia e os documentos derivados precisam ser reconciliados.
-4. **Mapa do escopo divergente:** `zones.json` lista sete zonas, mas não Orgrimmar; a Bíblia lista Orgrimmar e também descreve o Eye of the Storm como local de clímax. A Fase 0 deve decidir se “Eye” é uma zona separada e qual é a lista canônica total.
-5. **Documentação contraditória:** `CG_VARIANT_ROSTER.md` ainda diz que as sequências além da primeira estão pendentes, enquanto `cg_variants.json` e `PRODUCTION_STATUS_V001.md` declaram 12 sequências aprovadas. `RELEASE_NOTES.md` também chama opções e fontes de pendentes, embora as mudanças mais recentes as tenham integrado com QA pendente. `README_START_HERE.md` ainda descreve o kit de assets antigo, não o projeto Godot aberto pela raiz.
+4. **Mapa do escopo:** a lista de sete regiões foi alinhada à Bíblia e Orgrimmar foi incluída; seu background ainda falta. O Eye shrine ficou catalogado como local especial do clímax, não como oitava região.
+5. **Documentação:** `README_START_HERE.md`, `RELEASE_NOTES.md`, `PRODUCTION_STATUS_V001.md` e `CG_VARIANT_ROSTER.md` foram alinhados para separar asset produzido, runtime integrado, QA pendente e aprovação. Ver `docs/decisions/M30_CANONICAL_BASELINE.md`.
 6. **Percentual não calculável:** ainda não há backlog completo estimado em unidades consistentes. Os QA `PASS` anteriores não devem ser copiados para a nova build; `QA_REPORT.md` já delimita que são resultados históricos.
 
 ## Definição proposta do M30
 
-Uma pessoa deve conseguir instalar/abrir a build, iniciar uma campanha, jogar uma sequência contínua em PT-BR, concluir o arco inicial em Sen’jin, salvar, fechar o jogo, continuar o save e chegar a um encerramento de capítulo compreensível. Um conjunto de imagens ou uma cena de teste isolada não conta como conteúdo jogável.
+Uma pessoa deve conseguir instalar/abrir a build, iniciar uma campanha, jogar uma sequência contínua em PT-BR, chegar a uma resolução de capítulo, salvar, fechar o jogo e continuar o save. O capítulo final do M30 depende da escolha de escopo e da estimativa do esforço total. Um conjunto de imagens ou uma cena de teste isolada não conta como conteúdo jogável.
 
 ### Conteúdo incluído
 
-- Echo Isles como zona tutorial e de exploração, com as quests `QST_ECHO_001`–`QST_ECHO_008` implementadas conforme a Bíblia ou com desvios aprovados e documentados.
-- Sen’jin Village como segunda zona jogável, incluindo `QST_SEN_009` e uma transição persistente a partir de Echo Isles.
+- Echo Isles como zona tutorial e de exploração; o corte será `QST_ECHO_006` ou `QST_SEN_009`, conforme a decisão de escopo e a estimativa aprovada.
+- Se o corte chegar a Sen’jin, implementar também `QST_ECHO_007`, `QST_ECHO_008`, a transição persistente e `QST_SEN_009` em uma segunda zona jogável.
 - Personagens, inimigos, objetos, diálogos, escolhas e CGs necessários a essas quests. Os 4 quadros serão integrados para cada CG que entrar no recorte; arte fora do recorte permanece conteúdo de produção, não progresso jogável.
 - Combate por turnos para encontros do recorte, com pelo menos inimigos comuns e o confronto de Makrura. Cada evento aleatório deve ser tipado e roteado: aparição de NPC, descoberta de recurso, presságio e emboscada não podem ser tratados como a mesma batalha.
 - Estados consistentes de quest: disponível, em progresso, pronta para entrega e entregue; flags, atributos, relações e objetivos sobrevivem a save/load.
@@ -61,13 +63,16 @@ Durotar, Razor Hill, Orgrimmar, Ratchet, Northern Barrens e o clímax do Eye; qu
 
 **Entrega:** backlog M30 aprovado, fonte de verdade alinhada e estimativa total rastreável.
 
-- Revisar a Bíblia contra `zones.json`, `quest_states.json`, `encounter_tables.json`, `cg_variants.json` e o fluxo ativo.
-- Associar a quest atual a um ID canônico ou substituí-la; preservar somente as mecânicas/assets que servirem ao arco aprovado.
-- Registrar a decisão de combate por turnos e definir a lista oficial de regiões/zonas.
-- Decompor o jogo completo em entregas estimáveis; contar progresso apenas quando código, conteúdo e integração forem aceitos.
-- Corrigir os documentos de entrada e marcar cada status como `produzido`, `integrado`, `QA pendente` ou `aprovado`.
+**Status:** em andamento.
 
-**Gate:** todo conteúdo M30 tem ID, pré-requisito, estado final, consequências, recursos associados e critério de aceite. O denominador do projeto foi estimado; ainda não declarar progresso de 30% antes desse gate.
+- [x] Revisar os dados de regiões, CG e quest protótipo contra a Bíblia e o runtime.
+- [x] Registrar combate por turnos como direção vigente, sete regiões canônicas e Eye shrine como local especial.
+- [x] Atualizar a lista de regiões e corrigir os documentos de início, status, release e roster de CG.
+- [ ] Receber decisão final sobre o corte do M30.
+- [ ] Decompor e estimar o escopo completo; calcular se o corte escolhido corresponde a 30%.
+- [ ] Aprovar os critérios de aceite do backlog e congelar a linha de base.
+
+**Gate:** todo conteúdo M30 tem ID, pré-requisito, estado final, consequências, recursos associados e critério de aceite. O denominador do projeto está estimado e o corte escolhido corresponde a 30% do esforço planejado. Até fechar os itens pendentes, não declarar a Fase 0 concluída nem progresso de 30%.
 
 ### Fase 1 — Estabilizar a fundação jogável
 
@@ -137,4 +142,5 @@ Para cada gate futuro, guardar screenshots/capturas da build correspondente e re
 - `03_GODOT/PRODUCTION_STATUS_V001.md`, `DEMO_README.md`, `MAP_PRODUCTION_SPEC_V001.md` e `NPC_MONSTER_STATIC_SCOPE_V001.md`
 - `03_GODOT/QA_REPORT.md`, `KNOWN_ISSUES.md`, `CHANGELOG.md` e `RELEASE_NOTES.md`
 - `03_GODOT/data/` e `ASSET_REQUIREMENTS.md`
+- `docs/decisions/M30_CANONICAL_BASELINE.md`
 - `01_ASSETS/kataklysma/maps/README.md`, catálogo de assets, `99_AUDIT/CG_VARIANT_ROSTER.md` e `VISUAL_IDENTITY_QA_V002.md`

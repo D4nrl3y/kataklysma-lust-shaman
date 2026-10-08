@@ -30,7 +30,7 @@ The eight walk frames are ordered as contact, down, passing, up, contact-inverse
 
 - Kataklysma: `01_ASSETS/kataklysma/ui/portraits/neutral/kataklysma_portrait_neutral.png` — existing approved bust.
 - Zek'Ranu: `01_ASSETS/kataklysma/ui/portraits/neutral/zekranu_portrait_dedicated_v002.png` — separately generated square bust illustration based on the identity-locked render; replaces the earlier crop in the demo.
-- Quest PT-BR: `03_GODOT/data/dialogue/pt_BR/quest_01.json`.
+- Dialogue PT-BR prototype: `03_GODOT/data/dialogue/pt_BR/quest_01.json`; marked as a non-canonical prototype and not loaded by the active runtime yet.
 
 ## Typography
 

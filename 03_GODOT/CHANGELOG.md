@@ -79,3 +79,19 @@
 - The generated music is watermarked and its redistribution/commercial-use terms are not cleared; final authored SFX remain absent.
 - Options, fonts, portrait integration and Zek'Ranu's route require Godot QA. NPC routines still cover only Zek'Ranu, not the entire population.
 - The prior screenshot package shows the older walkability geometry and must not be cited as evidence for this revision.
+
+## M30 baseline alignment — 2026-10-07
+
+### Changed
+
+- Updated `zones.json` to the seven campaign regions in the Narrative Bible; Orgrimmar is explicitly marked as missing its map background.
+- Catalogued the Eye shrine as a special scripted finale location instead of an eighth travel region.
+- Marked the PT-BR tide dialogue JSON as a non-canonical prototype; the hardcoded runtime flow is not yet mapped to a canonical quest.
+- Added `KI-007` for quest/CG canon mismatch, `KI-008` for event-type routing and `KI-009` for missing Orgrimmar background.
+- Reconciled the CG roster, project start guide, release notes and production status so asset approval is distinguished from runtime integration and current-build QA.
+- Recorded the production baseline and scope decisions in `docs/decisions/M30_CANONICAL_BASELINE.md`.
+
+### Open
+
+- The final M30 chapter cutoff and full-project effort estimate are not yet approved; no numeric completion percentage is claimed.
+- No runtime or parser QA was performed as part of this documentation/data alignment.

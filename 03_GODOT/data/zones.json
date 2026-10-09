@@ -4,6 +4,7 @@
     {
       "id": "echo_isles",
       "display_name": "Echo Isles",
+      "background_asset": "res://01_ASSETS/kataklysma/maps/echo_isles/backgrounds/echo_isles_background_concept_v001.png",
       "biome": "tropical_coast",
       "main_quests": ["QST_ECHO_001", "QST_ECHO_002", "QST_ECHO_003", "QST_ECHO_004", "QST_ECHO_005", "QST_ECHO_006", "QST_ECHO_007", "QST_ECHO_008"],
       "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
@@ -18,6 +19,8 @@
     {
       "id": "senjin_village",
       "display_name": "Sen'jin Village",
+      "background_asset": "res://01_ASSETS/kataklysma/maps/senjin_village/backgrounds/senjin_village_background_concept_v001.png",
+      "foreground_assets": ["res://01_ASSETS/kataklysma/maps/senjin_village/foregrounds/senjin_foreground_vegetation_candidate_v001.png"],
       "biome": "coastal_village",
       "main_quests": ["QST_ECHO_008", "QST_SEN_009"],
       "map_layers": ["background", "collision", "decor_foreground", "interaction_markers", "spawn_points", "npc_placements"],
@@ -27,7 +30,8 @@
       "monsters": ["makrura_corrupted", "melee_chaser"],
       "interactions": ["alchemy_station", "supply_crate", "campfire", "boat", "quest_board"],
       "random_encounter_table": "senjin_village_day",
-      "map_asset_status": "concept_background_present_no_runtime_scene"
+      "map_asset_status": "runtime_scene_walkability_events_and_qst_integrated_visual_review_open",
+      "foreground_asset_status": "candidate_integrated_visual_review_open"
     },
     {
       "id": "durotar_coast",

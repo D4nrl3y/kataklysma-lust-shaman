@@ -9,6 +9,9 @@ func _init() -> void:
 func _capture_all() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
 	var demo = load("res://03_GODOT/scenes/main.tscn").instantiate()
+	var nonce := str(Time.get_ticks_usec())
+	demo.save_path_override = "user://capture_qa_%s.json" % nonce
+	demo.options_settings_path_override = "user://capture_options_%s.cfg" % nonce
 	root.add_child(demo)
 	await process_frame
 	demo.audio_manager.enabled = false
@@ -25,19 +28,27 @@ func _capture_all() -> void:
 	demo.toast_label.text = ""
 	await _save_frame("18_quest_before_accept.png")
 
+	demo.gameplay_hud.visible = false
+	demo.player.position = demo.MAP_SIZE * 0.5
+	demo.player_collision_body.position = demo.player.position
+	demo.camera.zoom = Vector2(0.70, 0.70)
+	demo.camera.reset_smoothing()
+	demo.walkability_debug.visible = true
+	await _save_frame("04_walkable_debug.png")
+	demo.walkability_debug.visible = false
+	demo.gameplay_hud.visible = true
+	demo.camera.zoom = Vector2(1.18, 1.18)
+	demo.camera.reset_smoothing()
+
 	_place_player(demo, Vector2(330.0, 190.0))
 	await _save_frame("02_scale_hut.png")
 	_place_player(demo, Vector2(410.0, 390.0))
 	await _save_frame("03_scale_training_area.png")
-	demo._toggle_walkability_debug()
-	demo.toast_label.text = ""
-	await _save_frame("04_walkable_debug.png")
-	demo._toggle_walkability_debug()
 	demo.toast_label.text = ""
 
-	_place_player_at_blocked_edge(demo, Vector2(1000.0, 505.0), Vector2(1000.0, 535.0), "água sul")
+	_place_player_at_blocked_edge(demo, demo.OBJECTIVE_POSITION, Vector2(990.0, 720.0), "água sul")
 	await _save_frame("05_blocked_water.png")
-	_place_player_at_blocked_edge(demo, Vector2(580.0, 155.0), Vector2(610.0, 155.0), "cliff arena")
+	_place_player_at_blocked_edge(demo, Vector2(500.0, 300.0), Vector2(500.0, 200.0), "cliff arena")
 	await _save_frame("06_blocked_cliff.png")
 	_place_player_at_blocked_edge(demo, Vector2(510.0, 380.0), Vector2(555.0, 390.0), "pedras centrais")
 	await _save_frame("07_blocked_rocks.png")
@@ -58,7 +69,7 @@ func _capture_all() -> void:
 		await create_timer(0.15).timeout
 		await _save_frame(str(capture[1]))
 
-	_place_player(demo, Vector2(730.0, 315.0))
+	_place_player(demo, demo.NPC_POSITION - Vector2(10.0, 0.0))
 	demo._show_dialogue("Zek'Ranu  •  Mentor Xamã", "A maré não está certa. Os espíritos evitam a costa.", "close")
 	await _save_frame("14_dialogue_zekranu.png")
 	demo.dialogue_panel.visible = false
@@ -73,7 +84,10 @@ func _capture_all() -> void:
 	_place_player(demo, demo.PLAYER_START)
 	demo.toast_label.text = ""
 	await _save_frame("17_minimap_final.png")
-	_place_player(demo, Vector2(900.0, 500.0))
+	demo._open_options_menu()
+	await _save_frame("23_options_menu.png")
+	demo.options_menu.visible = false
+	_place_player(demo, demo.OBJECTIVE_POSITION)
 	demo.toast_label.text = ""
 	await _save_frame("20_gameplay_final.png")
 
@@ -88,11 +102,17 @@ func _capture_all() -> void:
 	await _save_frame("22_turn_combat.png")
 
 	demo.audio_manager.stop_ambience()
+	var save_path: String = demo.save_path
+	var settings_path: String = demo.options_menu.settings_path
 	demo.queue_free()
 	await process_frame
 	await create_timer(0.5).timeout
+	for path in [save_path, settings_path]:
+		var absolute_path := ProjectSettings.globalize_path(path)
+		if FileAccess.file_exists(absolute_path):
+			DirAccess.remove_absolute(absolute_path)
 	if capture_failures.is_empty():
-		print("RELEASE_QA_CAPTURE: PASS (22 imagens atuais)")
+		print("RELEASE_QA_CAPTURE: PASS (23 imagens atuais)")
 		quit(0)
 	else:
 		push_error("RELEASE_QA_CAPTURE: FAIL -> %s" % ", ".join(capture_failures))

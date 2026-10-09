@@ -20,8 +20,8 @@ This repository is the Godot project, not an asset pack that must be copied into
 - `99_AUDIT/` — inventories, QA history, validation scripts and production rosters.
 - `docs/` — current roadmap, decisions and QA evidence.
 
-## Current playable prototype
+## Current playable build
 
-The active runtime is an Echo Isles prototype. Its movement sprites support front, back, left and right; no dedicated diagonal animations are present. The other region backgrounds, NPC sprite sets and CG sequences are not automatically playable content: each needs scene integration and QA before being counted as delivered.
+The default New Game flow now continues from the eight Echo Isles quests into Sen’jin and `QST_SEN_009`. Phase 3 code, automated tests and eight editor GUI captures pass. A Windows release preset/template now produce an executable that passes headless startup outside the project; independent playtest and exported GUI/save-load validation are still open. See `03_GODOT/QA_REPORT.md`, `03_GODOT/KNOWN_ISSUES.md` and `docs/qa/screenshots/phase3/`. Character movement uses front/back/left/right sprites with cardinal-direction selection; there are no dedicated diagonal animations.
 
-The project is for internal review. Check `03_GODOT/KNOWN_ISSUES.md` and the dated note in `03_GODOT/QA_REPORT.md` before relying on any historical PASS result.
+The project remains for internal review, not a public/M30 release. Candidate art, audio rights, Sen’jin visual review and clean-install/export QA remain open. Check `03_GODOT/KNOWN_ISSUES.md` before relying on a PASS outside the explicitly tested scope.

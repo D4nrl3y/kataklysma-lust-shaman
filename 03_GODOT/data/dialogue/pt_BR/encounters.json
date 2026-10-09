@@ -1,0 +1,19 @@
+{
+  "locale": "pt_BR",
+  "npc_walkby": {
+    "zalkiri": "Zalkiri atravessa a trilha e cumprimenta Kataklysma.",
+    "rakjin": "Rak'jin cruza a clareira voltando da costa.",
+    "makjala": "Mak'Jala passa pela trilha, atenta aos sinais da maré."
+  },
+  "resource_find": {
+    "herb_patch": {"name":"ervas costeiras", "found":"Kataklysma avista ervas costeiras. Aproxime-se e pressione %s para coletá-las.", "collected":"Ervas costeiras coletadas e registradas."},
+    "tide_pool": {"name":"poça de maré", "found":"Uma poça segura revela um resíduo cristalino. Aproxime-se e pressione %s para coletá-lo.", "collected":"Resíduo cristalino coletado e registrado."}
+  },
+  "spirit_omen": {
+    "message":"Um presságio percorre a maré. Kataklysma reconhece o sinal e ganha +1 de Espírito.",
+    "flag":"echo_isles_spirit_omen_attuned"
+  },
+  "resource_prompt":"[%s]  Coletar %s",
+  "walkby_fallback":"Uma viajante cruza a trilha e segue viagem.",
+  "resource_fallback":"Um recurso local foi encontrado e marcado para coleta."
+}

@@ -29,6 +29,7 @@ var settings := {
 	"camera_smoothing": true,
 }
 var capture_action: StringName = &""
+var settings_path := SETTINGS_PATH
 var key_buttons: Dictionary = {}
 var key_values: Dictionary = {}
 var _config := ConfigFile.new()
@@ -51,6 +52,14 @@ func open_menu() -> void:
 	capture_action = &""
 	_sync_controls()
 	visible = true
+	call_deferred("_focus_first_control")
+
+func _focus_first_control() -> void:
+	for control in find_children("*", "Control", true, false):
+		var candidate := control as Control
+		if candidate.visible and candidate.focus_mode != Control.FOCUS_NONE and not (candidate is BaseButton and (candidate as BaseButton).disabled):
+			candidate.grab_focus()
+			return
 
 func handle_key_event(event: InputEventKey) -> bool:
 	if not visible:
@@ -81,7 +90,7 @@ func handle_key_event(event: InputEventKey) -> bool:
 	return false
 
 func _load_settings() -> void:
-	_config.load(SETTINGS_PATH)
+	_config.load(settings_path)
 	for setting_name in settings.keys():
 		settings[setting_name] = _config.get_value("settings", setting_name, settings[setting_name])
 	for index in REMAP_ACTIONS.size():
@@ -288,17 +297,22 @@ func _key_label(physical_code: int) -> String:
 	return OS.get_keycode_string(physical_code)
 
 func _apply_settings(save: bool = true) -> void:
+	settings["master_volume"] = clampf(float(settings.get("master_volume", 0.85)), 0.0, 1.0)
+	settings["music_volume"] = clampf(float(settings.get("music_volume", 0.62)), 0.0, 1.0)
+	settings["sfx_volume"] = clampf(float(settings.get("sfx_volume", 0.80)), 0.0, 1.0)
+	settings["resolution_index"] = clampi(int(settings.get("resolution_index", 0)), 0, RESOLUTIONS.size() - 1)
 	_ensure_audio_bus("Music")
 	_ensure_audio_bus("SFX")
 	_set_bus_volume("Master", float(settings["master_volume"]))
 	_set_bus_volume("Music", float(settings["music_volume"]))
 	_set_bus_volume("SFX", float(settings["sfx_volume"]))
-	if bool(settings["fullscreen"]):
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-		var resolution: Vector2i = RESOLUTIONS[clampi(int(settings["resolution_index"]), 0, RESOLUTIONS.size() - 1)]
-		DisplayServer.window_set_size(resolution)
+	if DisplayServer.get_name() != "headless":
+		if bool(settings["fullscreen"]):
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			var resolution: Vector2i = RESOLUTIONS[int(settings["resolution_index"])]
+			DisplayServer.window_set_size(resolution)
 	settings_changed.emit(settings.duplicate(true))
 	if save:
 		for setting_name in settings:
@@ -319,4 +333,6 @@ func _set_bus_volume(bus_name: String, linear_value: float) -> void:
 		AudioServer.set_bus_volume_db(bus_index, linear_to_db(maxf(linear_value, 0.0001)))
 
 func _save_config() -> void:
-	_config.save(SETTINGS_PATH)
+	var error := _config.save(settings_path)
+	if error != OK:
+		push_error("Could not persist game settings (error %d)." % error)

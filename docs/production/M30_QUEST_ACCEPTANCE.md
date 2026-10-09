@@ -2,7 +2,9 @@
 
 **Escopo:** `QST_ECHO_001`–`QST_ECHO_008`, transição Echo Isles → Sen’jin e `QST_SEN_009`.
 
-**Estado:** especificação de produção derivada da Bíblia; ainda não implementada nem aprovada por QA.
+**Estado:** `QST_ECHO_001`–`QST_ECHO_008` implementadas e aceitas para fechamento da Fase 2. `QST_SEN_009` e a transição para mapa jogável continuam abertas para a Fase 3; portanto, o gate M30 geral permanece aberto.
+
+**Evidência Phase 2 (2026-10-08):** campanha ponta a ponta e retomada por save/load (`campaign_playthrough_test.gd`); rotas trap/hunt/surplus (`campaign_alternate_routes_test.gd`); todas as 32 escolhas (`campaign_branch_matrix_test.gd`, 320 checks), incluindo check de charme com fail-forward (`campaign_frog_branch_test.gd`); combate/arena de Makrura (`makrura_boss_test.gd`); integridade dos 37 pontos, falas PT-BR, atores em âncoras caminháveis e 20 props (`campaign_content_integrity_test.gd`, 130 checks); 21 capturas GUI atuais em `docs/qa/screenshots/phase2/`. Os scripts de percurso conduzem o personagem aos POIs via harness de teste; o movimento físico e walkability do mapa estão cobertos pelos testes de Fase 1.
 
 Este documento transforma os cartões e as branch matrices da Bíblia em critérios verificáveis para a campanha M30. Os nomes de cena e flags abaixo são canônicos; a presença de um arquivo de arte com nome parecido não prova que ele seja o recurso correto ou esteja integrado.
 
@@ -71,7 +73,7 @@ Este documento transforma os cartões e as branch matrices da Bíblia em critér
 - **Pré-condição / resolução:** concluir os incidentes prioritários de Echo Isles; escolher a despedida, falar com Mak’Jala e Rak’jin e embarcar para Sen’jin. A dupla foi fixada pelo usuário em 2026-10-07.
 - **Cenas:** `SCN_ECHO_008_PACK`, `SCN_ECHO_008_FAREWELL`, `SCN_ECHO_008_BOAT`.
 - **Ramos exigidos:** prometer voltar com honra → Espírito +2, reputação Darkspear +4 e sonho futuro de Mak’jala, `FLG_DEPARTURE_HONOR`; dizer que voltará mais poderosa → Estamina +1 / Agilidade +1, afinidade de Rak’jin +3, `FLG_DEPARTURE_AMBITION`; esconder medo com humor → Luxúria +1, afinidade geral +2, `FLG_DEPARTURE_CHARM`; partir sem revelar fragmento oculto → Corrupção +2, World Tension +3, `FLG_DEPARTURE_SECRET`.
-- **Aceite específico:** inventário/cartas e despedidas não apagam flags anteriores; Mak’Jala e Rak’jin reagem à história/relacionamento acumulados; a embarcação persiste estado e posição segura; exibe transição de capítulo e carrega Sen’jin com as relações e o ramo de fragmento.
+- **Aceite específico da Fase 2:** bagagem/cartas e despedidas preservam flags; Mak’Jala e Rak’jin reagem às escolhas de Q007, fragmento e relações. Na Fase 2 a embarcação encerrava no estado `ECHO_ISLES_COMPLETE`; na integração da Fase 3 o fluxo continua ao mapa Sen’jin e Q009, preservando escolhas e save/load (teste no fluxo completo).
 
 ### `QST_SEN_009` — Missing Supplies
 
@@ -86,6 +88,10 @@ O catálogo contém sequências com quatro quadros, mas a associação ao cartã
 
 Para cada CG aprovada no corte, exigir quatro imagens na ordem início → desenvolvimento → clímax → resolução, continuidade de identidade, trigger ligado ao beat certo e retorno ao estado/quest correto. Sequências sem beat canônico dentro destas nove quests ficam fora do M30, mesmo que os arquivos já existam.
 
+## Status de execução — Fase 3 (2026-10-08)
+
+`QST_SEN_009` e sua transição estão implementados em `03_GODOT/data/campaign/echo_isles.json`, `03_GODOT/data/campaign/senjin_village_interactions.json` e `03_GODOT/data/dialogue/pt_BR/campaign_senjin_village.json`. O runtime integra os quatro ramos; `campaign_quest_runtime_test.gd` passa 125 checks e `campaign_playthrough_test.gd` valida o encerramento e dois pontos de save/load. O mapa usa 10 regiões caminháveis, 26 blockers e cinco anchors conectados ao cais inicial. A classificação final da fase continua aberta até playtest independente, inspeção visual de toda a geometria e export/instalação limpa.
+
 ## Gate documental
 
-Esta matriz fecha a definição inicial de conteúdo e de critérios por quest para planejamento. Ela não afirma implementação, cobertura total de assets, QA realizado nem 30% concluído. A estimativa de esforço permanece preliminar e deve ser calibrada na Fase 1; cada item de aceite só conta no progresso quando integrado e aprovado com evidência atual.
+A implementação e QA das oito quests de Echo Isles fecham a Fase 2. `QST_SEN_009` e a transição carregável agora estão implementadas e testadas localmente; export/instalação limpa, inspeção visual e playtest independente permanecem pendentes da Fase 3. A estimativa de esforço permanece preliminar; nenhum percentual de conclusão do jogo é inferido do fechamento das Fases 1/2 nem do conteúdo automatizado da Fase 3.

@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="Kataklysma — Lust Shaman's Journey"
-config/version="0.1.0-demo"
+; Windows file metadata requires a numeric version. The in-game demo label remains 0.1.0-demo.
+config/version="0.1.0"
 run/main_scene="res://03_GODOT/scenes/main.tscn"
 config/features=PackedStringArray("4.7")
 

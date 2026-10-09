@@ -1,18 +1,19 @@
 # Roadmap para uma build jogável de 30 por cento
 
-**Revisão do projeto:** 7 de outubro de 2026
+**Baseline da revisão:** 7 de outubro de 2026
+**Atualização de execução:** 8 de outubro de 2026
 
 **Base revisada:** `39576a1` (`feat: implement Echo Isles blocker foundations`)
 
 **Estado do repositório na revisão:** `main` sincronizada com `origin/main`, sem alterações locais antes deste documento.
 
-**Execução:** Fase 0 concluída — baseline v1 congelada até `QST_SEN_009`, com critérios narrativos e cobertura de assets documentados. Fase 1 está em andamento: parser/import, smoke test, 22 probes de geometria e seis amostras de obstáculos de treino passaram; QA visual de walkability segue parcial e o gate não foi atingido. A estimativa de 35 pontos de 100 (faixa aproximada de 30%–45%) continua sendo planejamento, não progresso realizado.
+**Execução atual:** Fases 0, 1 e 2 estão fechadas. Fase 3 liga Echo Isles a Sen’jin e entrega `QST_SEN_009`; QA automatizado/editor passou, o preset Windows foi criado e a build exportada passa smoke headless fora do projeto. O gate permanece aberto para playtest independente, revisão visual de percurso e validação GUI/save-load da build exportada. A estimativa de 35 pontos de 100 (faixa aproximada de 30%–45%) continua sendo planejamento, não percentual realizado; o M30 não está concluído.
 
 ## Decisão executiva
 
-O projeto já tem um protótipo funcional de Echo Isles e um acervo de arte amplo, mas ainda não tem uma build que possa ser chamada honestamente de 30% do jogo. Hoje, conteúdo produzido, conteúdo integrado e conteúdo validado são coisas diferentes: somente Echo Isles está ligada ao fluxo principal; várias regiões, quests, personagens e CGs existem como arte ou dados de referência, sem cenas jogáveis correspondentes. A atualização técnica mais recente também ainda não recebeu QA em runtime.
+O projeto agora tem uma campanha contínua de Echo Isles até a resolução de `QST_SEN_009` em Sen’jin. As Fases 1 e 2 estão fechadas; a Fase 3 continua sem gate completo. Outras regiões, áudio liberado, revisão visual humana, playtest independente e QA GUI/save-load da build exportada continuam pendentes. Arte candidata integrada continua identificada como candidata, não como asset final aprovado.
 
-O corte até `QST_SEN_009` em Sen’jin foi escolhido pelo usuário para a primeira campanha demonstrável. Esse recorte contém 9 das 15 quests principais. A primeira decomposição de esforço estima 35/100 pontos para esse conteúdo, com baixa confiança e faixa aproximada de 30%–45%; portanto, é uma hipótese de planejamento que precisa ser revisada após a Fase 1. Quests ou assets não equivalem a esforço concluído.
+O corte até `QST_SEN_009` em Sen’jin foi escolhido pelo usuário para a primeira campanha demonstrável. Esse recorte contém 9 das 15 quests principais. A primeira decomposição estima 35/100 pontos, com baixa confiança e faixa aproximada de 30%–45%; o fechamento das Fases 1 e 2 não valida essa estimativa nem mede percentual concluído. Revisar os pesos com dados de esforço observados na produção e no mapa/quest da Fase 3, sem usar contagem de quests ou arquivos como substituto.
 
 O projeto não tem uma estimativa de esforço validada por histórico de execução que permita calcular seu percentual real concluído. A baseline v1 estabelece um denominador preliminar para planejar o escopo; “30%” continua sendo uma meta de entrega, não progresso atribuído por quantidade de arquivos.
 
@@ -20,26 +21,26 @@ O projeto não tem uma estimativa de esforço validada por histórico de execuç
 
 | Área | O que existe | O que isso ainda não comprova |
 |---|---|---|
-| Projeto Godot | Projeto na raiz, cena principal, menu, exploração de Echo Isles, UI construída em runtime e sistemas de save, pause, diálogo, opções e combate; parser/import e smoke atual executados em Godot 4.7.2 | Fase 1 ainda sem gate: walkability visual e cobertura mais ampla de opções/escala seguem parciais |
-| Código | 11 scripts Godot sob `03_GODOT`; `demo_game.gd` concentra aproximadamente 1.349 linhas e monta a maior parte da demo | Arquitetura de campanha com cenas de zona, quests e componentes de UI independentes |
-| Mundo | 7 imagens de background conceitual e catálogo de zonas | Sete mapas jogáveis: só Echo Isles é carregada pelo jogo; os backgrounds não têm as camadas modulares de colisão, foreground, pontos e rotas descritas na especificação |
-| Personagens | 13 NPCs nomeados com conjuntos de `IDLE`/`WALK`; 3 entidades com conjuntos parciais; retratos, locks e sprites da protagonista | Elenco integrado: a cena atual posiciona Zek’Ranu; os NPCs restantes não formam ainda a população jogável. Os 13 NPCs não têm conjuntos `CAST`/`COMBAT` |
-| CGs | 48 PNGs em 12 sequências de quatro quadros, além de keyframes históricos | Doze cenas implementadas: a demo tem uma sequência ativa, definida por caminhos no script |
-| Quest e diálogo | Uma quest curta, cinco escolhas iniciais, atributos, flags, marcadores de estado, save/load; há JSON de diálogo PT-BR | As 15 quests da Bíblia: o JSON de diálogo e vários catálogos não são a fonte consumida pelo fluxo ativo, que ainda contém texto e estado codificados em `demo_game.gd` |
-| Combate | Sistema de turnos separado, cinco ações e dois perfis inimigos; encounter manager e tabelas de eventos; apenas `monster_ambush` abre batalha após a correção | Sistema de campanha validado ou encontros variados: NPC/resource events ainda são avisos pendentes; frequência/regiões ainda não estão implementadas por mapa |
-| Objetos e áudio | Marcadores, ícones e música candidata; tons procedurais como fallback | A pasta `static_objects` está vazia. A faixa de campo está marcada com watermark e sem liberação de direitos; SFX finais não estão presentes |
-| QA | Parser/import, smoke test, 22 probes amostrados e 22 screenshots atuais foram executados em Godot 4.7.2 | Gate visual completo: o F10 ainda mostra arestas aproximadas; opções e métricas de escala não foram exaustivamente testadas |
+| Projeto Godot | Cena principal com menu, campanha Echo Isles → Sen’jin, `QST_SEN_009`, save/load, pause, diálogo, opções, minimapa e combate por turnos; Godot 4.7.2 | Playtest independente, build exportada em instalação limpa e release público ainda não foram aprovados |
+| Código | Catálogo de campanha e interações separados em JSON, runtime de estado e diálogo PT-BR separados; `demo_game.gd` ainda centraliza integração e apresentação | Refatoração adicional para reduzir acoplamento e componentes de UI independentes |
+| Mundo | Echo Isles, interior de cabana e Sen’jin estão ligados ao fluxo; 42 POIs totais, walkability em Sen’jin com 10 regiões/26 blockers, foreground candidate | Sen’jin usa background achatado e arte de foreground candidata; revisão visual ampla e outras regiões seguem pendentes |
+| Personagens | NPCs necessários às oito quests estão posicionados e interativos; sprites específicos do aprendiz e das crianças permanecem candidatos | Retratos dedicados para todos os falantes, animações gerais de combate/cast e elenco das regiões futuras |
+| CGs | Quatro sequências de quatro imagens integradas às quests 002, 003 (rota de caça), 005 e 006 | Outras CGs do catálogo não entram automaticamente no arco; a visão de Q008 não foi associada sem confirmação canônica |
+| Quest e diálogo | Nove quests até `QST_SEN_009`, ramos, consequências, flags, relações, estado e PT-BR integrados | Playtest independente da duração/legibilidade e futuras regiões continuam pendentes |
+| Combate | Combate por turnos integrado à caça de Q003 e ao boss Makrura de Q006; armadilha e excedente são alternativas sem combate | Elenco/inimigos comuns finais e balanceamento externo continuam como produção/QA posterior |
+| Objetos e áudio | Atlas candidato com 20 props de quest integrado; música candidata e tons procedurais mantidos | Música com watermark/direitos não liberados; SFX finais de autoria não fornecidos |
+| QA | Godot import, smoke, 213 checks da Fase 1, 125 runtime checks, 320 escolhas Echo, 186 checks de conteúdo e 8 capturas GUI Sen’jin | Não foi feito playtest independente nem teste de export/instalação limpa; M30 permanece aberto |
 
-O inventário do repositório encontra 48 imagens de CG na pasta de variantes, 7 backgrounds de zona e nenhum arquivo em `static_objects`. Há agora uma captura F10 atual em `docs/qa/screenshots/04_walkable_debug.png`; ela é evidência do bloqueio, não aprovação: alguns contornos seguem aproximados.
+O acervo contém 48 quadros de CG em 12 sequências e backgrounds conceituais das regiões catalogadas. `static_objects/CANDIDATE/` contém o atlas de 20 props utilizado pelas interações de Echo Isles. A evidência atual de Sen’jin está em `docs/qa/screenshots/phase3/`; a busca em grade a partir do cais encontrou 6.932 células alcançáveis e validou conexão aos cinco POIs da Q009.
 
 ### Bloqueadores e inconsistências que afetam o roadmap
 
-1. **Walkability P0:** `KI-001` continua aberto. Os 22 probes amostrados passam e capturas atuais mostram tentativas de borda bloqueadas, mas o overlay aponta imprecisão nas arestas/obstáculos e ainda falta uma passagem manual completa pelo mapa.
-2. **Conteúdo ainda não canônico:** o fluxo ativo “Purificar a Maré Corrompida” é agora classificado como protótipo sem ID canônico. O runtime ainda liga esse objetivo à CG `echo_002_zekranu_totem_choice`, cujo evento narrativo é diferente. A Fase 2 precisa reconciliar a quest e o gatilho da CG com os cartões canônicos.
+1. **Walkability P0:** `KI-001` foi fechado para o escopo da Fase 1. A geometria atual tem 16 regiões caminháveis, 17 blockers nomeados; 15 pontos permitidos/negados, 7 probes físicos e 7 rotas verificadas por busca e `CharacterBody2D` passaram. A proporção da protagonista foi medida em 2.53:1. Ajustes futuros por expansão do mapa voltam a exigir QA.
+2. **Conteúdo canônico:** a campanha principal agora inicia nas oito quests canônicas de Echo Isles; as CGs integradas estão ligadas aos beats de Q002, Q003 (caça), Q005 e Q006. O antigo fluxo de maré permanece apenas como legado/protótipo e não é a campanha padrão.
 3. **Combate em conflito documental:** o usuário definiu combate por turnos, enquanto a seção de controle da Bíblia descreve combate em tempo real. Este roadmap mantém turnos como direção de produção vigente; a Bíblia e os documentos derivados precisam ser reconciliados.
 4. **Mapa do escopo:** a lista de sete regiões foi alinhada à Bíblia e Orgrimmar foi incluída; seu background ainda falta. O Eye shrine ficou catalogado como local especial do clímax, não como oitava região.
 5. **Documentação:** `README_START_HERE.md`, `RELEASE_NOTES.md`, `PRODUCTION_STATUS_V001.md` e `CG_VARIANT_ROSTER.md` foram alinhados para separar asset produzido, runtime integrado, QA pendente e aprovação. Ver `docs/decisions/M30_CANONICAL_BASELINE.md`.
-6. **Percentual não calculável:** há uma estimativa preliminar por pacote, mas não um backlog completo de tarefas calibrado. `QA_REPORT.md` separa os testes da build atual dos gates visuais e de conteúdo que seguem abertos.
+6. **Percentual não calculável:** há uma estimativa preliminar por pacote, mas não um backlog completo de tarefas calibrado. A Fase 1 concluída estabiliza a fundação, mas não fornece esforço validado suficiente para declarar percentual do jogo completo.
 
 ## Definição proposta do M30
 
@@ -89,31 +90,39 @@ Durotar, Razor Hill, Orgrimmar, Ratchet, Northern Barrens e o clímax do Eye; qu
 
 **Gate:** iniciar do menu e completar o fluxo atual sem erro; screenshots atuais, não reaproveitados; testes de fronteira da walkability passam na geometria corrente. Nenhum P0 visual permanece aberto.
 
-**Execução atual:** parser/import, `demo_smoke_test.gd`, seis amostras de blockers de props e 22 probes de `final_release_qa.gd` passaram. As capturas GUI atuais estão em `docs/qa/screenshots/`. O overlay F10 ainda revela limites aproximados; opções/escala têm cobertura parcial. Portanto, o gate da Fase 1 segue **ABERTO**, KI-001 permanece P0 e a Fase 2 ainda não começou.
+**Execução atual (2026-10-08):** **CONCLUÍDA E REVALIDADA.** Parser/import, `demo_smoke_test.gd`, acceptance suite (211 headless / 216 GUI na evidência de aceite), boundary suite (22/22) e captura GUI (23 imagens) passaram. Na reauditoria da transição, parser/import, smoke, 211 checks headless e 22/22 boundary probes passaram novamente. A escala foi medida em 2.53:1; opções, eventos de Echo Isles, rotina do Zek'Ranu durante uma travessia física do jogador, quest/diálogo separados, minimapa, fontes, áudio em runtime e fluxo atual foram testados. KI-001, KI-003, KI-004, KI-006 e KI-008 estão fechados para o escopo da fase. `03_GODOT/QA_REPORT.md` contém resultados e limites.
 
 ### Fase 2 — Entregar o arco de Echo Isles
 
 **Entrega:** campanha de Echo Isles do despertar à partida, com estado e ramificações persistentes.
 
-- Implementar `QST_ECHO_001`–`QST_ECHO_008` como quests separadas, com objetivos e soluções alternativas onde a Bíblia pede; incluir interações e fail-forward, sem criar quests novas apenas para inflar contagem.
-- Integrar os NPCs nomeados e genéricos realmente necessários, rotas e POIs; criar os objetos de quest que hoje não existem como arquivos modulares.
-- Implementar pelo menos uma batalha comum, o boss de Makrura e a resolução pós-combate; atributos e escolhas devem afetar checks, consequências ou estado, não apenas conceder +2 sem uso posterior.
-- Integrar as CGs do recorte em sequências de quatro imagens, com continuidade validada, captions/localização e retorno correto ao jogo.
-- Salvar progresso, posição segura, objetivos, flags, atributos, relações, tutorial e capítulo; testar retomada em cada transição importante.
+- [x] Implementar `QST_ECHO_001`–`QST_ECHO_008` como quests separadas, com objetivos, interações, alternativas e fail-forward.
+- [x] Integrar os NPCs necessários, 37 POIs, rotas do mapa e 20 objetos de quest instanciados por atlas.
+- [x] Integrar caça por turnos, alternativas não-combate, boss de Makrura e consequências mecânicas para atributos, flags, confiança, afinidade, inventário e desbloqueios.
+- [x] Integrar quatro CGs de quatro imagens nos beats aprovados para Q002, rota de caça Q003, Q005 e Q006, com legenda PT-BR e retorno ao estado correto.
+- [x] Persistir quest/progresso, posição segura, objetivos, flags, atributos, relações, inventário, tutorial e capítulo; testar retomada durante quest, CG, boss e saída.
 
 **Gate:** começo, quests, boss, escolhas, conclusão e saída da região podem ser jogados em uma campanha nova e após carregar save; nenhum texto final chama o protótipo de demo completa.
+
+**Execução atual (2026-10-08):** **CONCLUÍDA — GATE FECHADO.** O fluxo de novo jogo inicia `QST_ECHO_001`; as oito quests, objetivos, 32 escolhas, rotas alternativas, 37 âncoras, 20 props, quatro sequências de CG, caça em turnos, boss Makrura, capítulo de partida e retomada por save/load estão integrados. Passaram `campaign_quest_runtime_test.gd` (90), `campaign_frog_branch_test.gd` (15), `campaign_branch_matrix_test.gd` (320), `campaign_content_integrity_test.gd` (130; inclui âncoras caminháveis dos NPCs), `campaign_playthrough_test.gd`, `campaign_alternate_routes_test.gd`, `makrura_boss_test.gd`, `campaign_anchor_validation.gd`, smoke e captura GUI (21 screenshots). O QA e os limites de assets estão em `03_GODOT/QA_REPORT.md` e `docs/production/M30_ASSET_COVERAGE.md`. O encerramento persiste como `ECHO_ISLES_COMPLETE`; Sen’jin não é carregada nesta fase e continua sendo a entrega da Fase 3.
 
 ### Fase 3 — Entregar Sen’jin e o primeiro encerramento de campanha
 
 **Entrega:** primeira versão demonstrável termina `QST_SEN_009` em Sen’jin Village.
 
-- Transformar o background conceitual de Sen’jin em mapa jogável com colisões, foreground, rotas, marcadores e spawn points próprios.
-- Implementar a chegada, os NPCs necessários (incluindo Taz’Rima e Ruk’ka), investigação e resolução de `QST_SEN_009`.
-- Implementar a transição Echo Isles → Sen’jin sem resetar estado, interface ou save.
-- Incluir NPCs/recursos aleatórios com resultados próprios e limites de frequência; eventos não devem interromper diálogo, CG ou boss.
-- Fazer um passe de balanceamento e duração com jogadores que não participaram do desenvolvimento; ajustar instruções e dificuldade a partir das observações.
+- [x] Carregar Sen’jin como zona runtime, com 10 regiões caminháveis, 26 blockers poligonais nomeados, spawn de cais, marcadores, 5 POIs da quest e overlay F10. O mapa permanece uma imagem conceitual achatada; foreground adicionado permanece identificado como candidate.
+- [x] Implementar a chegada, Taz’Rima, Ruk’ka, investigação PT-BR e quatro resoluções de `QST_SEN_009`, com consequências/fail-forward e verificação de cada ramo, incluindo charme bem-sucedido/falho e falta de ouro.
+- [x] Implementar a transição Echo Isles → Sen’jin sem resetar estado, HUD, opções ou save; validar migração de save legado, retomada durante investigação e novo load após concluir a quest.
+- [x] Integrar a tabela regional de eventos, spawn regions próprios, aparição de NPC, pedido de alquimia e problema de suprimentos; os handlers persistem resultado e não abrem combate. `monster_ambush` permanece o tipo que inicia combate.
+- [x] Expandir QA automatizado da malha: 11 marcos caminháveis, 10 marcos de água/borda bloqueados, colisão física individual dos 26 blockers e conectividade dos cinco POIs de Q009; todas as verificações passam.
+- [ ] Fazer travessia visual em gameplay de toda a costa, cachoeira/cliffs, escadas, vila, cais e limites do mapa; aceitar ou corrigir o alinhamento dos polígonos contra a arte.
+- [ ] Fazer playtest independente e passe de duração/balanceamento; recolher observações de alguém que não participou da implementação e ajustar onboarding/dificuldade conforme evidência.
+- [x] Configurar preset Windows x86_64, instalar o template oficial Godot 4.7.2, exportar release e iniciar o executável headless fora do diretório do projeto (exit 0).
+- [ ] Testar a build exportada em GUI, incluindo save/load em conta limpa ou segunda máquina; recolher playtest independente e duração/balanceamento.
 
 **Gate M30:** campanha contínua do despertar à resolução em Sen’jin; menus e configurações persistem; save/load atravessa a mudança de zona; todos os caminhos críticos funcionam; sem crashes, referências ausentes ou bloqueador P0; build exportada e reproduzida em instalação limpa.
+
+**Execução atual (2026-10-08):** implementação jogável e QA automatizado/GUI do editor passaram. A regressão mais recente passou 11/11 scripts; `campaign_playthrough_test.gd` conclui Echo Isles → Sen’jin → Q009 e testa save/load durante e após a quest; runtime passa 125 checks; conteúdo passa 186 checks; walkability alcança 6.807 posições físicas, verifica 11 marcos caminháveis, 10 pontos de bloqueio, 26 blockers por colisão e os cinco POIs. A captura do editor gera oito PNGs. O preset Windows x86_64 exportou um executável de 659,241,336 bytes, iniciado fora do projeto em smoke headless (exit 0). Ainda faltam travessia visual integral em gameplay, teste GUI/save-load na build exportada e playtest independente. **Fase 3: EM ANDAMENTO — GATE NÃO FECHADO. A Fase 4 não começou.**
 
 ### Fase 4 — Qualidade de lançamento e manutenção
 
@@ -136,7 +145,7 @@ O percentual atual continua **não calculado**: pontos estimados para o M30 não
 
 ## QA e regra de evidência
 
-Esta revisão foi estática: examinei o inventário completo do repositório, os scripts de runtime relevantes, dados de produção, documentação de status e screenshots existentes, além de inspecionar visualmente o background de Echo Isles e um overlay histórico. **Não iniciei o Godot nem executei parser, smoke tests, QA automatizado ou uma sessão de jogo.** Os resultados `PASS` de `QA_REPORT.md` são históricos e não aprovam as mudanças do commit revisado.
+O baseline de 2026-10-07 foi uma revisão estática: naquele momento não houve execução do Godot. A atualização de execução em 2026-10-08 realizou parser/import, smoke, acceptance automatizada em headless e GUI, QA de fronteiras e captura gráfica; os resultados atuais e respectivos limites estão em `03_GODOT/QA_REPORT.md`. Os testes aprovam a build efetivamente aberta nesta pasta, não builds futuras ou conteúdo ainda não implementado.
 
 Para cada gate futuro, guardar screenshots/capturas da build correspondente e registrar engine/commit. Um `PASS` só vale para a versão efetivamente testada; screenshots antigos e resultados de outra geometria não são evidência da build corrente.
 

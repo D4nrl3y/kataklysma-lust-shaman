@@ -1,6 +1,6 @@
 # Linha de base canônica do M30
 
-**Estado:** baseline v1 congelada — corte e despedida escolhidos pelo usuário; critérios narrativos, estimativa preliminar e inventário de assets documentados. Calibração empírica fica para a Fase 1.
+**Estado:** baseline v1 congelada. Atualização de execução (2026-10-08): Fases 1 e 2 estão concluídas para Echo Isles; Sen’jin/`QST_SEN_009`, export e estimativa de esforço real permanecem para as fases seguintes. Este arquivo preserva as decisões e lacunas observadas na revisão inicial, não substitui o estado corrente de `ROADMAP_30_PERCENT.md` e `QA_REPORT.md`.
 
 **Referência narrativa:** `00_DOCS/source_lore/Lust_Shamans_Journey_Complete_Game_Narrative_Bible_V2.0.docx`.
 
@@ -27,23 +27,23 @@ O local especial `eye_of_storm_shrine` se relaciona a `QST_BAR_014` e `QST_END_0
 | Tema | Decisão de linha de base | Evidência / consequência |
 |---|---|---|
 | Combate | Manter combate por turnos | Direção já definida pelo usuário. A descrição de combate em tempo real na Bíblia é uma divergência documental a reconciliar; não substituir silenciosamente o sistema vigente. |
-| Quest atual | Tratar “Purificar a Maré Corrompida” como protótipo não canônico, sem ID de quest principal | O diálogo JSON e a lógica runtime não implementam por completo nenhum dos 15 cartões. O protótipo pode fornecer mecânicas/referências, mas não conta como uma quest canônica concluída. |
-| CG atual | Tratar Echo 002 como asset candidato à cena do totem/ritual de `QST_ECHO_002` | O runtime dispara essa sequência após o objetivo da quest protótipo de maré; corrigir o vínculo ao implementar a quest canônica. |
-| Inventário de CG | `cg_variants.json` é o catálogo de produção; `CG_VARIANT_ROSTER.md` distingue asset aprovado de cena integrada | Há 12 sequências e 48 PNGs v002. Só uma sequência está referenciada no script da demo; QA de assets não equivale a QA de gameplay. |
+| Quest legada | Tratar “Purificar a Maré Corrompida” como protótipo não canônico, sem ID de quest principal | Continua rotulada como legado; o fluxo padrão agora inicia a campanha canônica Echo Isles e não conta o protótipo como quest. |
+| CG Echo 002 | Usar somente no beat do ritual/totem de `QST_ECHO_002` | Vínculo implementado e validado na Fase 2; outras CGs continuam dependendo de associação e QA por beat. |
+| Inventário de CG | `cg_variants.json` é o catálogo de produção; `CG_VARIANT_ROSTER.md` distingue asset aprovado de cena integrada | Há 12 sequências e 48 PNGs v002; quatro sequências de Echo Isles estão integradas/testadas na Fase 2. Presença não equivale a gameplay integrado. |
 | Escopo de regiões | Sete regiões conforme a Bíblia; Orgrimmar incluída; santuário como local especial | Orgrimmar precisa de arte e cena. Todos os backgrounds existentes continuam classificados como conceito até receberem mapa jogável e QA. |
 | Direções dos sprites | Kataklysma tem frente, costas, esquerda e direita; não há animações diagonais dedicadas | O controller seleciona a direção cardinal dominante em movimento diagonal. Não reutilizar isso como alegação de sprite diagonal. |
 
 ## Quest prototype e migração
 
-`03_GODOT/data/dialogue/pt_BR/quest_01.json` está marcado como protótipo e não é consumido pelo runtime. A quest ativa está também codificada diretamente em `03_GODOT/scripts/demo_game.gd`. Não atribuir o protótipo a `QST_ECHO_005` nem a outro ID sem comparar objetivos, cenas, escolhas, flags e CG com o cartão canônico correspondente.
+`03_GODOT/data/dialogue/pt_BR/quest_01.json` está marcado como protótipo e não é o diálogo do fluxo padrão. A orquestração permanece concentrada em `03_GODOT/scripts/demo_game.gd`, enquanto estado, interações e diálogos canônicos de Echo Isles usam dados/runtime separados. Não atribuir o protótipo a `QST_ECHO_005` nem a outro ID.
 
-Na Fase 2, decompor o protótipo em elementos reaproveitáveis e reimplementar o arco usando IDs canônicos. A sequência `echo_002_zekranu_totem_choice` deve tocar somente no evento narrativo correspondente. Saves de teste do protótipo não são saves compatíveis garantidos com a campanha canônica.
+Na Fase 2, o arco Echo Isles foi reimplementado com IDs canônicos; `echo_002_zekranu_totem_choice` toca no evento do ritual correspondente. Saves antigos do protótipo não são garantidos como compatíveis com a campanha canônica.
 
 ## Escopo M30 e medição
 
 O usuário escolheu uma campanha do início até `QST_SEN_009`: `QST_ECHO_001`–`QST_ECHO_008`, transição persistente e `QST_SEN_009`. O corte cobre nove dos quinze IDs de quest; essa razão não é usada como medida de esforço.
 
-`docs/production/M30_WORK_BREAKDOWN.md` registra uma estimativa preliminar de 35 pontos M30 em 100 pontos para o jogo completo (faixa aproximada de 30%–45%; baixa confiança). É um plano de esforço, não progresso já realizado, nem uma baseline de custo validada. Revisar depois de estabilizar a fundação Godot e estimar uma quest e um mapa com dados reais. Só contar itens integrados, aceitos e com QA; não ajustar pesos retroativamente para preservar um rótulo percentual.
+`docs/production/M30_WORK_BREAKDOWN.md` registra uma estimativa preliminar de 35 pontos M30 em 100 pontos para o jogo completo (faixa aproximada de 30%–45%; baixa confiança). É um plano de esforço, não progresso já realizado, nem uma baseline de custo validada. As Fases 1 e 2 agora fornecem entregas reais, mas ainda não há diário calibrado de esforço; revisar os pesos com dados de tempo observados na Fase 3. Só contar itens integrados, aceitos e com QA; não ajustar pesos retroativamente para preservar um rótulo percentual.
 
 A matriz `docs/production/M30_QUEST_ACCEPTANCE.md` registra objetivos, dependências de spine, cenas, escolhas, flags, consequências e critérios de aceite das nove quests. `docs/production/M30_ASSET_COVERAGE.md` separa assets integrados, candidatos e ausentes; a despedida de `QST_ECHO_008` foi fixada em Mak’Jala + Rak’jin por escolha do usuário. A baseline de planejamento está congelada, com esforço ainda não calibrado empiricamente; isso não representa percentual concluído.
 

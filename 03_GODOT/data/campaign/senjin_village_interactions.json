@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "region": "senjin_village",
+  "interact_radius": 98,
+  "points": [
+    {"id":"q009_supply_report","quest_id":"QST_SEN_009","scene":"senjin_village","position":[1154,275],"action":"objective","speaker":"tazrima","speaker_offset":[-78,-26],"objectives":[{"id":"hear_supply_report","amount":1}],"dialogue_key":"q009_supply_report"},
+    {"id":"q009_depot","quest_id":"QST_SEN_009","scene":"senjin_village","position":[1195,453],"action":"objective","requires_objectives":["hear_supply_report"],"objectives":[{"id":"inspect_depot","amount":1}],"dialogue_key":"q009_depot"},
+    {"id":"q009_trail","quest_id":"QST_SEN_009","scene":"senjin_village","position":[1295,510],"action":"objective","requires_objectives":["inspect_depot"],"objectives":[{"id":"follow_rukka_trail","amount":1}],"dialogue_key":"q009_trail"},
+    {"id":"q009_rukka","quest_id":"QST_SEN_009","scene":"senjin_village","position":[1005,444],"action":"objective","requires_objectives":["follow_rukka_trail"],"speaker":"rukka","speaker_offset":[-72,-18],"objectives":[{"id":"discover_rukka_motive","amount":1}],"dialogue_key":"q009_rukka"},
+    {"id":"q009_council","quest_id":"QST_SEN_009","scene":"senjin_village","position":[811,408],"action":"branch_finish","requires_objectives":["discover_rukka_motive"],"group_id":"council_resolution","speaker":"tazrima","speaker_offset":[-82,-22],"objectives":[{"id":"resolve_supply_shortage","amount":1}],"dialogue_key":"q009_council"}
+  ]
+}

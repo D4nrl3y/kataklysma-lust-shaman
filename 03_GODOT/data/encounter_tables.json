@@ -1,49 +1,78 @@
 {
-  "version": "v001",
+  "version": "v002",
   "rules": {
     "cooldown_seconds": 45,
     "minimum_steps_between_events": 18,
     "roll_only_in_spawn_regions": true,
     "never_during_dialogue": true,
-    "never_during_boss_or_cg": true
+    "never_during_boss_or_cg": true,
+    "only_monster_ambush_starts_combat": true
   },
   "tables": {
-    "echo_isles_day": [
-      {"weight": 35, "type": "npc_walkby", "actors": ["hunter", "child", "village_shaman"]},
-      {"weight": 30, "type": "monster_ambush", "actors": ["water_spirit_weakened", "makrura_corrupted"]},
-      {"weight": 20, "type": "resource_find", "actors": ["herb_patch", "tide_pool"]},
-      {"weight": 15, "type": "spirit_omen", "actors": ["spirit_elemental"]}
-    ],
-    "senjin_village_day": [
-      {"weight": 40, "type": "npc_walkby", "actors": ["merchant", "fisher", "villager"]},
-      {"weight": 25, "type": "supply_problem", "actors": ["rukka", "supply_crate"]},
-      {"weight": 20, "type": "monster_ambush", "actors": ["makrura_corrupted"]},
-      {"weight": 15, "type": "alchemy_request", "actors": ["tazrima"]}
-    ],
-    "durotar_coast_day": [
-      {"weight": 30, "type": "npc_walkby", "actors": ["hunter", "scout", "gatherer"]},
-      {"weight": 35, "type": "monster_ambush", "actors": ["melee_chaser", "ranged_harasser", "brute"]},
-      {"weight": 20, "type": "track_discovery", "actors": ["track_marker", "mokjala"]},
-      {"weight": 15, "type": "ritual_omen", "actors": ["azkarra", "spirit_elemental"]}
-    ],
-    "razor_hill_day": [
-      {"weight": 45, "type": "npc_walkby", "actors": ["orc_guard", "warrior", "arena_spectator"]},
-      {"weight": 30, "type": "arena_challenge", "actors": ["korgash", "rakjin"]},
-      {"weight": 25, "type": "monster_ambush", "actors": ["brute", "melee_chaser"]}
-    ],
-    "ratchet_day": [
-      {"weight": 45, "type": "npc_walkby", "actors": ["goblin_merchant", "sailor", "mechanic"]},
-      {"weight": 25, "type": "deal_opportunity", "actors": ["grikzan", "razzik_coilthumb"]},
-      {"weight": 15, "type": "machine_malfunction", "actors": ["vexa_geargrin", "controller"]},
-      {"weight": 15, "type": "alley_ambush", "actors": ["ranged_harasser", "support"]}
-    ],
-    "barrens_night": [
-      {"weight": 35, "type": "npc_walkby", "actors": ["nomad", "pilgrim", "sister_aruka"]},
-      {"weight": 40, "type": "monster_ambush", "actors": ["melee_chaser", "ranged_harasser", "brute"]},
-      {"weight": 25, "type": "spirit_omen", "actors": ["sister_aruka", "spirit_elemental"]}
-    ],
-    "storm_shrine_final": [
-      {"weight": 100, "type": "scripted_sequence", "actors": ["eye_of_storm_avatar", "zekranu", "makjala", "azkarra"]}
-    ]
+    "echo_isles_day": {
+      "zone_id": "echo_isles",
+      "allowed_event_types": ["npc_walkby", "monster_ambush", "resource_find", "spirit_omen"],
+      "spawn_regions": [
+        {"id":"training_clearing", "points":[[316,327],[329,296],[365,271],[405,258],[470,255],[521,266],[564,287],[595,315],[612,344],[606,371],[585,394],[558,412],[532,432],[490,446],[435,450],[390,444],[357,433],[330,411],[311,377]]},
+        {"id":"zekranu_crossing", "points":[[574,317],[601,300],[634,304],[668,319],[702,337],[736,350],[770,356],[807,359],[844,367],[873,382],[886,402],[873,422],[847,434],[818,432],[789,423],[759,410],[729,393],[699,377],[668,360],[636,344],[606,334],[583,334]]},
+        {"id":"south_beach_access", "points":[[540,525],[570,520],[600,525],[630,540],[655,560],[665,580],[650,600],[625,605],[600,590],[575,575],[550,560],[535,545]]}
+      ],
+      "entries": [
+        {"weight":30,"type":"npc_walkby","actors":["zalkiri","rakjin","makjala"]},
+        {"weight":35,"type":"monster_ambush","actors":["wild_boar","water_spirit_weakened","makrura_corrupted"]},
+        {"weight":20,"type":"resource_find","actors":["herb_patch","tide_pool"]},
+        {"weight":15,"type":"spirit_omen","actors":["spirit_elemental"]}
+      ]
+    },
+    "senjin_village_day": {
+      "zone_id":"senjin_village", "allowed_event_types":["npc_walkby","supply_problem","monster_ambush","alchemy_request"], "spawn_regions":[
+        {"id":"senjin_central_plaza","points":[[345,205],[650,180],[1075,190],[1190,255],[1164,395],[1065,500],[890,535],[700,520],[535,532],[380,500],[285,420],[270,300]]},
+        {"id":"senjin_dock_approach","points":[[925,548],[1090,535],[1205,560],[1280,610],[1320,665],[1260,680],[1185,645],[1070,630],[960,615]]}
+      ],
+      "entries":[
+        {"weight":40,"type":"npc_walkby","actors":["tazrima","rukka"]},
+        {"weight":25,"type":"supply_problem","actors":["supply_crate"]},
+        {"weight":20,"type":"monster_ambush","actors":["makrura_corrupted"]},
+        {"weight":15,"type":"alchemy_request","actors":["tazrima"]}
+      ]
+    },
+    "durotar_coast_day": {
+      "zone_id":"durotar_coast", "allowed_event_types":["npc_walkby","monster_ambush","track_discovery","ritual_omen"], "spawn_regions":[],
+      "entries":[
+        {"weight":30,"type":"npc_walkby","actors":["hunter","scout","gatherer"]},
+        {"weight":35,"type":"monster_ambush","actors":["melee_chaser","ranged_harasser","brute"]},
+        {"weight":20,"type":"track_discovery","actors":["track_marker","mokjala"]},
+        {"weight":15,"type":"ritual_omen","actors":["azkarra","spirit_elemental"]}
+      ]
+    },
+    "razor_hill_day": {
+      "zone_id":"razor_hill", "allowed_event_types":["npc_walkby","arena_challenge","monster_ambush"], "spawn_regions":[],
+      "entries":[
+        {"weight":45,"type":"npc_walkby","actors":["orc_guard","warrior","arena_spectator"]},
+        {"weight":30,"type":"arena_challenge","actors":["korgash","rakjin"]},
+        {"weight":25,"type":"monster_ambush","actors":["brute","melee_chaser"]}
+      ]
+    },
+    "ratchet_day": {
+      "zone_id":"ratchet", "allowed_event_types":["npc_walkby","deal_opportunity","machine_malfunction","alley_ambush"], "spawn_regions":[],
+      "entries":[
+        {"weight":45,"type":"npc_walkby","actors":["goblin_merchant","sailor","mechanic"]},
+        {"weight":25,"type":"deal_opportunity","actors":["grikzan","razzik_coilthumb"]},
+        {"weight":15,"type":"machine_malfunction","actors":["vexa_geargrin","controller"]},
+        {"weight":15,"type":"alley_ambush","actors":["ranged_harasser","support"]}
+      ]
+    },
+    "barrens_night": {
+      "zone_id":"barrens", "allowed_event_types":["npc_walkby","monster_ambush","spirit_omen"], "spawn_regions":[],
+      "entries":[
+        {"weight":35,"type":"npc_walkby","actors":["nomad","pilgrim","sister_aruka"]},
+        {"weight":40,"type":"monster_ambush","actors":["melee_chaser","ranged_harasser","brute"]},
+        {"weight":25,"type":"spirit_omen","actors":["sister_aruka","spirit_elemental"]}
+      ]
+    },
+    "storm_shrine_final": {
+      "zone_id":"eye_of_storm_shrine", "allowed_event_types":["scripted_sequence"], "spawn_regions":[],
+      "entries":[{"weight":100,"type":"scripted_sequence","actors":["eye_of_storm_avatar","zekranu","makjala","azkarra"]}]
+    }
   }
 }

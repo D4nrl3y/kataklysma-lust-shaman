@@ -21,7 +21,14 @@
       "marker_asset": "res://01_ASSETS/kataklysma/ui/markers/quest_complete.svg",
       "color": "#8BE28B",
       "rule": "Todos os objetivos completos, aguardando entrega"
+    },
+    "turned_in": {
+      "id": "quest_turned_in",
+      "display_name": "Quest entregue",
+      "marker_asset": "",
+      "color": "#a9f4b0",
+      "rule": "Quest entregue; sem marcador ativo no mapa"
     }
   },
-  "state_transition": ["quest_available", "quest_in_progress", "quest_complete", "turned_in"]
+  "state_transition": ["available", "in_progress", "complete", "turned_in"]
 }

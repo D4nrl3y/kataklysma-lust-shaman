@@ -1,0 +1,31 @@
+{
+  "locale": "pt_BR",
+  "region": "senjin_village",
+  "interactions": {
+    "q009_supply_report": {"label":"Ouvir Taz’Rima","title":"Suprimentos desaparecidos","body":"Taz’Rima conta que parte das provisões sumiu do depósito. A vila precisa repor os mantimentos, mas ela pede que Kataklysma investigue antes de acusar alguém."},
+    "q009_depot": {"label":"Examinar o depósito","title":"Marcas entre as caixas","body":"As caixas foram abertas sem arrombamento. Há marcas pequenas no chão e uma rota discreta que evita a praça; alguém levou comida, não reagentes."},
+    "q009_trail": {"label":"Seguir as marcas","title":"Uma trilha até as casas","body":"As marcas seguem até um esconderijo improvisado perto das casas. Um embrulho vazio e pegadas menores indicam que as provisões foram divididas."},
+    "q009_rukka": {"label":"Conversar com Ruk’ka","title":"Por que a comida sumiu","body":"Ruk’ka admite ter levado parte da comida para os irmãos mais novos. Ela não queria prejudicar a vila; tentou resolver a fome em casa sem pedir ajuda e ficou com medo de ser punida."},
+    "q009_council": {"label":"Resolver a falta de suprimentos","title":"Uma solução para a vila","body":"Com a necessidade dos irmãos de Ruk’ka conhecida, Taz’Rima pede uma decisão que reponha os mantimentos e trate a causa do furto. Cada caminho assegura as provisões, mas deixa consequências diferentes."}
+  },
+  "interaction_variants": {},
+  "branch_results": {
+    "success": "A decisão foi aceita e a solução fica registrada.",
+    "fail_forward": "O conselho percebe a tentativa de manipulação, mas a falta de provisões ainda é resolvida. A campanha continua.",
+    "partial_success": "A decisão é aceita com uma consequência adicional."
+  },
+  "arrival": {
+    "title": "Chegada a Sen’jin",
+    "body": "A canoa alcança o cais de Sen’jin. A vila se abre ao redor da praça central; antes de seguir viagem, Kataklysma percebe a inquietação de Taz’Rima junto ao depósito de mantimentos."
+  },
+  "events": {
+    "supply_problem_first": "Uma caixa de mantimentos foi deixada fora do depósito. Kataklysma ajuda a vila a recuperar as provisões: +1 ração e +1 reputação local.",
+    "supply_problem_repeat": "Os mantimentos da vila estão sob controle; nenhuma nova perda foi encontrada.",
+    "alchemy_request_first": "Taz’Rima pede uma erva de campo para repor o estoque: +1 reagente e +1 afinidade.",
+    "alchemy_request_repeat": "Taz’Rima agradece a ajuda anterior; por enquanto, o estoque de reagentes está suficiente.",
+    "walkby": {
+      "tazrima": "Taz’Rima atravessa a praça levando anotações para o depósito.",
+      "rukka": "Ruk’ka cruza a praça a caminho de uma entrega para a vila."
+    }
+  }
+}

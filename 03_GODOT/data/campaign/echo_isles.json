@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "campaign_id": "campaign_echo_isles_v001",
+  "locale": "pt_BR",
+  "quest_order": [
+    "QST_ECHO_001",
+    "QST_ECHO_002",
+    "QST_ECHO_003",
+    "QST_ECHO_004",
+    "QST_ECHO_005",
+    "QST_ECHO_006",
+    "QST_ECHO_007",
+    "QST_ECHO_008",
+    "QST_SEN_009"
+  ],
+  "quests": {
+    "QST_ECHO_001": {
+      "id": "QST_ECHO_001",
+      "title_pt_BR": "Despertar",
+      "region": "echo_isles",
+      "prerequisites": [],
+      "scenes": ["SCN_ECHO_001_DREAM", "SCN_ECHO_001_HUT", "SCN_ECHO_001_EXIT"],
+      "objectives": [
+        {"id": "inspect_mothers_necklace", "label_pt_BR": "Examinar o colar antigo", "target": 1, "optional": true},
+        {"id": "inspect_ritual_bowl", "label_pt_BR": "Examinar a tigela ritual", "target": 1, "optional": true},
+        {"id": "look_through_sea_window", "label_pt_BR": "Olhar pela janela para o mar", "target": 1, "optional": true},
+        {"id": "inspect_coin_pouch", "label_pt_BR": "Examinar a bolsa de moedas", "target": 1, "optional": true},
+        {"id": "meet_zekranu", "label_pt_BR": "Sair da cabana e encontrar Zek’Ranu", "target": 1}
+      ],
+      "required_branch_groups": ["awakening_choice"],
+      "completion": {"all": [{"objective_id": "meet_zekranu", "target": 1}]},
+      "branch_groups": [
+        {"id": "awakening_choice", "required": true, "branches": [
+          {"id": "reverence", "label_pt_BR": "Usar o colar e fazer uma breve reverência", "flag": "FLG_ECHO_001_REVERENCE", "effects": {"attributes": {"spirit": 1}}, "response_pt_BR": "O gesto acalma a lembrança; Kataklysma parte levando o colar consigo.", "future_consequence_pt_BR": "Mak’Jala lembrará que alguém ouviu Kataklysma antes de ela chamar."},
+          {"id": "studied", "label_pt_BR": "Examinar as inscrições e comparar símbolos", "flag": "FLG_ECHO_001_STUDIED", "effects": {"attributes": {"intellect": 1}, "journal_entries": ["lore_four_elements_first_mark"]}, "response_pt_BR": "A marca repete um padrão elemental. Kataklysma registra a descoberta antes de sair.", "future_consequence_pt_BR": "Abre uma observação adicional na quest do Eye of the Storm."},
+          {"id": "pragmatic", "label_pt_BR": "Guardar o colar para vender se precisar", "flag": "FLG_ECHO_001_PRAGMATIC", "effects": {"attributes": {"corruption": 1}}, "response_pt_BR": "Ela guarda o colar como recurso, sem fingir que a decisão foi sentimental.", "future_consequence_pt_BR": "Grik’Zan reconhecerá o colar e oferecerá um preço indecente."},
+          {"id": "confident", "label_pt_BR": "Olhar o reflexo e ajeitar a aparência", "flag": "FLG_ECHO_001_CONFIDENT", "effects": {"attributes": {"lust": 1}, "unlock_tags": ["senjin_first_charm_variant"]}, "response_pt_BR": "Kataklysma sustenta o próprio olhar e transforma a dúvida em confiança.", "future_consequence_pt_BR": "A primeira opção de charme em Sen’jin recebe uma variante."}
+        ]}
+      ]
+    },
+    "QST_ECHO_002": {
+      "id": "QST_ECHO_002",
+      "title_pt_BR": "A Voz dos Elementos",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_001"],
+      "scenes": ["SCN_ECHO_002_CIRCLE", "SCN_ECHO_002_REFUSAL", "SCN_ECHO_002_DEBRIEF"],
+      "objectives": [
+        {"id": "earth_totem", "label_pt_BR": "Interagir com o totem da terra", "target": 1},
+        {"id": "fire_totem", "label_pt_BR": "Interagir com o totem do fogo", "target": 1},
+        {"id": "water_totem", "label_pt_BR": "Interagir com o totem da água", "target": 1},
+        {"id": "air_totem", "label_pt_BR": "Enfrentar a recusa do totem do ar", "target": 1},
+        {"id": "air_refusal_observed", "label_pt_BR": "Observar a recusa deliberada do elemento", "target": 1},
+        {"id": "answer_zekranu", "label_pt_BR": "Responder à pergunta de Zek’Ranu", "target": 1}
+      ],
+      "required_branch_groups": ["elemental_response"],
+      "completion": {"all": [{"objective_id": "earth_totem", "target": 1}, {"objective_id": "fire_totem", "target": 1}, {"objective_id": "water_totem", "target": 1}, {"objective_id": "air_totem", "target": 1}, {"objective_id": "air_refusal_observed", "target": 1}, {"objective_id": "answer_zekranu", "target": 1}]},
+      "branch_groups": [
+        {"id": "elemental_response", "required": true, "requires_objectives_completed": ["earth_totem", "fire_totem", "water_totem", "air_totem", "air_refusal_observed"], "branches": [
+          {"id": "patience", "label_pt_BR": "Esperar, escutar e tentar novamente", "flag": "FLG_ZEK_APPROVES_PATIENCE", "effects": {"attributes": {"spirit": 2}, "trust": {"elemental": 5, "zekranu": 8}}, "response_pt_BR": "Zek’Ranu aprova a pausa: o ar não é uma ferramenta, e sim uma presença que pode aceitar o convite."},
+          {"id": "method", "label_pt_BR": "Observar o padrão e corrigir o gesto", "flag": "FLG_ZEK_APPROVES_METHOD", "effects": {"attributes": {"intellect": 2}, "unlock_tags": ["vexa_technical_comment"]}, "response_pt_BR": "A corrente muda quando Kataklysma ajusta o movimento. Zek’Ranu reconhece a observação cuidadosa."},
+          {"id": "dominion", "label_pt_BR": "Aumentar a pressão até o ar obedecer", "flag": "FLG_FIRST_DOMINION", "effects": {"attributes": {"corruption": 2}, "trust": {"elemental": -5}, "counters": {"dark_shaman_seed": 1}}, "response_pt_BR": "O vento cede por um instante, mas o círculo esfria. Zek’Ranu percebe o custo da imposição."},
+          {"id": "tease", "label_pt_BR": "Responder com charme e depois tentar de verdade", "flag": "FLG_ZEK_TEASED", "effects": {"attributes": {"lust": 1, "spirit": 1}, "affinity": {"zekranu": 2}}, "response_pt_BR": "Zek’Ranu aceita a provocação com um sorriso breve e espera que Kataklysma escute o elemento."}
+        ]}
+      ]
+    },
+    "QST_ECHO_003": {
+      "id": "QST_ECHO_003",
+      "title_pt_BR": "Carne Fresca",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_002"],
+      "scenes": ["SCN_ECHO_003_TRACK", "SCN_ECHO_003_ALTERNATIVE", "SCN_ECHO_003_RETURN"],
+      "objectives": [
+        {"id": "receive_mokjala_request", "label_pt_BR": "Receber a tarefa de Mok’Jala", "target": 1},
+        {"id": "boar_meat", "label_pt_BR": "Obter carne de javali pela caça", "target": 4},
+        {"id": "trap_meat", "label_pt_BR": "Concluir a captura preparada", "target": 1},
+        {"id": "surplus_meat", "label_pt_BR": "Obter o excedente do outro caçador", "target": 1},
+        {"id": "return_to_mokjala", "label_pt_BR": "Levar a solução a Mok’Jala", "target": 1}
+      ],
+      "required_branch_groups": ["food_method"],
+      "completion": {
+        "all": [{"objective_id": "receive_mokjala_request", "target": 1}, {"objective_id": "return_to_mokjala", "target": 1}],
+        "any_paths": [
+          {"id": "hunt", "branch": {"group_id": "food_method", "branch_id": "hunt"}, "objectives": [{"objective_id": "boar_meat", "target": 4}]},
+          {"id": "trap", "branch": {"group_id": "food_method", "branch_id": "trap"}, "objectives": [{"objective_id": "trap_meat", "target": 1}]},
+          {"id": "surplus", "branch": {"group_id": "food_method", "branch_id": "surplus"}, "objectives": [{"objective_id": "surplus_meat", "target": 1}]}
+        ]
+      },
+      "branch_groups": [
+        {"id": "food_method", "required": true, "requires_objectives_completed": ["receive_mokjala_request"], "branches": [
+          {"id": "hunt", "label_pt_BR": "Caçar e abater os javalis", "flag": "FLG_ECHO_003_HUNTED", "effects": {"attributes": {"agility": 1, "stamina": 1}, "affinity": {"mokjala": 5}}, "response_pt_BR": "Mok’Jala concorda com a caça e pede quatro porções; cada captura será registrada."},
+          {"id": "trap", "label_pt_BR": "Estudar os hábitos e preparar uma emboscada", "flag": "FLG_ECHO_003_TRAPPED", "effects": {"attributes": {"intellect": 2}, "inventory": {"hunting_component": 1}, "unlock_tags": ["contextual_traps"]}, "response_pt_BR": "Mok’Jala aprova a solução sem combate. A armadilha exigirá três etapas de preparação."},
+          {"id": "surplus", "label_pt_BR": "Pegar o excedente do outro caçador", "flag": "FLG_ECHO_003_STOLE", "effects": {"attributes": {"corruption": 2}}, "response_pt_BR": "Kataklysma pega as quatro porções sem confronto; Mok’Jala saberá que a solução veio do excedente.", "future_consequence_pt_BR": "Se Zal’Kiri descobrir, sua confiança pode diminuir; não inicia combate."}
+        ]},
+        {"id": "after_hunt", "required": false, "available_if_branch": {"group_id": "food_method", "branch_id": "hunt"}, "requires_objectives_completed": ["boar_meat"], "branches": [
+          {"id": "rite", "label_pt_BR": "Agradecer em um pequeno ritual após a caça", "flag": "FLG_ECHO_003_RITE", "effects": {"attributes": {"spirit": 2}, "trust": {"elemental": 3}, "unlock_tags": ["future_animal_event"]}, "response_pt_BR": "O agradecimento encerra a caçada com respeito; Mok’Jala segue com as provisões para a comunidade."}
+        ]}
+      ]
+    },
+    "QST_ECHO_004": {
+      "id": "QST_ECHO_004",
+      "title_pt_BR": "Sapos por Toda Parte",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_003"],
+      "scenes": ["SCN_ECHO_004_BEACH", "SCN_ECHO_004_APPRENTICE", "SCN_ECHO_004_LAB"],
+      "objectives": [
+        {"id": "speak_to_tazrima", "label_pt_BR": "Receber a tarefa de Taz’Rima", "target": 1},
+        {"id": "meet_apprentice", "label_pt_BR": "Conversar com o aprendiz na praia", "target": 1},
+        {"id": "live_frogs", "label_pt_BR": "Obter seis sapos vivos sem danificar o reagente", "target": 6},
+        {"id": "deliver_frogs", "label_pt_BR": "Entregar os sapos a Taz’Rima", "target": 1}
+      ],
+      "required_branch_groups": ["frog_method"],
+      "completion": {"all": [{"objective_id": "speak_to_tazrima", "target": 1}, {"objective_id": "meet_apprentice", "target": 1}, {"objective_id": "live_frogs", "target": 6}, {"objective_id": "deliver_frogs", "target": 1}]},
+      "branch_groups": [
+        {"id": "frog_method", "required": true, "requires_objectives_completed": ["speak_to_tazrima", "meet_apprentice"], "branches": [
+          {"id": "catch", "label_pt_BR": "Capturar os sapos pessoalmente", "flag": "FLG_ECHO_004_CAUGHT", "effects": {"attributes": {"agility": 2}, "inventory": {"antidote_standard": 1, "extra_reagent": 1}}, "response_pt_BR": "Kataklysma decide fazer as capturas com cuidado; Taz’Rima reserva o reagente padrão e uma amostra extra."},
+          {"id": "barter", "label_pt_BR": "Negociar uma troca justa com o aprendiz", "flag": "FLG_ECHO_004_BARTER", "progress_on_branch": {"live_frogs": 2}, "effects": {"attributes": {"intellect": 1}, "reputation": {"local": 2}, "inventory": {"live_frog": 2}}, "response_pt_BR": "O aprendiz aceita uma troca justa e entrega duas capturas. Restam quatro sapos vivos a obter."},
+          {"id": "lie", "label_pt_BR": "Dizer que Taz’Rima já pagou por eles", "flag": "FLG_ECHO_004_LIED", "progress_on_branch": {"live_frogs": 2}, "effects": {"attributes": {"corruption": 2}, "inventory": {"live_frog": 2}, "counters": {"tazrima_debt": 1}}, "response_pt_BR": "O aprendiz entrega duas capturas, mas registra uma dívida em nome de Taz’Rima; ainda faltam quatro.", "future_consequence_pt_BR": "A dívida pode ser cobrada publicamente se não for resolvida."},
+          {"id": "charm", "label_pt_BR": "Tentar charme direto", "flag": "FLG_ECHO_004_CHARM_ATTEMPT", "check": {"attribute": "lust", "minimum": 15, "pass_result": "partial_success", "fail_result": "fail_forward"}, "effects_on_check_pass": {"inventory": {"live_frog": 2}}, "progress_on_check_pass": {"live_frogs": 2}, "response_pt_BR": "O aprendiz mantém o limite: uma boa impressão pode render apenas duas capturas, nunca resolver a tarefa inteira.", "future_consequence_pt_BR": "Se a checagem passar, ainda será necessário conseguir quatro sapos; em caso de falha, seis."}
+        ]}
+      ]
+    },
+    "QST_ECHO_005": {
+      "id": "QST_ECHO_005",
+      "title_pt_BR": "Algo na Água",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_004"],
+      "scenes": ["SCN_ECHO_005_SHORE", "SCN_ECHO_005_SPIRIT", "SCN_ECHO_005_TRACE"],
+      "objectives": [
+        {"id": "inspect_shore", "label_pt_BR": "Investigar os peixes mortos e a água alterada", "target": 1},
+        {"id": "meet_water_spirit", "label_pt_BR": "Encontrar o espírito enfraquecido", "target": 1},
+        {"id": "trace_lair", "label_pt_BR": "Seguir as pistas até o covil", "target": 1}
+      ],
+      "required_branch_groups": ["spirit_treatment"],
+      "completion": {"all": [{"objective_id": "inspect_shore", "target": 1}, {"objective_id": "meet_water_spirit", "target": 1}, {"objective_id": "trace_lair", "target": 1}]},
+      "branch_groups": [
+        {"id": "spirit_treatment", "required": true, "requires_objectives_completed": ["inspect_shore", "meet_water_spirit", "trace_lair"], "branches": [
+          {"id": "help", "label_pt_BR": "Curar o espírito e pedir ajuda", "flag": "FLG_WATER_SPIRIT_HELPED", "effects": {"attributes": {"spirit": 2}, "trust": {"elemental": 8}, "unlock_tags": ["makrura_starts_debuffed"]}, "response_pt_BR": "O espírito recupera forças e promete enfraquecer a corrupção quando o Makrura surgir."},
+          {"id": "analyze", "label_pt_BR": "Analisar a energia antes de agir", "flag": "FLG_CONTAMINATION_ANALYZED", "effects": {"attributes": {"intellect": 2}, "journal_entries": ["artificial_contamination_frequency"], "unlock_tags": ["disable_makrura_mechanic"]}, "response_pt_BR": "Kataklysma identifica a frequência artificial e registra como interromper uma das fontes de poder do boss."},
+          {"id": "force", "label_pt_BR": "Ordenar que o espírito mostre a origem", "flag": "FLG_WATER_SPIRIT_FORCED", "effects": {"attributes": {"corruption": 2}, "trust": {"elemental": -8}, "counters": {"dark_shaman_seed": 1}}, "response_pt_BR": "O espírito cede a informação, mas se afasta; a confiança elemental diminui."},
+          {"id": "bargain", "label_pt_BR": "Prometer um favor em troca da informação", "flag": "FLG_SPIRIT_BARGAIN", "effects": {"attributes": {"spirit": 1, "corruption": 1}, "unlock_tags": ["mandatory_spirit_debt_event"]}, "response_pt_BR": "O espírito revela a origem depois de aceitar a promessa. A dívida fica registrada para uma cena futura.", "future_consequence_pt_BR": "Um evento futuro de cobrança é obrigatório."}
+        ]}
+      ]
+    },
+    "QST_ECHO_006": {
+      "id": "QST_ECHO_006",
+      "title_pt_BR": "Makrura Corrompido",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_005"],
+      "scenes": ["SCN_ECHO_006_ENTRY", "SCN_ECHO_006_BOSS", "SCN_ECHO_006_FRAGMENT"],
+      "objectives": [
+        {"id": "boss_phase_one", "label_pt_BR": "Sobreviver à primeira fase do Makrura", "target": 1},
+        {"id": "boss_phase_two", "label_pt_BR": "Resolver a segunda fase da arena", "target": 1},
+        {"id": "boss_phase_three", "label_pt_BR": "Concluir a terceira fase do confronto", "target": 1},
+        {"id": "makrura_defeated", "label_pt_BR": "Derrotar ou neutralizar o Makrura", "target": 1, "on_complete_effects": {"inventory": {"makrura_fragment": 1}}},
+        {"id": "fragment_decided", "label_pt_BR": "Decidir o destino do fragmento do Eye", "target": 1}
+      ],
+      "required_branch_groups": ["fragment_fate"],
+      "completion": {"all": [{"objective_id": "boss_phase_one", "target": 1}, {"objective_id": "boss_phase_two", "target": 1}, {"objective_id": "boss_phase_three", "target": 1}, {"objective_id": "makrura_defeated", "target": 1}, {"objective_id": "fragment_decided", "target": 1}]},
+      "branch_groups": [
+        {"id": "fragment_fate", "required": true, "requires_objectives_completed": ["makrura_defeated"], "branches": [
+          {"id": "destroy", "label_pt_BR": "Destruir o fragmento", "flag": "FLG_FRAGMENT_DESTROYED", "effects": {"attributes": {"spirit": 3}, "trust": {"elemental": 10}, "inventory": {"makrura_fragment": -1, "elemental_blessing": 1}}, "response_pt_BR": "A energia se dissipa; o fragmento é perdido e uma bênção elemental permanece."},
+          {"id": "study", "label_pt_BR": "Estudar e selar para pesquisa", "flag": "FLG_FRAGMENT_STUDIED", "effects": {"attributes": {"intellect": 3}, "unlock_tags": ["vexa_fragment_option"]}, "response_pt_BR": "Kataklysma sela o fragmento para análise. O registro abre uma futura opção de pesquisa com Vexa."},
+          {"id": "hide", "label_pt_BR": "Guardar escondido sem contar a Zek", "flag": "FLG_FRAGMENT_HIDDEN", "effects": {"attributes": {"corruption": 3}, "unlock_tags": ["q14_early_branch"]}, "response_pt_BR": "Ela esconde o fragmento e não conta ao mentor; a tensão aumenta em segredo.", "future_consequence_pt_BR": "Se Zek descobrir, sua confiança cai; o ramo antecipado de Q14 permanece disponível."},
+          {"id": "give_zek", "label_pt_BR": "Entregar o fragmento ao mentor", "flag": "FLG_FRAGMENT_GIVEN_ZEK", "effects": {"attributes": {"spirit": 1}, "trust": {"zekranu": 8}, "inventory": {"makrura_fragment": -1}, "unlock_tags": ["zekranu_mentor_scene", "world_tension_reduced"]}, "response_pt_BR": "Zek’Ranu recebe o fragmento e promete guardá-lo; a confiança entre mentor e aprendiz se fortalece."}
+        ]}
+      ]
+    },
+    "QST_ECHO_007": {
+      "id": "QST_ECHO_007",
+      "title_pt_BR": "O Totem Roubado",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_006"],
+      "scenes": ["SCN_ECHO_007_SEARCH", "SCN_ECHO_007_CHILDREN", "SCN_ECHO_007_REPAIR"],
+      "objectives": [
+        {"id": "find_clues", "label_pt_BR": "Encontrar pistas na areia e nas cabanas", "target": 1},
+        {"id": "speak_with_children", "label_pt_BR": "Conversar com as crianças sem violência", "target": 1},
+        {"id": "restore_totem", "label_pt_BR": "Recuperar, reparar ou substituir o totem", "target": 1}
+      ],
+      "required_branch_groups": ["children_resolution"],
+      "completion": {"all": [{"objective_id": "find_clues", "target": 1}, {"objective_id": "speak_with_children", "target": 1}, {"objective_id": "restore_totem", "target": 1}]},
+      "branch_groups": [
+        {"id": "children_resolution", "required": true, "requires_objectives_completed": ["find_clues", "speak_with_children"], "branches": [
+          {"id": "protect", "label_pt_BR": "Proteger as crianças e reparar o totem", "flag": "FLG_CHILDREN_PROTECTED", "effects": {"attributes": {"spirit": 2, "intellect": 1}, "affinity": {"community": 5}}, "response_pt_BR": "Kataklysma protege as crianças sem apagar o dano: elas ajudam a reparar o totem e a comunidade reconhece o cuidado."},
+          {"id": "confess", "label_pt_BR": "Levá-las para confessar", "flag": "FLG_CHILDREN_CONFESSED", "effects": {"attributes": {"spirit": 1, "stamina": 1}, "trust": {"makjala": 5}}, "response_pt_BR": "As crianças assumem a responsabilidade diante de Mak’Jala; ela valoriza a honestidade e participa da reparação."},
+          {"id": "blackmail", "label_pt_BR": "Usar o segredo para conseguir favores", "flag": "FLG_CHILDREN_BLACKMAILED", "effects": {"attributes": {"corruption": 3}, "counters": {"underworld_seed": 1}, "unlock_tags": ["future_guilt_or_exposure_event"]}, "response_pt_BR": "As crianças aceitam em silêncio. O totem será reparado, mas o medo e a culpa ficam registrados para depois."},
+          {"id": "false_blame", "label_pt_BR": "Inventar um culpado externo", "flag": "FLG_FALSE_BLAME", "effects": {"attributes": {"corruption": 2}, "trust": {"zalkiri": -12}}, "response_pt_BR": "A acusação preserva a reputação pública por enquanto, mas Zal’Kiri nota que a história não fecha.", "future_consequence_pt_BR": "A reputação pública fica preservada, mas Zal’Kiri percebe a inconsistência."}
+        ]}
+      ]
+    },
+    "QST_ECHO_008": {
+      "id": "QST_ECHO_008",
+      "title_pt_BR": "Além das Ilhas",
+      "region": "echo_isles",
+      "prerequisites": ["QST_ECHO_007"],
+      "scenes": ["SCN_ECHO_008_PACK", "SCN_ECHO_008_FAREWELL", "SCN_ECHO_008_BOAT"],
+      "farewell_npcs": ["makjala", "rakjin"],
+      "objectives": [
+        {"id": "pack_belongings", "label_pt_BR": "Separar a bagagem e as cartas", "target": 1},
+        {"id": "farewell_makjala", "label_pt_BR": "Despedir-se de Mak’Jala", "target": 1},
+        {"id": "farewell_rakjin", "label_pt_BR": "Despedir-se de Rak’jin", "target": 1},
+        {"id": "board_boat", "label_pt_BR": "Embarcar para Sen’jin Village", "target": 1}
+      ],
+      "required_branch_groups": ["departure_choice"],
+      "completion": {"all": [{"objective_id": "pack_belongings", "target": 1}, {"objective_id": "farewell_makjala", "target": 1}, {"objective_id": "farewell_rakjin", "target": 1}, {"objective_id": "board_boat", "target": 1}]},
+      "branch_groups": [
+        {"id": "departure_choice", "required": true, "requires_objectives_completed": ["pack_belongings", "farewell_makjala", "farewell_rakjin"], "branches": [
+          {"id": "honor", "label_pt_BR": "Prometer voltar com honra", "flag": "FLG_DEPARTURE_HONOR", "effects": {"attributes": {"spirit": 2}, "reputation": {"darkspear": 4}, "unlock_tags": ["future_makjala_dream"]}, "response_pt_BR": "Kataklysma promete voltar sem esquecer quem a acolheu; a comunidade guarda a palavra."},
+          {"id": "ambition", "label_pt_BR": "Dizer que voltará mais poderosa", "flag": "FLG_DEPARTURE_AMBITION", "effects": {"attributes": {"stamina": 1, "agility": 1}, "affinity": {"rakjin": 3}, "unlock_tags": ["ambitious_departure_bark"]}, "response_pt_BR": "Rak’jin responde à ambição com uma provocação afetuosa e promete cobrar a promessa quando ela voltar."},
+          {"id": "charm", "label_pt_BR": "Esconder a preocupação e brincar com todos", "flag": "FLG_DEPARTURE_CHARM", "effects": {"attributes": {"lust": 1}, "affinity": {"general": 2}, "unlock_tags": ["future_vulnerability_scene"]}, "response_pt_BR": "A brincadeira arranca sorrisos, embora Mak’Jala perceba que Kataklysma está escondendo a preocupação."},
+          {"id": "secret", "label_pt_BR": "Partir sem revelar o fragmento oculto", "flag": "FLG_DEPARTURE_SECRET", "requires_flags": ["FLG_FRAGMENT_HIDDEN"], "effects": {"attributes": {"corruption": 2}, "counters": {"world_tension": 3}, "unlock_tags": ["q14_early_branch"]}, "response_pt_BR": "Kataklysma embarca sem contar a verdade. O fragmento continua oculto e a tensão aumenta."}
+        ]}
+      ]
+    },
+    "QST_SEN_009": {
+      "id": "QST_SEN_009",
+      "title_pt_BR": "Suprimentos Desaparecidos",
+      "region": "senjin_village",
+      "prerequisites": ["QST_ECHO_008"],
+      "scenes": ["SCN_SEN_009_DEPOT", "SCN_SEN_009_RUKKA", "SCN_SEN_009_COUNCIL"],
+      "objectives": [
+        {"id":"hear_supply_report","label_pt_BR":"Ouvir o relato sobre os suprimentos desaparecidos","target":1},
+        {"id":"inspect_depot","label_pt_BR":"Investigar o depósito e conferir as provisões","target":1},
+        {"id":"follow_rukka_trail","label_pt_BR":"Seguir as pistas deixadas perto do depósito","target":1},
+        {"id":"discover_rukka_motive","label_pt_BR":"Descobrir por que Ruk’ka levou a comida","target":1},
+        {"id":"resolve_supply_shortage","label_pt_BR":"Resolver a falta de suprimentos com o conselho","target":1}
+      ],
+      "required_branch_groups": ["council_resolution"],
+      "completion": {"all":[
+        {"objective_id":"hear_supply_report","target":1},
+        {"objective_id":"inspect_depot","target":1},
+        {"objective_id":"follow_rukka_trail","target":1},
+        {"objective_id":"discover_rukka_motive","target":1},
+        {"objective_id":"resolve_supply_shortage","target":1}
+      ]},
+      "branch_groups": [{
+        "id":"council_resolution",
+        "required":true,
+        "requires_objectives_completed":["hear_supply_report","inspect_depot","follow_rukka_trail","discover_rukka_motive"],
+        "branches":[
+          {"id":"pay_shortage","label_pt_BR":"Cobrir parte da falta e pedir que Ruk’ka trabalhe pelo restante","flag":"FLG_RUKKA_PROTECTED","percentage_costs":{"gold":20},"effects":{"attributes":{"spirit":2},"trust":{"rukka":20},"reputation":{"local":4}},"progress_on_branch":{"resolve_supply_shortage":1},"response_pt_BR":"Kataklysma entrega uma parte do próprio ouro e combina que Ruk’ka trabalhará para devolver o restante. As provisões são repostas sem expor as crianças."},
+          {"id":"paid_job","label_pt_BR":"Oferecer a Ruk’ka um trabalho remunerado como mensageiro","flag":"FLG_RUKKA_WORK","effects":{"attributes":{"intellect":2},"unlock_tags":["rukka_messenger_npc"]},"progress_on_branch":{"resolve_supply_shortage":1},"response_pt_BR":"O conselho aprova um trabalho remunerado de mensageiro. A solução cobre a necessidade imediata e dá a Ruk’ka um papel útil na comunidade."},
+          {"id":"informant","label_pt_BR":"Recrutar Ruk’ka como informante em troca de ajuda","flag":"FLG_RUKKA_INFORMANT","effects":{"attributes":{"corruption":2},"counters":{"underworld_heat":2},"unlock_tags":["rukka_future_information"]},"progress_on_branch":{"resolve_supply_shortage":1},"response_pt_BR":"Ruk’ka aceita ajudar com informações em troca de apoio para os irmãos. O acordo resolve a falta de provisões, mas aumenta a atenção do submundo."},
+          {"id":"charm","label_pt_BR":"Usar humor e charme para convencer o conselho","flag":"FLG_RUKKA_SOCIAL_SAVE","check":{"attribute":"lust","minimum":30,"pass_result":"success","fail_result":"fail_forward"},"effects_on_check_pass":{"desire":{"council_npc":5},"reputation":{"social":3}},"effects_on_check_fail":{"flags":{"FLG_RUKKA_COUNCIL_SAW_MANIPULATION":true}},"progress_on_branch":{"resolve_supply_shortage":1},"response_pt_BR":"Kataklysma usa humor e charme, sem apagar a responsabilidade de Ruk’ka. As provisões ficam asseguradas; o conselho reage de acordo com a forma como ela conduziu a conversa."}
+        ]
+      }]
+    }
+  }
+}

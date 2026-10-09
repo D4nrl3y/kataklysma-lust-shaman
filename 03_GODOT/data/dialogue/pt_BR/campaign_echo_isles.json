@@ -1,0 +1,86 @@
+{
+  "locale": "pt_BR",
+  "interactions": {
+    "q001_necklace": {"title":"O colar antigo","label":"Colar da mãe","body":"O pingente carrega o cheiro de fumaça e sal. Você o guarda junto ao peito; a escolha sobre o que ele significa ainda é sua."},
+    "q001_bowl": {"title":"A tigela ritual","label":"Tigela ritual","body":"As cinzas formam linhas que lembram os quatro elementos. Uma marca recente interrompe o círculo, como se alguém tivesse tentado apagar um símbolo."},
+    "q001_window": {"title":"A janela para o mar","label":"Olhar para o mar","body":"A maré recua em silêncio. Por um instante, algo azul brilha entre as ondas e some sob a espuma."},
+    "q001_pouch": {"title":"A bolsa de moedas","label":"Bolsa de moedas","body":"Há poucas moedas e uma conta de madeira entalhada. O objeto parece valer mais como lembrança do que como dinheiro."},
+    "q001_choice": {"title":"O primeiro gesto","label":"Decidir o que fazer com o colar","body":"Antes de deixar a cabana, escolha como Kataklysma responde ao legado da mãe."},
+    "q001_exit": {"title":"A saída da cabana","label":"Sair da cabana","body":"A decisão já foi tomada. Você atravessa a soleira e segue até o círculo ritual."},
+    "q001_zekranu": {"title":"Zek’Ranu","label":"Encontrar Zek’Ranu","body":"Zek’Ranu observa o colar e percebe o peso da escolha que você fez. Ele a convida a ouvir os quatro elementos."},
+    "q002_earth": {"title":"Totem da terra","label":"Totem da terra","body":"A pedra responde ao toque com uma vibração baixa. O chão firma sob seus pés."},
+    "q002_fire": {"title":"Totem do fogo","label":"Totem do fogo","body":"A chama cresce sem queimar. O calor parece aguardar uma intenção clara."},
+    "q002_water": {"title":"Totem da água","label":"Totem da água","body":"A água se ergue em um arco breve e retorna à bacia, limpa e fria."},
+    "q002_air": {"title":"Totem do ar","label":"Totem do ar","body":"O vento se desfaz quando você tenta conduzi-lo. O totem recusa deliberadamente sua primeira ordem; insistir sem escutar não funciona."},
+    "q002_answer": {"title":"A pergunta de Zek’Ranu","label":"Responder a Zek’Ranu","body":"“Quando um elemento diz não, o que você faz?” Zek’Ranu espera uma resposta — não uma demonstração de força."},
+    "q003_request": {"title":"Pedido de Mok’Jala","label":"Falar com Mok’Jala","body":"Mok’Jala precisa de quatro porções de carne de javali para a comunidade. Ela pergunta como você pretende resolver isso."},
+    "q003_method": {"title":"Como conseguir a carne","label":"Escolher um método","body":"Você pode caçar, preparar uma emboscada ou conversar com Zal’Kiri sobre o excedente. Nenhum desses caminhos exige atacar outro membro da comunidade."},
+    "q003_hunt": {"title":"Trilhas de javali","label":"Caçar javalis","body":"Rastros frescos cruzam a clareira. Um javali se aproxima; cada vitória rende uma porção de carne."},
+    "q003_trap": {"title":"A armadilha","label":"Preparar a emboscada","body":"Você observa as pegadas, posiciona a isca e espera. A armadilha captura a presa sem transformar a solução em uma luta obrigatória."},
+    "q003_surplus": {"title":"O excedente do caçador","label":"Conversar com Zal’Kiri","body":"Zal’Kiri tem provisões extras. Você pega uma parte sem iniciar combate; se ele descobrir a escolha, a confiança dele pode mudar."},
+    "q003_rite": {"title":"Agradecimento após a caça","label":"Fazer um pequeno ritual","body":"A caça garantiu alimento. Você pode agradecer aos espíritos antes de voltar à aldeia."},
+    "q003_return": {"title":"Retorno a Mok’Jala","label":"Entregar a solução","body":"Mok’Jala avalia o método e o resultado, não apenas a quantidade de carne."},
+    "q004_request": {"title":"O pedido de Taz’Rima","label":"Falar com Taz’Rima","body":"Taz’Rima precisa de seis sapos vivos para um antídoto. O reagente perde qualidade se os animais forem feridos."},
+    "q004_apprentice": {"title":"O aprendiz na praia","label":"Conversar com o aprendiz","body":"O aprendiz já reuniu alguns sapos e está desconfiado. Negociar, mentir ou tentar charme não resolve toda a tarefa: ainda será preciso obter a quantidade restante."},
+    "q004_frogs": {"title":"Captura na lagoa","label":"Capturar um sapo vivo","body":"Você cerca o sapo com cuidado e o recolhe sem machucá-lo. O contador só aumenta para capturas vivas."},
+    "q004_deliver": {"title":"Entrega do antídoto","label":"Levar os sapos a Taz’Rima","body":"Taz’Rima confere os seis sapos vivos e prepara o antídoto conforme a qualidade dos reagentes."},
+    "q005_shore": {"title":"Peixes mortos","label":"Investigar a margem","body":"Os peixes morreram recentemente. Um brilho azulado permanece na água e não acompanha o movimento das ondas."},
+    "q005_spirit": {"title":"Espírito enfraquecido","label":"Encontrar o espírito da água","body":"A presença está debilitada, mas consciente. Ela confirma que a corrupção veio de uma fonte próxima."},
+    "q005_trace": {"title":"Rastro até o covil","label":"Seguir as pistas","body":"Marcas de arrasto, ovos quebrados e resíduos escuros apontam para a caverna costeira."},
+    "q005_choice": {"title":"Como tratar o espírito","label":"Decidir como agir","body":"O espírito aguarda sua resposta. A escolha altera a confiança elemental e a preparação do confronto com o Makrura."},
+    "q006_boss": {"title":"Makrura corrompido","label":"Entrar no covil","body":"Poças condutivas, ovos e uma pedra ritual alimentam a corrupção. Observe o terreno durante as três fases do confronto."},
+    "q006_fragment": {"title":"O fragmento do Eye","label":"Decidir o destino do fragmento","body":"O fragmento ainda pulsa. Você pode destruí-lo, estudá-lo, escondê-lo ou entregá-lo a Zek’Ranu."},
+    "q007_clues": {"title":"Pistas na areia","label":"Examinar as pistas","body":"Pegadas pequenas e lascas do totem seguem até as cabanas. A trilha não indica uma invasão adulta."},
+    "q007_children": {"title":"As crianças","label":"Conversar com as crianças","body":"As crianças admitem que pegaram e quebraram o totem sem entender o dano que causariam. Elas estão assustadas; a conversa permanece não violenta."},
+    "q007_restore": {"title":"Restaurar o totem","label":"Reparar o totem comunitário","body":"Com a verdade conhecida e sua decisão tomada, você recupera e restaura o símbolo da comunidade."},
+    "q008_pack": {"title":"Bagagem e cartas","label":"Separar os pertences","body":"Você reúne o necessário e guarda as cartas. O fragmento e as escolhas anteriores permanecem com você."},
+    "q008_makjala": {"title":"Despedida de Mak’Jala","label":"Despedir-se de Mak’Jala","body":"Mak’Jala acompanha Kataklysma até a trilha e espera que ela diga o que ainda não foi dito."},
+    "q008_rakjin": {"title":"Despedida de Rak’jin","label":"Despedir-se de Rak’jin","body":"Rak’jin tenta esconder a preocupação atrás de uma provocação. A despedida considera o que aconteceu entre vocês."},
+    "q008_choice": {"title":"As últimas palavras","label":"Escolher como partir","body":"Antes de embarcar, decida o que Kataklysma promete — ou prefere esconder — dos que ficam."},
+    "q008_boat": {"title":"A travessia","label":"Embarcar para Sen’jin","body":"A embarcação deixa Echo Isles. O estado da campanha, as relações e as escolhas ficam prontos para a transição de capítulo."}
+  },
+  "interaction_variants": {
+    "q001_exit": [
+      {"flag":"FLG_ECHO_001_REVERENCE","body":"Zek’Ranu nota a reverência e fala com Kataklysma sobre escutar antes de partir."},
+      {"flag":"FLG_ECHO_001_STUDIED","body":"Kataklysma leva consigo a inscrição registrada; Zek’Ranu reconhece a observação no círculo."},
+      {"flag":"FLG_ECHO_001_PRAGMATIC","body":"Ela confere se o colar está seguro antes de cruzar a soleira. A escolha prática não passa despercebida."},
+      {"flag":"FLG_ECHO_001_CONFIDENT","body":"Kataklysma ergue o queixo ao sair. Zek’Ranu percebe a confiança recém-escolhida."}
+    ],
+    "q003_return": [
+      {"branch":{"quest_id":"QST_ECHO_003","group_id":"food_method","branch_id":"hunt"},"body":"Mok’Jala confere as quatro porções e elogia a disposição de Kataklysma para ajudar."},
+      {"branch":{"quest_id":"QST_ECHO_003","group_id":"food_method","branch_id":"trap"},"body":"Mok’Jala reconhece o trabalho da armadilha e a solução que evitou uma luta desnecessária."},
+      {"branch":{"quest_id":"QST_ECHO_003","group_id":"food_method","branch_id":"surplus"},"body":"Mok’Jala aceita o excedente, mas pergunta de onde veio. A decisão poupou a comunidade de ficar sem comida."},
+      {"flag":"FLG_ECHO_003_RITE","append":true,"body":"O pequeno agradecimento aos espíritos também fica registrado na memória de Mok’Jala."}
+    ],
+    "q004_deliver": [
+      {"branch":{"quest_id":"QST_ECHO_004","group_id":"frog_method","branch_id":"catch"},"body":"Taz’Rima confirma as seis capturas; a amostra extra permite preparar o antídoto padrão com reserva."},
+      {"branch":{"quest_id":"QST_ECHO_004","group_id":"frog_method","branch_id":"barter"},"body":"Taz’Rima confirma que a troca foi justa e reconhece a contribuição do aprendiz."},
+      {"branch":{"quest_id":"QST_ECHO_004","group_id":"frog_method","branch_id":"lie"},"body":"Taz’Rima recebe o reagente, mas descobre que o aprendiz registrou uma dívida em seu nome."},
+      {"branch":{"quest_id":"QST_ECHO_004","group_id":"frog_method","branch_id":"charm"},"body":"Taz’Rima comenta a tentativa de charme: ela ajudou apenas parcialmente e não substituiu as capturas restantes."}
+    ],
+    "q007_restore": [
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"protect"},"body":"O totem é reparado sem expor as crianças. A comunidade reconhece a proteção sem apagar a responsabilidade."},
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"confess"},"body":"Depois da confissão, as crianças ajudam a reparar o totem e Mak’Jala acompanha a resolução."},
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"blackmail"},"body":"O totem volta ao lugar, mas as crianças obedecem por medo. A culpa permanece como consequência aberta."},
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"false_blame"},"body":"O totem é substituído e a história pública é preservada; Zal’Kiri continua desconfiado da acusação."}
+    ],
+    "q008_makjala": [
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"protect"},"body":"Ela agradece por Kataklysma ter protegido as crianças sem abandonar a comunidade."},
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"confess"},"body":"Ela lembra que as crianças puderam assumir o erro e ajudar a reparar o totem."},
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"blackmail"},"body":"Ela sente a tensão deixada pelo segredo usado como moeda e pede que Kataklysma pense no que fará com essa culpa."},
+      {"branch":{"quest_id":"QST_ECHO_007","group_id":"children_resolution","branch_id":"false_blame"},"body":"Ela não confronta Kataklysma ali, mas a despedida fica atravessada pela história que não convenceu Zal’Kiri."},
+      {"minimum_affinity":{"npc":"mokjala","value":5},"append":true,"body":"A confiança construída durante a caçada torna a despedida mais próxima."}
+    ],
+    "q008_rakjin": [
+      {"flag":"FLG_FRAGMENT_STUDIED","body":"Rak’jin pergunta se a pesquisa do fragmento vai mesmo ficar segura com Zek’Ranu."},
+      {"flag":"FLG_FRAGMENT_HIDDEN","body":"Rak’jin percebe que Kataklysma está guardando um segredo, mas não a força a confessar diante de todos."},
+      {"flag":"FLG_FRAGMENT_DESTROYED","body":"Rak’jin vê que a decisão sobre o fragmento pesou e tenta aliviar a partida com uma piada."},
+      {"minimum_affinity":{"npc":"rakjin","value":3},"append":true,"body":"A provocação termina num cumprimento sincero: ele espera que Kataklysma volte mais forte."}
+    ]
+  },
+  "branch_results": {
+    "success":"A escolha fica registrada e seus efeitos passam a valer.",
+    "partial_success":"A tentativa funciona apenas em parte; ainda será necessário completar a tarefa.",
+    "fail_forward":"A conversa não dá o resultado ideal, mas a campanha continua por um caminho alternativo."
+  }
+}

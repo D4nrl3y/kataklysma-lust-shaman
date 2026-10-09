@@ -24,13 +24,29 @@ The eight walk frames are ordered as contact, down, passing, up, contact-inverse
 - `velocity.y < 0` routes to `walk_back`; `velocity.y > 0` to `walk_front`.
 - Stopping preserves the last direction and selects the matching idle animation.
 - Texture filtering remains nearest-neighbor.
-- World scale is provisionally `0.26`; foot collision is `20×12` at `48 px` below the actor origin. Current cabin/training screenshots were reviewed, but the road-to-character width target was not measured, so scale is not declared finally approved.
+- Final Phase 1 calibration: Kataklysma and Zek'Ranu scale `0.22`; player foot collision `20×12` at `40 px` below the actor origin; camera zoom `1.18`.
+- Measured on the current map: sprite width `37.62` world px / road width `95.00` world px = `2.53:1`, within the `2.5–3.0:1` target. Cabin and training-area gameplay captures were reviewed.
 
 ## Dialogue assets
 
 - Kataklysma: `01_ASSETS/kataklysma/ui/portraits/neutral/kataklysma_portrait_neutral.png` — existing approved bust.
 - Zek'Ranu: `01_ASSETS/kataklysma/ui/portraits/neutral/zekranu_portrait_dedicated_v002.png` — separately generated square bust illustration based on the identity-locked render; replaces the earlier crop in the demo.
-- Dialogue PT-BR prototype: `03_GODOT/data/dialogue/pt_BR/quest_01.json`; marked as a non-canonical prototype and not loaded by the active runtime yet.
+- Canonical Phase 2 PT-BR dialogue: `03_GODOT/data/dialogue/pt_BR/campaign_echo_isles.json`; integrated with quest interactions, branches and conditional responses. The older `quest_01.json` remains a labeled legacy prototype.
+- Non-combat encounter strings: `03_GODOT/data/dialogue/pt_BR/encounters.json`.
+- Other Echo Isles NPC speakers currently use their integrated gameplay sprite as a temporary dialogue crop, not a dedicated bust portrait. This is documented asset polish, not a final-art approval.
+
+## Sen’jin / QST_SEN_009 — Phase 3
+
+| Asset/system | Path or data | Current status |
+|---|---|---|
+| Sen’jin map background | `01_ASSETS/kataklysma/maps/senjin_village/backgrounds/senjin_village_background_concept_v001.png` | Integrated into the runtime zone; single flattened concept image, not a modular/artist-final map |
+| Walkability and blockers | `03_GODOT/data/walkability/senjin_village.json` | 10 whitelist regions, 26 named blocker polygons, five-point foot probes, physical `CollisionPolygon2D` bodies; spawn `[1325, 690]`; 6,932 whitelist and 6,807 physical grid cells reachable in current test |
+| Foreground foliage | `01_ASSETS/kataklysma/maps/senjin_village/foregrounds/senjin_foreground_vegetation_candidate_v001.png` | Generated transparent pixel-art candidate (1536×1024 RGBA), integrated at sprite scale 0.08 over an existing blocked vegetation area; visually checked in Godot, not final-art approved |
+| Quest and interaction data | `03_GODOT/data/campaign/echo_isles.json`; `senjin_village_interactions.json`; `03_GODOT/data/dialogue/pt_BR/campaign_senjin_village.json` | Q009, five anchors, PT-BR arrival/investigation/resolution dialogue and four council outcomes are runtime-integrated |
+| Regional events | `03_GODOT/data/encounter_tables.json` | Sen’jin plaza/dock regions; named NPC walk-by, supply issue, alchemy request and Makrura ambush entries; functional handler tests pass |
+| Visual/functional evidence | `docs/qa/screenshots/phase3/` | Eight current GUI captures; see the Phase 3 section in `03_GODOT/QA_REPORT.md` |
+
+The map's collision polygons are hand-authored against the concept image. The automated route/connectivity checks pass, but a full human visual traversal of shore, waterfall/cliffs, village, stairs and dock remains a gate item. Candidate foliage must not be described as approved final art.
 
 ## Typography
 
@@ -46,19 +62,21 @@ The eight walk frames are ordered as contact, down, passing, up, contact-inverse
 
 ## Walkability and NPC behavior
 
-- `demo_game.gd` defines ten walkable polygons for the training clearing, cabin access, north trail, mentor route, totem approach, cave road, bridge, stairs and beaches, plus a central-rock exclusion, seven local training-prop footprints and map/NPC boundaries.
-- The player's five foot probes (center and four corners) must all remain inside the whitelist and outside exclusions. F10 shows the geometry only in debug; current `04_walkable_debug.png` reveals edge/prop mismatches, so the geometry is not final.
-- The current boundary suite passes 15 named walkability points and 7 blocked targets; the smoke test also checks six representative training-prop footprints. It does not prove every visible prop has a physical collider or replace manual edge traversal.
-- Zek'Ranu has a six-point ambient route around his current station, waits between steps, pauses when Kataklysma approaches, and keeps his interaction area, marker, name and minimap icon attached to his live position; route QA is still pending.
+- `03_GODOT/data/walkability/echo_isles.json` defines 16 whitelist polygons and 17 named blocker polygons for the background-image map. Runtime creates physical collision polygons for blockers; the player's five foot probes must remain inside the whitelist and outside exclusions.
+- F10 overlay is off by default and shown only for QA. The current `04_walkable_debug.png` was visually reviewed against the route art; route traversal plus deliberate water, cliff, rock, vegetation, stair, bridge and inaccessible-edge probes pass the Phase 1 criteria.
+- Current boundary suite passes 15 named walkability points and 7 physical blocked-target probes; acceptance also physically traverses seven routes and checks representative training props.
+- Zek'Ranu has a six-point ambient route, waits between steps, pauses when Kataklysma approaches and keeps interaction/collision/name/marker/minimap anchors synced. A 20-second deterministic routine test passes.
 - Options persist separate bindings for four movement directions, interaction/confirm, and pause; arrow keys and the default interaction alternatives remain available.
-- The current QA captures are under `docs/qa/screenshots/01_*.png` through `22_*.png`. Older `*_release_*.png` files are historical and must not be used to approve this polygon set.
+- Phase 1 QA captures are under `docs/qa/screenshots/`; the current Phase 2 campaign walkthrough (21 images, 1280×720) is under `docs/qa/screenshots/phase2/`. Older `*_release_*.png` files are historical and do not approve the current build.
 
 ## Remaining asset requirements
 
-- Release-approved unwatermarked Echo Isles score/ambience and authored SFX: OPEN, P1.
-- Full visual review and final polygon/obstacle adjustments for shorelines, cliffs, vegetation, props and small islands: OPEN, P0.
-- Options persistence/remapping, alternate-resolution typography and Zek'Ranu route need broader Godot QA. His dedicated dialogue portrait has been rendered and visually checked in-game.
+- Release-approved unwatermarked Echo Isles score/ambience and authored SFX: OPEN, P1 (KI-002). Runtime playback/routing passed; rights and final authoring did not.
+- Phase 1 walkability, options, scale and Zek'Ranu routine acceptance: COMPLETE; see `03_GODOT/QA_REPORT.md`.
+- Phases 1 and 2 are complete. Sen’jin/`QST_SEN_009` and cross-zone persistence are implemented and automated-tested; Phase 3 remains open for full human visual route review, independent playtest and clean exported-install validation (KI-011/KI-013).
+- `01_ASSETS/kataklysma/static_objects/CANDIDATE/echo_isles_quest_props_candidate_sheet_v001.png` provides the 20 atlas props used by all 37 Phase 2 interaction points. The file is explicitly a candidate atlas, not final approved art.
+- Phase 2 also integrates the candidate apprentice and children actors, and a static wild-boar candidate (`entity_wild_boar_candidate_v002.png`) in the Q003 hunt path. The boar is a one-frame combat sprite; animation/style approval remains open (KI-012).
 
 ## Roadmap M30 — coverage beyond the Echo Isles prototype
 
-The static inventory for `QST_ECHO_001`–`QST_ECHO_008` and `QST_SEN_009` is documented in `docs/production/M30_ASSET_COVERAGE.md`. Key gaps include a playable Sen'jin scene, generic child/apprentice/depot/council actors, dedicated dialogue portraits beyond Zek'Ranu, boar and common-enemy sprites, interactive quest props, and canonical quest dialogue. Existing NPC renders, CG sequences and concept backgrounds remain produced assets until their correct quest beat is integrated and QA-approved.
+The current inventory and integration evidence for `QST_ECHO_001`–`QST_ECHO_008` and Sen’jin `QST_SEN_009` are documented in `docs/production/M30_ASSET_COVERAGE.md` and `03_GODOT/QA_REPORT.md`. Later regions, final portraits for every speaker, approved enemy animation sets and release audio remain open. Candidate assets are not described as final; presence, integration and art approval are tracked separately.

@@ -38,4 +38,4 @@ Esta estimativa não declara que 35% já foi produzido. O progresso concluído p
 
 ## Reestimativa
 
-Reestimar os pacotes após fechar a fundação técnica da Fase 1, construir o mapa de Sen’jin e medir uma quest canônica de ponta a ponta. Se o intervalo mudar, registrar uma nova versão; não alterar pontos retroativamente para manter o rótulo M30.
+Reestimar os pacotes após construir o mapa de Sen’jin e medir uma quest canônica de ponta a ponta. A fundação técnica de Echo Isles (Fase 1) foi fechada em 2026-10-08, mas não é amostra suficiente para validar a estimativa de esforço da campanha. Se o intervalo mudar, registrar uma nova versão; não alterar pontos retroativamente para manter o rótulo M30.

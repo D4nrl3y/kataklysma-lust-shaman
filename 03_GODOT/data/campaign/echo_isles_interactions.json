@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "region": "echo_isles",
+  "interact_radius": 92,
+  "points": [
+    {"id":"q001_necklace","quest_id":"QST_ECHO_001","scene":"cabin","position":[1205,680],"action":"objective","prop_ids":["heirloom_necklace"],"objectives":[{"id":"inspect_mothers_necklace","amount":1}],"dialogue_key":"q001_necklace"},
+    {"id":"q001_bowl","quest_id":"QST_ECHO_001","scene":"cabin","position":[1280,385],"action":"objective","prop_ids":["ritual_bowl"],"objectives":[{"id":"inspect_ritual_bowl","amount":1}],"dialogue_key":"q001_bowl"},
+    {"id":"q001_window","quest_id":"QST_ECHO_001","scene":"cabin","position":[835,300],"action":"objective","objectives":[{"id":"look_through_sea_window","amount":1}],"dialogue_key":"q001_window"},
+    {"id":"q001_pouch","quest_id":"QST_ECHO_001","scene":"cabin","position":[1370,330],"action":"objective","prop_ids":["coin_pouch"],"objectives":[{"id":"inspect_coin_pouch","amount":1}],"dialogue_key":"q001_pouch"},
+    {"id":"q001_choice","quest_id":"QST_ECHO_001","scene":"cabin","position":[675,645],"action":"branch","group_id":"awakening_choice","dialogue_key":"q001_choice"},
+    {"id":"q001_exit","quest_id":"QST_ECHO_001","scene":"cabin","position":[832,748],"action":"exit_cabin","dialogue_key":"q001_exit"},
+    {"id":"q001_zekranu","quest_id":"QST_ECHO_001","scene":"echo_isles","position":[830,365],"action":"finish","speaker":"zekranu","speaker_offset":[40,0],"objectives":[{"id":"meet_zekranu","amount":1}],"dialogue_key":"q001_zekranu"},
+
+    {"id":"q002_earth","quest_id":"QST_ECHO_002","scene":"echo_isles","position":[1120,144],"action":"objective","prop_ids":["earth_totem"],"objectives":[{"id":"earth_totem","amount":1}],"dialogue_key":"q002_earth"},
+    {"id":"q002_fire","quest_id":"QST_ECHO_002","scene":"echo_isles","position":[1160,152],"action":"objective","prop_ids":["fire_totem"],"objectives":[{"id":"fire_totem","amount":1}],"dialogue_key":"q002_fire"},
+    {"id":"q002_water","quest_id":"QST_ECHO_002","scene":"echo_isles","position":[1224,168],"action":"objective","prop_ids":["water_totem"],"objectives":[{"id":"water_totem","amount":1}],"dialogue_key":"q002_water"},
+    {"id":"q002_air","quest_id":"QST_ECHO_002","scene":"echo_isles","position":[1296,320],"action":"objective","prop_ids":["air_totem"],"objectives":[{"id":"air_totem","amount":1},{"id":"air_refusal_observed","amount":1}],"dialogue_key":"q002_air"},
+    {"id":"q002_answer","quest_id":"QST_ECHO_002","scene":"echo_isles","position":[830,365],"action":"branch_finish","group_id":"elemental_response","objectives":[{"id":"answer_zekranu","amount":1}],"speaker":"zekranu","speaker_offset":[40,0],"dialogue_key":"q002_answer"},
+
+    {"id":"q003_request","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[430,355],"action":"objective","objectives":[{"id":"receive_mokjala_request","amount":1}],"speaker":"mokjala","speaker_offset":[-52,0],"dialogue_key":"q003_request"},
+    {"id":"q003_method","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[430,355],"action":"branch","group_id":"food_method","speaker":"mokjala","speaker_offset":[-52,0],"dialogue_key":"q003_method"},
+    {"id":"q003_hunt","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[496,400],"action":"boar_hunt","prop_ids":["boar_tracks"],"speaker":"mokjala","speaker_offset":[-52,0],"dialogue_key":"q003_hunt"},
+    {"id":"q003_trap","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[536,408],"action":"trap","prop_ids":["rope_snare"],"prop_offsets":[[60,-12]],"objectives":[{"id":"trap_meat","amount":1}],"dialogue_key":"q003_trap"},
+    {"id":"q003_surplus","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[600,440],"action":"objective","requires_branch":{"group_id":"food_method","branch_id":"surplus"},"prop_ids":["boar_meat"],"prop_offsets":[[48,8]],"objectives":[{"id":"surplus_meat","amount":1}],"speaker":"zalkiri","speaker_offset":[16,16],"dialogue_key":"q003_surplus"},
+    {"id":"q003_rite","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[600,440],"action":"branch","group_id":"after_hunt","speaker":"mokjala","speaker_offset":[-48,-8],"dialogue_key":"q003_rite"},
+    {"id":"q003_return","quest_id":"QST_ECHO_003","scene":"echo_isles","position":[430,355],"action":"finish","objectives":[{"id":"return_to_mokjala","amount":1}],"speaker":"mokjala","speaker_offset":[-52,0],"dialogue_key":"q003_return"},
+
+    {"id":"q004_request","quest_id":"QST_ECHO_004","scene":"echo_isles","position":[620,550],"action":"objective","objectives":[{"id":"speak_to_tazrima","amount":1}],"speaker":"tazrima","speaker_offset":[-40,-24],"dialogue_key":"q004_request"},
+    {"id":"q004_apprentice","quest_id":"QST_ECHO_004","scene":"echo_isles","position":[640,552],"action":"objective_then_branch","requires_objectives":["speak_to_tazrima"],"objectives":[{"id":"meet_apprentice","amount":1}],"group_id":"frog_method","speaker":"apprentice","speaker_offset":[-8,-64],"dialogue_key":"q004_apprentice"},
+    {"id":"q004_frogs","quest_id":"QST_ECHO_004","scene":"echo_isles","position":[624,552],"action":"capture_frog","requires_branch_group":"frog_method","prop_ids":["live_frog"],"prop_offsets":[[70,8]],"objectives":[{"id":"live_frogs","amount":1}],"dialogue_key":"q004_frogs"},
+    {"id":"q004_deliver","quest_id":"QST_ECHO_004","scene":"echo_isles","position":[620,550],"action":"finish","requires_objectives":["live_frogs"],"prop_ids":["reagent_basket"],"objectives":[{"id":"deliver_frogs","amount":1}],"speaker":"tazrima","speaker_offset":[-40,-24],"dialogue_key":"q004_deliver"},
+
+    {"id":"q005_shore","quest_id":"QST_ECHO_005","scene":"echo_isles","position":[648,536],"action":"objective","prop_ids":["dead_fish"],"prop_offsets":[[-64,16]],"objectives":[{"id":"inspect_shore","amount":1}],"dialogue_key":"q005_shore"},
+    {"id":"q005_spirit","quest_id":"QST_ECHO_005","scene":"echo_isles","position":[648,536],"action":"objective","requires_objectives":["inspect_shore"],"objectives":[{"id":"meet_water_spirit","amount":1}],"speaker":"water_spirit","speaker_offset":[-16,-48],"dialogue_key":"q005_spirit"},
+    {"id":"q005_trace","quest_id":"QST_ECHO_005","scene":"echo_isles","position":[1440,248],"action":"objective","prop_ids":["contamination_vial"],"requires_objectives":["meet_water_spirit"],"objectives":[{"id":"trace_lair","amount":1}],"dialogue_key":"q005_trace"},
+    {"id":"q005_choice","quest_id":"QST_ECHO_005","scene":"echo_isles","position":[648,536],"action":"branch_finish","group_id":"spirit_treatment","speaker":"water_spirit","speaker_offset":[-16,-48],"dialogue_key":"q005_choice"},
+
+    {"id":"q006_boss","quest_id":"QST_ECHO_006","scene":"echo_isles","position":[1440,216],"action":"makrura_boss","prop_ids":["conductive_pool","makrura_eggs","ritual_stone"],"prop_offsets":[[-78,12],[0,32],[78,12]],"dialogue_key":"q006_boss"},
+    {"id":"q006_fragment","quest_id":"QST_ECHO_006","scene":"echo_isles","position":[1440,216],"action":"branch_finish","group_id":"fragment_fate","objectives":[{"id":"fragment_decided","amount":1}],"dialogue_key":"q006_fragment"},
+
+    {"id":"q007_clues","quest_id":"QST_ECHO_007","scene":"echo_isles","position":[256,176],"action":"objective","prop_ids":["boar_tracks"],"prop_offsets":[[-56,20]],"objectives":[{"id":"find_clues","amount":1}],"dialogue_key":"q007_clues"},
+    {"id":"q007_children","quest_id":"QST_ECHO_007","scene":"echo_isles","position":[312,192],"action":"objective_then_branch","requires_objectives":["find_clues"],"objectives":[{"id":"speak_with_children","amount":1}],"group_id":"children_resolution","speaker":"children","dialogue_key":"q007_children"},
+    {"id":"q007_restore","quest_id":"QST_ECHO_007","scene":"echo_isles","position":[256,176],"action":"finish","prop_ids":["broken_totem"],"prop_offsets":[[58,8]],"objectives":[{"id":"restore_totem","amount":1}],"dialogue_key":"q007_restore"},
+
+    {"id":"q008_pack","quest_id":"QST_ECHO_008","scene":"echo_isles","position":[830,365],"action":"objective","prop_ids":["travel_pack"],"prop_offsets":[[-70,-8]],"objectives":[{"id":"pack_belongings","amount":1}],"speaker":"zekranu","speaker_offset":[40,0],"dialogue_key":"q008_pack"},
+    {"id":"q008_makjala","quest_id":"QST_ECHO_008","scene":"echo_isles","position":[430,355],"action":"objective","requires_objectives":["pack_belongings"],"objectives":[{"id":"farewell_makjala","amount":1}],"speaker":"makjala","speaker_offset":[-52,0],"dialogue_key":"q008_makjala"},
+    {"id":"q008_rakjin","quest_id":"QST_ECHO_008","scene":"echo_isles","position":[600,440],"action":"objective","requires_objectives":["pack_belongings"],"objectives":[{"id":"farewell_rakjin","amount":1}],"speaker":"rakjin","speaker_offset":[16,16],"dialogue_key":"q008_rakjin"},
+    {"id":"q008_choice","quest_id":"QST_ECHO_008","scene":"echo_isles","position":[1504,480],"action":"branch","group_id":"departure_choice","dialogue_key":"q008_choice"},
+    {"id":"q008_boat","quest_id":"QST_ECHO_008","scene":"echo_isles","position":[1528,504],"marker_position":[1400,660],"radius":210,"action":"depart","prop_ids":["outrigger_boat"],"objectives":[{"id":"board_boat","amount":1}],"dialogue_key":"q008_boat"}
+  ]
+}

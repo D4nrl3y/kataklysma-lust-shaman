@@ -1,17 +1,24 @@
 extends SceneTree
 
 var failures: Array[String] = []
+var test_save_path := ""
+var test_settings_path := ""
 
 func _init() -> void:
     call_deferred("_run")
 
 func _run() -> void:
+    var nonce := str(Time.get_ticks_usec())
+    test_save_path = "user://demo_smoke_%s.json" % nonce
+    test_settings_path = "user://demo_smoke_%s.cfg" % nonce
     var packed_scene: PackedScene = load("res://03_GODOT/scenes/main.tscn")
     if packed_scene == null:
         failures.append("main scene could not be loaded")
         _finish()
         return
     var demo = packed_scene.instantiate()
+    demo.save_path_override = test_save_path
+    demo.options_settings_path_override = test_settings_path
     root.add_child(demo)
     await process_frame
     demo.audio_manager.enabled = false
@@ -32,6 +39,8 @@ func _run() -> void:
         demo.options_menu._apply_settings(false)
         if not bool(demo.minimap_panel.visible):
             failures.append("minimap option on")
+    if demo.campaign_runtime == null or demo.campaign_runtime.definition.get("quest_order", []).size() != 9:
+        failures.append("canonical campaign runtime includes QST_ECHO_001–008 and QST_SEN_009")
     demo._start_new_game()
     if not bool(demo.world_started):
         failures.append("new game start")
@@ -69,7 +78,7 @@ func _run() -> void:
             failures.append(directional_name + " frame count")
         elif demo.player.sprite_frames.get_frame_texture(directional_name, 0) == demo.player.sprite_frames.get_frame_texture("walk_front", 0):
             failures.append(directional_name + " uses front fallback")
-    for walkable_position in [demo.NPC_POSITION, demo.OBJECTIVE_POSITION, Vector2(340.0, 320.0), Vector2(1380.0, 192.0), Vector2(1400.0, 482.0)]:
+    for walkable_position in [demo.NPC_POSITION, demo.OBJECTIVE_POSITION, Vector2(340.0, 320.0), Vector2(1380.0, 192.0), Vector2(1488.0, 464.0)]:
         if not bool(demo._is_walkable_position(walkable_position)):
             failures.append("walkable sample " + str(walkable_position))
     for prop_ground in [Vector2(381.0, 360.0), Vector2(420.0, 346.0), Vector2(470.0, 332.0), Vector2(505.0, 323.0), Vector2(573.0, 346.0), Vector2(596.0, 359.0)]:
@@ -139,8 +148,13 @@ func _run() -> void:
     if bool(demo.paused) or bool(demo.pause_layer.visible):
         failures.append("pause resume")
 
-    for noncombat_type in ["npc_walkby", "resource_find", "spirit_omen"]:
-        demo._start_encounter({"type": noncombat_type, "actors": []})
+    var event_cases := {
+        "npc_walkby": ["zalkiri", "rakjin", "makjala"],
+        "resource_find": ["herb_patch", "tide_pool"],
+        "spirit_omen": ["spirit_elemental"],
+    }
+    for noncombat_type in event_cases:
+        demo._start_encounter({"type": noncombat_type, "actors": event_cases[noncombat_type]})
         if bool(demo.encounter_active):
             failures.append("non-combat event opened battle: " + noncombat_type)
 
@@ -161,16 +175,35 @@ func _run() -> void:
     if bool(demo.encounter_active):
         failures.append("encounter resolution")
 
+    demo._start_encounter({"type": "monster_ambush", "actors": ["wild_boar"]})
+    if not bool(demo.encounter_active) or str(demo.combat_system.enemy.get("id", "")) != "wild_boar":
+        failures.append("wild boar common encounter routing")
+    if demo.combat_enemy_name_label.text != "JAVALI SELVAGEM":
+        failures.append("wild boar combat name label")
+    if demo.combat_enemy_sprite.sprite_frames.get_frame_count("idle") != 1:
+        failures.append("wild boar candidate sprite frame integration")
+    elif demo.combat_enemy_sprite.sprite_frames.get_frame_texture("idle", 0) == null:
+        failures.append("wild boar candidate texture missing")
+    demo.encounter_panel.visible = false
+    demo.encounter_active = false
+    demo.combat_enemy_sprite.visible = false
+    demo.combat_player_sprite.visible = false
+
     var saved_quest_state: String = str(demo.quest_state)
     var saved_attributes: Dictionary = demo.attributes.duplicate(true)
     var saved_affinity: Dictionary = demo.npc_affinity.duplicate(true)
     var saved_flags: Dictionary = demo.story_flags.duplicate(true)
     var saved_pois: Dictionary = demo.discovered_pois.duplicate(true)
+    demo.campaign_runtime.accept_quest("QST_ECHO_001")
+    demo.campaign_runtime.resolve_branch("QST_ECHO_001", "awakening_choice", "studied")
+    demo.campaign_runtime.increment_objective("QST_ECHO_001", "meet_zekranu")
+    var campaign_flag_before_save: bool = bool(demo.campaign_runtime.get_flag("FLG_ECHO_001_STUDIED"))
     demo._save_game()
     var saved_position: Vector2 = demo.player.position
     demo.player.position = demo.NPC_POSITION
     demo.attributes["spirit"] = -1
     demo.quest_state = "available"
+    demo.campaign_runtime.configure(demo.campaign_definition)
     demo._load_game()
     if demo.player.position != saved_position:
         failures.append("save/load position")
@@ -178,14 +211,17 @@ func _run() -> void:
         failures.append("save/load quest and attributes")
     if not _numeric_dictionaries_match(demo.npc_affinity, saved_affinity) or demo.story_flags != saved_flags or demo.discovered_pois != saved_pois:
         failures.append("save/load affinity, flags and POIs")
+    if not campaign_flag_before_save or not demo.campaign_runtime.get_flag("FLG_ECHO_001_STUDIED") or demo.campaign_runtime.get_objective_progress("QST_ECHO_001", "meet_zekranu") != 1:
+        failures.append("save/load canonical campaign branches and objective state")
 
-    if demo.encounter_manager.try_roll(demo.ZONE_ID, false):
+    if demo.encounter_manager.try_roll(demo.ZONE_ID, Vector2(450.0, 390.0)):
         failures.append("zone id was incorrectly accepted as encounter table")
+    demo.player.position = Vector2(450.0, 350.0)
     for _step in 18:
         demo.encounter_manager.register_step()
-    if not demo.encounter_manager.try_roll("echo_isles_day", false):
+    if not demo.encounter_manager.try_roll("echo_isles_day", Vector2(450.0, 390.0)):
         failures.append("Echo Isles encounter table did not roll")
-    elif bool(demo.encounter_active) and str(demo.combat_system.enemy.get("id", "")) not in ["water_spirit_weakened", "corrupted_makrura"]:
+    elif bool(demo.encounter_active) and str(demo.combat_system.enemy.get("id", "")) not in ["water_spirit_weakened", "corrupted_makrura", "wild_boar"]:
         failures.append("encounter selected an unsupported combat actor")
 
     if failures.is_empty():
@@ -212,4 +248,10 @@ func _numeric_dictionaries_match(actual: Dictionary, expected: Dictionary) -> bo
     return true
 
 func _finish() -> void:
+    for path in [test_save_path, test_settings_path]:
+        if path.is_empty():
+            continue
+        var absolute_path := ProjectSettings.globalize_path(path)
+        if FileAccess.file_exists(absolute_path):
+            DirAccess.remove_absolute(absolute_path)
     quit(0 if failures.is_empty() else 1)

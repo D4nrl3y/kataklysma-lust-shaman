@@ -2,7 +2,7 @@
 
 Use este roteiro com alguém que não participou da implementação. A build é interna e ainda não está aprovada para divulgação pública.
 
-- Executável Windows x86_64: `Builds/Phase3_Internal_Review_2026-10-08/Kataklysma.exe` (659,241,336 bytes; SHA-256 `0D6CB013E49551E270D441273A1E540F79CC1DF2E7B97835A367F8736E918DF6`).
+- Executável Windows x86_64: `../Builds/Phase3_Internal_Review_2026-10-08/Kataklysma.exe` (659,241,336 bytes; SHA-256 `0D6CB013E49551E270D441273A1E540F79CC1DF2E7B97835A367F8736E918DF6`). Ele fica fora do repositório, ao lado da pasta `Kataklysma_Dev_Kit`, e não está incluído no clone Git; entregue essa build separadamente ao testador. Em outra instalação, confirme o SHA-256 acima antes do teste.
 - O executável não possui assinatura digital. Se o Windows bloquear a execução, pare e registre o aviso; não tente contornar o bloqueio.
 
 ## Registro

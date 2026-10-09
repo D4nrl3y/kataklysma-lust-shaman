@@ -4,6 +4,7 @@
   "map_size": [1672, 941],
   "calibration": {
     "player_scale": 0.22,
+    "cabin_player_scale": 0.26,
     "npc_scale": 0.22,
     "player_foot_shape": [20, 12],
     "player_foot_offset": [0, 40],

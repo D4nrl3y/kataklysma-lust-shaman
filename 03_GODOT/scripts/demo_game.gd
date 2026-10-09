@@ -167,6 +167,10 @@ var campaign_dialogue_context: Dictionary = {}
 var campaign_pending_encounter: Dictionary = {}
 var campaign_mode := false
 var campaign_scene_id := "echo_isles"
+var player_base_scale := 0.22
+var player_frame_geometry: Dictionary = {}
+var player_side_reference_height := 0.0
+var player_reference_floor_offset := 0.0
 var active_zone_id := "echo_isles"
 var active_map_texture_path := MAP_TEXTURE
 var active_encounter_table_id := ENCOUNTER_TABLE_ID
@@ -210,6 +214,7 @@ var debug_walkability_visible := false
 
 const PLAYER_START := Vector2(410.0, 390.0)
 const NPC_POSITION := Vector2(830.0, 365.0)
+const CABIN_EXIT_SPAWN := Vector2(784.0, 336.0)
 const OBJECTIVE_POSITION := Vector2(600.0, 535.0)
 const MOVE_SPEED := 190.0
 const NPC_MOVE_SPEED := 34.0
@@ -326,11 +331,16 @@ func _build_world() -> void:
 
     player = _make_actor("Kataklysma", PLAYER_IDLE_DIR, PLAYER_WALK_DIR, "kataklysma")
     player.position = PLAYER_START
-    var actor_scale := float(CALIBRATION.get("player_scale", 0.26))
+    var actor_scale := float(CALIBRATION.get("player_scale", 0.22))
+    player_base_scale = actor_scale
     player.scale = Vector2.ONE * actor_scale
     player.z_index = 5
     entities_root.add_child(player)
+    _cache_player_frame_geometry()
+    player.animation_changed.connect(_apply_player_frame_calibration)
+    player.frame_changed.connect(_apply_player_frame_calibration)
     player.play("idle")
+    _apply_player_frame_calibration()
     last_position = player.position
 
     camera = Camera2D.new()
@@ -742,6 +752,54 @@ func _copy_animation(frames: SpriteFrames, source_name: String, target_name: Str
     frames.set_animation_loop(target_name, frames.get_animation_loop(source_name))
     for frame_index in range(frames.get_frame_count(source_name)):
         frames.add_frame(target_name, frames.get_frame_texture(source_name, frame_index))
+
+func _cache_player_frame_geometry() -> void:
+    player_frame_geometry.clear()
+    player_side_reference_height = 0.0
+    if not player or not player.sprite_frames:
+        return
+    for animation_name in player.sprite_frames.get_animation_names():
+        var animation_frames: Array[Dictionary] = []
+        for frame_index in range(player.sprite_frames.get_frame_count(animation_name)):
+            var texture := player.sprite_frames.get_frame_texture(animation_name, frame_index)
+            if not texture:
+                animation_frames.append({})
+                continue
+            var image := texture.get_image()
+            var used_rect := image.get_used_rect() if image else Rect2i(Vector2i.ZERO, Vector2i(texture.get_size()))
+            if used_rect.size == Vector2i.ZERO:
+                used_rect = Rect2i(Vector2i.ZERO, Vector2i(texture.get_size()))
+            animation_frames.append({"rect":used_rect, "texture_size":texture.get_size()})
+            if animation_name in [&"idle_left", &"idle_right", &"walk_left", &"walk_right"]:
+                player_side_reference_height = maxf(player_side_reference_height, float(used_rect.size.y))
+        player_frame_geometry[str(animation_name)] = animation_frames
+    var reference_frames: Array = player_frame_geometry.get("idle_front", [])
+    if reference_frames.is_empty():
+        reference_frames = player_frame_geometry.get("idle", [])
+    if not reference_frames.is_empty() and not reference_frames[0].is_empty():
+        var reference_rect: Rect2i = reference_frames[0]["rect"]
+        var reference_size: Vector2 = reference_frames[0]["texture_size"]
+        player_reference_floor_offset = float(CALIBRATION.get("player_scale", 0.22)) * (float(reference_rect.end.y) - reference_size.y * 0.5)
+
+func _apply_player_frame_calibration() -> void:
+    if not is_instance_valid(player) or not player.sprite_frames:
+        return
+    var animation_name := str(player.animation)
+    var animation_frames: Array = player_frame_geometry.get(animation_name, [])
+    if player.frame < 0 or player.frame >= animation_frames.size() or animation_frames[player.frame].is_empty():
+        player.scale = Vector2.ONE * player_base_scale
+        player.offset = Vector2.ZERO
+        return
+    var frame_geometry: Dictionary = animation_frames[player.frame]
+    var used_rect: Rect2i = frame_geometry["rect"]
+    var texture_size: Vector2 = frame_geometry["texture_size"]
+    var frame_factor := 1.0
+    if animation_name in ["idle_left", "idle_right", "walk_left", "walk_right"] and used_rect.size.y > 0:
+        frame_factor = player_side_reference_height / float(used_rect.size.y)
+    var effective_scale := player_base_scale * frame_factor
+    player.scale = Vector2.ONE * effective_scale
+    var frame_floor_offset := float(used_rect.end.y) - texture_size.y * 0.5
+    player.offset = Vector2(0.0, player_reference_floor_offset / effective_scale - frame_floor_offset)
 
 func _build_hud() -> void:
     var hud := CanvasLayer.new()
@@ -1265,7 +1323,9 @@ func _set_campaign_scene(scene_id: String, spawn_position := Vector2(-1.0, -1.0)
         body.collision_layer = 0 if in_cabin else 1
         body.collision_mask = 0 if in_cabin else 1
     if player:
-        player.scale = Vector2.ONE * float(CALIBRATION.get("player_scale", 0.22))
+        var outdoor_player_scale := float(CALIBRATION.get("player_scale", 0.22))
+        player_base_scale = float(CALIBRATION.get("cabin_player_scale", outdoor_player_scale)) if in_cabin else outdoor_player_scale
+        _apply_player_frame_calibration()
     if player_collision_body:
         var foot_collider := player_collision_body.get_node_or_null("PlayerFootCollider") as CollisionShape2D
         if foot_collider and foot_collider.shape is RectangleShape2D:
@@ -1556,8 +1616,12 @@ func _process_campaign_point(point: Dictionary) -> void:
             _campaign_persist()
         "exit_cabin":
             campaign_runtime.set_flag("FLG_ECHO_001_CABIN_EXITED", true)
-            _set_campaign_scene("echo_isles", Vector2(745.0, 355.0))
-            _campaign_show_point_dialogue(point, "campaign_ack")
+            _set_campaign_scene("echo_isles", CABIN_EXIT_SPAWN)
+            var exit_dialogue: Dictionary = campaign_dialogue_data.get("interactions", {}).get(dialogue_key, {})
+            var exit_body := _campaign_interaction_body(point_id, str(exit_dialogue.get("body", "Você atravessa a soleira e segue até o círculo ritual.")))
+            campaign_dialogue_context.clear()
+            dialogue_action = ""
+            _show_toast(exit_body, 4.0)
             _campaign_persist()
         "boar_hunt":
             campaign_pending_encounter = {"point_id":point_id,"quest_id":quest_id,"objective_id":"boar_meat"}

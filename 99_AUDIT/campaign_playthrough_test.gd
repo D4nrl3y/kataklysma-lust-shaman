@@ -54,7 +54,7 @@ func _run() -> void:
 	_expect(demo.player.position == saved_cabin_position, "continue restores the cabin position")
 	demo._confirm_dialogue()
 	_use_point(demo, "q001_exit")
-	_expect(demo.dialogue_body.text.contains("confiança recém-escolhida"), "Q001 exit bark reflects the persistent choice")
+	_expect(demo.toast_label.text.contains("confiança recém-escolhida"), "Q001 exit bark reflects the persistent choice without blocking movement")
 	_expect(demo.campaign_scene_id == "echo_isles" and demo.campaign_runtime.get_flag("FLG_ECHO_001_CABIN_EXITED"), "cabin exit is gated by the saved choice")
 	_use_point(demo, "q001_zekranu")
 	_expect(str(demo.campaign_runtime.get_active_quest_id()) == "QST_ECHO_002", "Q001 completion unlocks Q002")
@@ -259,6 +259,10 @@ func _use_point(demo, point_id: String) -> void:
 	demo.player.position = Vector2(float(position_data[0]), float(position_data[1]))
 	demo.player_collision_body.position = demo.player.position
 	demo._try_campaign_interact()
+	if str(selected.get("action", "")) == "exit_cabin":
+		if demo.dialogue_panel.visible or demo.toast_label.text.is_empty():
+			_fail("cabin exit preserves its narrative without locking player movement")
+		return
 	if selected.get("action", "") not in ["boar_hunt", "makrura_boss", "trap", "capture_frog"] and demo.dialogue_action not in ["campaign_ack", "campaign_finish_ack", "campaign_branch_choice", "campaign_branch_ack"]:
 		_fail("physical interaction did not activate expected point: " + point_id)
 	if demo.dialogue_action in ["campaign_ack", "campaign_finish_ack"]:

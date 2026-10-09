@@ -135,3 +135,21 @@ An attempt to pass `campaign_playthrough_test.gd` to the exported executable wit
 - The Computer Use UI controller (`node_repl` / `@oai/sky`) was unavailable in this session. This is why no interactive GUI playtest of the exported executable is claimed; the editor-side GUI captures above are separate evidence.
 - Regression rerun on 2026-10-09: 11 headless audit scripts exited 0 — demo smoke, Phase 1 acceptance (213), campaign runtime (125), Echo Isles branch matrix (320), frog branch (15), content integrity (186), full campaign playthrough, alternate routes, Makrura boss, campaign anchors and Sen’jin walkability. Editor import/parser and the exported executable's headless startup also exited 0. This is local automated evidence only.
 - **Phase 3 status: IN PROGRESS — GATE OPEN.** Do not advance the roadmap phase until the independent playtest, full visual map review and exported GUI/save-load validation pass. Audio rights/final SFX and broader candidate-art finalization remain release limitations.
+
+## User-reported gameplay regressions — 2026-10-09
+
+The supplied screenshots/reports exposed three issues in the active Echo Isles build: Kataklysma read too small inside the cabin; left/right idle and walk frames visibly changed silhouette size; and cabin exit could leave the player apparently stuck. Source inspection found the old exit spawn `(745, 355)` outside the walkable whitelist, and the exit immediately opened a modal acknowledgement that suppressed movement.
+
+| Test | Result | Actual evidence |
+|---|---|---|
+| Godot import/parser | PASS | Godot 4.7.2 `--headless --editor --path . --quit`, exit 0 after the fixes. |
+| Cabin vs outdoor scale | PASS — local visual review | Cabin uses `0.26`; outdoor Kataklysma remains `0.22`. The Echo Isles road ratio remains 2.53:1. See `docs/qa/screenshots/user_report_regression/01_cabin_scale.png`. |
+| Side-facing frame height and foot pivot | PASS — 110-check regression | Every `idle_left/right` and `walk_left/right` frame is normalized to one rendered alpha height and retains a common foot baseline at both scene scales. Source alpha heights ranged from 405 to 470 px; PNGs were not modified. See `02_side_walk_normalized.png`. |
+| Cabin exit spawn | PASS — geometry, physics and texture sample | The new spawn `(784, 336)` is walkable in all four cardinal directions, clear in 12 px physical probes, and 260/273 pixels of its 20×12 foot footprint pass the dirt-color check. `CABIN_EXIT_GROUND_SAMPLE` is printed by the regression. |
+| Immediate movement after exit | PASS | The actual `q001_exit` handler retains its narration as a toast, opens no modal, and moves Kataklysma 22.8 px in 0.12 s of right input. See `03_exit_spawn_after_movement.png`. |
+| Campaign regression | PASS | `campaign_playthrough_test.gd` still completes Echo Isles through Sen’jin Q009, including the branch-aware exit narration. |
+| Full local regression rerun | PASS | Twelve headless scripts exited 0 after the fixes: user-report regression (110 checks), smoke, Phase 1 (213), campaign runtime (125), branch matrix (320), frog branch (15), content integrity (186), playthrough, alternate routes, Makrura boss, campaign anchors and Sen’jin walkability. |
+| Screenshot capture | PASS — local visual inspection | `capture_user_report_regression.gd` emitted three 1280×720 PNGs; cabin scale, a normalized side frame, dirt-path spawn and post-exit movement were reviewed. |
+| Updated Windows export | PASS — export/startup smoke only | Godot 4.7.2 `--export-release "Windows Desktop"` produced `../Builds/Phase3_UserFix_2026-10-09/Kataklysma.exe` (662,709,208 bytes; SHA-256 `D7D3B2589427ED66AC7D83AD4733BDDD20E493D3DB67FD9C9D3A17F5EDB8C7F0`). The exported executable launched with `--headless --quit-after 5`, exit 0. The prior 2026-10-08 export was not overwritten. GUI play and save/load in this new export remain untested. |
+
+**Scope note:** these results close the reported local regressions in automated/local visual QA only. They do not close Phase 3, replace the user's hands-on play session, or validate GUI/save behavior in the exported build. The Windows UI controller was unavailable, so no live observation of user input is claimed. The previously documented phase and release gates remain unchanged.

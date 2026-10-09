@@ -1,5 +1,28 @@
 # Changelog
 
+## User-reported gameplay fixes — 2026-10-09
+
+### Added
+
+- Added `user_report_regression_test.gd` (110 checks) for cabin scale, normalized side-view frames, the real cabin-exit handler, walkability/physics/sand clearance and immediate movement.
+- Added three reviewed visual QA captures under `docs/qa/screenshots/user_report_regression/`.
+
+### Changed
+
+- Added a cabin-only Kataklysma scale of `0.26`; the Echo Isles outdoor calibration remains `0.22` and its road-width target is unchanged.
+- Normalized the four side-facing idle/walk animations to one visible alpha height while preserving the shared foot baseline. The source PNGs were not modified.
+- Moved the cabin exit to the four-way-clear dirt-path point `(784, 336)` (260/273 foot-area pixels pass the dirt-color check) and changed the exit narration from a movement-blocking modal to a non-modal toast.
+
+### Fixed
+
+- Fixed the former cabin exit spawn `(745, 355)`, which was outside the authored walkable area.
+- Fixed the exit interaction leaving the player unable to move until an unnecessary acknowledgement was confirmed.
+- Fixed visible size pulsing across side-facing frames with source alpha heights from 405 to 470 px.
+
+### Known limitations
+
+- The screenshots and tests are local QA; the user should still confirm the presentation in a normal play session. Phase 3 remains open for its separate map traversal, independent playtest and exported-build checks.
+
 ## ROADMAP 30 — Phase 3 implementation in progress: Sen’jin — 2026-10-08
 
 ### Added

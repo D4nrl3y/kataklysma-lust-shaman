@@ -1,6 +1,6 @@
 # Roster de personagens para produção de arte
 
-Fonte de verdade: `Doocumentes/Lust_Shamans_Journey_Complete_Game_Narrative_Bible_V2.0.docx`.
+Fonte de verdade: `00_DOCS/source_lore/Lust_Shamans_Journey_Complete_Game_Narrative_Bible_V2.0.docx`.
 
 ## Personagens nomeados
 
